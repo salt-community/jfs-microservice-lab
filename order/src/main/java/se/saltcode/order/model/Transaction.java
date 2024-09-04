@@ -14,5 +14,5 @@ public class Transaction {
     private Event eventType;
     private Status status;
     private String payload;
-    
+
 }
