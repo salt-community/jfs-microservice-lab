@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import se.saltcode.order.model.Order;
 import se.saltcode.order.model.OrderCreationObject;
 import se.saltcode.order.model.OrderResponseObject;
+import se.saltcode.order.model.OrderUpdateObject;
 import se.saltcode.service.OrderService;
 
 import java.net.URI;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class OrderController {
 
     private final OrderService orderService;
+
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
@@ -39,7 +41,7 @@ public class OrderController {
     @PostMapping
     ResponseEntity<URI> createOrder(@RequestBody OrderCreationObject orderCreationObject) throws URISyntaxException {
         return ResponseEntity
-                .created(new URI("/order/" + orderService.createOrder(new Order(orderCreationObject))))
+                .created(new URI("/api/order/" + orderService.createOrder(new Order(orderCreationObject))))
                 .build();
     }
 
@@ -47,6 +49,14 @@ public class OrderController {
     ResponseEntity<?> deleteOrder(@PathVariable UUID id) {
         orderService.deleteOrder(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping()
+    ResponseEntity<OrderResponseObject> updateOrder(@RequestBody OrderUpdateObject orderUpdateObject) {
+        return ResponseEntity
+                .ok(orderService
+                        .updateOrder(new Order(orderUpdateObject))
+                        .toResponseObject());
     }
 
 

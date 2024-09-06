@@ -42,6 +42,20 @@ public class OrderService {
         orderRepository.deleteOrder(id);
     }
 
+    public Order updateOrder(Order order) {
+
+        int newInventory = getInventory(order.getId())
+                +orderRepository.getOrder(order.getId()).getQuantity()
+                -order.getQuantity();
+
+        if (newInventory < 0) {
+            throw new InsufficientInventoryException();
+        }
+        setInventory(order.getId(), newInventory);
+        return orderRepository.updateOrder(order);
+
+    }
+
     private int getInventory(UUID id){
         return Optional.ofNullable(webClient
                 .get()

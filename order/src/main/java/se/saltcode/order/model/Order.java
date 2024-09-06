@@ -25,6 +25,12 @@ public class Order {
         this.totalCost=orderCreationObject.totalCost();
     }
 
+    public Order(OrderUpdateObject orderUpdateObject) {
+        this.customerId=orderUpdateObject.customerId();
+        this.quantity=orderUpdateObject.quantity();
+        this.totalCost=orderUpdateObject.totalCost();
+    }
+
     public OrderResponseObject toResponseObject() {
         return new OrderResponseObject(id, customerId, quantity, totalCost);
     }

@@ -15,6 +15,7 @@ public class OrderRepository {
     public OrderRepository(IOrderRepository IOrderRepository) {
         this.IOrderRepository = IOrderRepository;
     }
+
     public List<Order> getOrders() {
         return IOrderRepository.findAll();
     }
@@ -28,9 +29,17 @@ public class OrderRepository {
     }
 
     public void deleteOrder(UUID id) {
+
         if(!IOrderRepository.existsById(id)){
             throw new NoSuchOrderException();
         }
         IOrderRepository.deleteById(id);
+    }
+
+    public Order updateOrder(Order order) {
+        if(!IOrderRepository.existsById(order.getId())){
+            throw new NoSuchOrderException();
+        }
+        return IOrderRepository.save(order);
     }
 }
