@@ -26,7 +26,7 @@ public class InventoryService {
     }
 
     public Inventory createInventoryItem(Inventory inventory) {
-        inventory.setId(UUID.randomUUID()); // Generate a UUID for the new item
+        inventory.setId(UUID.randomUUID()); // Generate a random UUID for the new item
         inventoryList.add(inventory);
         return inventory;
     }
