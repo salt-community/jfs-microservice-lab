@@ -8,5 +8,4 @@ public class Inventory {
     private String product;
     private int quantity;
     private int reservedQuantity;
-    
 }

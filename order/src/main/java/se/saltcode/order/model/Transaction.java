@@ -1,7 +1,6 @@
 package se.saltcode.order.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.UUID;
 
@@ -9,10 +8,60 @@ import java.util.UUID;
 @Table
 public class Transaction {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID eventID;
+
     private UUID orderId;
     private Event eventType;
     private Status status;
     private String payload;
 
+    public Transaction(UUID eventID, UUID orderId, Event eventType, Status status, String payload) {
+        this.eventID = eventID;
+        this.orderId = orderId;
+        this.eventType = eventType;
+        this.status = status;
+        this.payload = payload;
+    }
+
+    public UUID getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(UUID eventID) {
+        this.eventID = eventID;
+    }
+
+    public UUID getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(UUID orderId) {
+        this.orderId = orderId;
+    }
+
+    public Event getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(Event eventType) {
+        this.eventType = eventType;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public void setPayload(String payload) {
+        this.payload = payload;
+    }
 }
