@@ -2,6 +2,7 @@ package se.saltcode.inventory.service;
 
 import se.saltcode.inventory.model.Inventory;
 import org.springframework.stereotype.Service;
+import se.saltcode.inventory.model.InventoryRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,19 @@ public class InventoryService {
 
     // list to simulate the inventory database
     private final List<Inventory> inventoryList = new ArrayList<>();
+
+    // repo
+    InventoryRepository repo;
+
+    // default constructor
+    public InventoryService() {
+        // todo: this default constructor should not be used. But if removed the tests will fail.
+    }
+
+    // constructor with repository injected
+    public InventoryService(InventoryRepository repo) {
+        this.repo = repo;
+    }
 
     public List<Inventory> getAllInventoryItems() {
         return inventoryList;
