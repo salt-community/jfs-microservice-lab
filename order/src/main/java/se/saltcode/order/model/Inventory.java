@@ -1,4 +1,4 @@
-package se.saltcode.inventory.model;
+package se.saltcode.order.model;
 
 import java.util.UUID;
 
@@ -8,6 +8,7 @@ public class Inventory {
     private String product;
     private int quantity;
     private int reservedQuantity;
+
     // Getters and Setters
 
     public UUID getId() {
