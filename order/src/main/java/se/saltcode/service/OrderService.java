@@ -2,9 +2,7 @@ package se.saltcode.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import se.saltcode.order.model.Inventory;
 import se.saltcode.order.model.Order;
-import se.saltcode.order.model.OrderResponseObject;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +30,7 @@ public class OrderService {
 
     public void deleteOrder(UUID id) {
     }
-    private Inventory getInventory(UUID id){
-       return null;
+    private int getInventory(UUID id){
+       return 0;
     }
 }
