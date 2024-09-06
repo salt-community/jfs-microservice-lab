@@ -1,15 +1,32 @@
 package se.saltcode.inventory.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.UuidGenerator;
+
 import java.util.UUID;
 
+@Entity
+@Table(name = "inventory")
 public class Inventory {
 
+    @UuidGenerator
+    @Id
     private UUID id;
+    @Column(name = "product")
     private String product;
+    @Column(name = "quantity")
     private int quantity;
+    @Column(name = "reserved_quantity")
     private int reservedQuantity;
-    // Getters and Setters
 
+    // Constructors
+    // Default constructor
+    public Inventory() {}
+
+    // Getters and Setters
     public UUID getId() {
         return id;
     }
