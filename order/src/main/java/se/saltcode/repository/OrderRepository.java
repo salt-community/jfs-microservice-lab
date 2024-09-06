@@ -1,9 +1,36 @@
 package se.saltcode.repository;
 
-import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.stereotype.Repository;
+import se.saltcode.error.NoSuchOrderException;
 import se.saltcode.order.model.Order;
 
+import java.util.List;
 import java.util.UUID;
 
-public interface OrderRepository  extends ListCrudRepository<Order, UUID> {
+@Repository
+public class OrderRepository {
+
+    private final IOrderRepository IOrderRepository;
+
+    public OrderRepository(IOrderRepository IOrderRepository) {
+        this.IOrderRepository = IOrderRepository;
+    }
+    public List<Order> getOrders() {
+        return IOrderRepository.findAll();
+    }
+
+    public Order getOrder(UUID id) {
+        return IOrderRepository.findById(id).orElseThrow(NoSuchOrderException::new);
+    }
+
+    public UUID createOrder(Order order) {
+        return IOrderRepository.save(order).getId();
+    }
+
+    public void deleteOrder(UUID id) {
+        if(!IOrderRepository.existsById(id)){
+            throw new NoSuchOrderException();
+        }
+        IOrderRepository.deleteById(id);
+    }
 }

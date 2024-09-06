@@ -18,7 +18,7 @@ public class Order {
     private int quantity;
     private double totalCost;
 
-
+    public Order() {}
     public Order(OrderCreationObject orderCreationObject) {
         this.customerId=orderCreationObject.customerId();
         this.quantity=orderCreationObject.quantity();
@@ -27,5 +27,37 @@ public class Order {
 
     public OrderResponseObject toResponseObject() {
         return new OrderResponseObject(id, customerId, quantity, totalCost);
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public UUID getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(UUID customerId) {
+        this.customerId = customerId;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
     }
 }
