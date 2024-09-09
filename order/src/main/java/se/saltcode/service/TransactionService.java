@@ -1,10 +1,10 @@
 package se.saltcode.service;
 
 import org.springframework.stereotype.Service;
-import se.saltcode.order.model.Event;
-import se.saltcode.order.model.Status;
-import se.saltcode.order.model.Transaction;
-import se.saltcode.order.model.TransactionRepository;
+import se.saltcode.model.enums.Event;
+import se.saltcode.model.enums.Status;
+import se.saltcode.model.transaction.Transaction;
+import se.saltcode.model.transaction.TransactionRepository;
 
 import java.util.List;
 import java.util.UUID;

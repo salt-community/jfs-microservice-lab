@@ -3,7 +3,7 @@ package se.saltcode.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import se.saltcode.error.InsufficientInventoryException;
-import se.saltcode.order.model.Order;
+import se.saltcode.model.order.Order;
 import se.saltcode.repository.OrderRepository;
 
 import java.util.List;

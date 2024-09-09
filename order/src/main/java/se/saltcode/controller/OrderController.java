@@ -3,10 +3,10 @@ package se.saltcode.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.saltcode.order.model.Order;
-import se.saltcode.order.model.OrderCreationObject;
-import se.saltcode.order.model.OrderResponseObject;
-import se.saltcode.order.model.OrderUpdateObject;
+import se.saltcode.model.order.Order;
+import se.saltcode.model.order.OrderCreationObject;
+import se.saltcode.model.order.OrderResponseObject;
+import se.saltcode.model.order.OrderUpdateObject;
 import se.saltcode.service.OrderService;
 
 import java.net.URI;

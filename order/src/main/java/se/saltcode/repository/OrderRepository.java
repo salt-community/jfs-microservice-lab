@@ -2,7 +2,7 @@ package se.saltcode.repository;
 
 import org.springframework.stereotype.Repository;
 import se.saltcode.error.NoSuchOrderException;
-import se.saltcode.order.model.Order;
+import se.saltcode.model.order.Order;
 
 import java.util.List;
 import java.util.UUID;

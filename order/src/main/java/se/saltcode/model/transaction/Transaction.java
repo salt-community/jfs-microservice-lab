@@ -1,6 +1,8 @@
-package se.saltcode.order.model;
+package se.saltcode.model.transaction;
 
 import jakarta.persistence.*;
+import se.saltcode.model.enums.Event;
+import se.saltcode.model.enums.Status;
 
 import java.util.UUID;
 

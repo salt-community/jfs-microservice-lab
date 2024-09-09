@@ -1,4 +1,4 @@
-package se.saltcode.order.model;
+package se.saltcode.model.order;
 
 import java.util.UUID;
 

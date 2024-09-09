@@ -1,7 +1,7 @@
-package se.saltcode.order.model;
+package se.saltcode.model.transaction;
 
-import se.saltcode.order.model.Event;
-import se.saltcode.order.model.Status;
+import se.saltcode.model.enums.Event;
+import se.saltcode.model.enums.Status;
 
 import java.util.UUID;
 

@@ -3,9 +3,9 @@ package se.saltcode.controller;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.saltcode.order.model.AddTransactionDTO;
-import se.saltcode.order.model.Transaction;
-import se.saltcode.order.model.TransactionDTO;
+import se.saltcode.model.transaction.AddTransactionDTO;
+import se.saltcode.model.transaction.Transaction;
+import se.saltcode.model.transaction.TransactionDTO;
 import se.saltcode.service.TransactionService;
 
 import java.net.URI;

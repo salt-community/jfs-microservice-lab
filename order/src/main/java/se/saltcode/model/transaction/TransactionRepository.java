@@ -1,6 +1,7 @@
-package se.saltcode.order.model;
+package se.saltcode.model.transaction;
 
 import org.springframework.stereotype.Repository;
+import se.saltcode.repository.TransactionDbRepository;
 
 import java.util.List;
 import java.util.Optional;

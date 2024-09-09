@@ -1,5 +1,6 @@
-package se.saltcode.order.model;
+package se.saltcode.model.order;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -14,8 +15,11 @@ public class Order {
     @UuidGenerator
     @Id
     private UUID id;
+    @Column(name="customer_id")
     private UUID customerId;
+    @Column(name = "quantity")
     private int quantity;
+    @Column(name= "total_cost")
     private double totalCost;
 
     public Order() {}

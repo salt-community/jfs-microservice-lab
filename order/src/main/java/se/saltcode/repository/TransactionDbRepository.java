@@ -1,6 +1,7 @@
-package se.saltcode.order.model;
+package se.saltcode.repository;
 
 import org.springframework.data.repository.ListCrudRepository;
+import se.saltcode.model.transaction.Transaction;
 
 import java.util.UUID;
 

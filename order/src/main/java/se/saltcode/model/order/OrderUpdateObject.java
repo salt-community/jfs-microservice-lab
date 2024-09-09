@@ -1,8 +1,9 @@
-package se.saltcode.order.model;
+package se.saltcode.model.order;
 
 import java.util.UUID;
 
-public record OrderCreationObject(
+public record OrderUpdateObject(
+        UUID id,
         UUID customerId,
         int quantity,
         double totalCost) {}
