@@ -27,6 +27,10 @@ public class Transaction {
         this.payload = payload;
     }
 
+    public Transaction() {
+
+    }
+
     public UUID getEventID() {
         return eventID;
     }

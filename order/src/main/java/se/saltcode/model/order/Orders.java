@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table
-public class Order {
+public class Orders {
 
     @UuidGenerator
     @Id
@@ -22,18 +22,26 @@ public class Order {
     @Column(name= "total_cost")
     private double totalCost;
 
-    public Order() {}
-    public Order(OrderCreationObject orderCreationObject) {
+    public Orders() {}
+    public Orders(OrderCreationObject orderCreationObject) {
         this.customerId=orderCreationObject.customerId();
         this.quantity=orderCreationObject.quantity();
         this.totalCost=orderCreationObject.totalCost();
     }
 
-    public Order(OrderUpdateObject orderUpdateObject) {
+    public Orders(OrderUpdateObject orderUpdateObject) {
         this.customerId=orderUpdateObject.customerId();
         this.quantity=orderUpdateObject.quantity();
         this.totalCost=orderUpdateObject.totalCost();
     }
+
+    public Orders(UUID id, UUID customerId, int quantity, double totalCost) {
+        this.id = id;
+        this.customerId = customerId;
+        this.quantity = quantity;
+        this.totalCost = totalCost;
+    }
+
 
     public OrderResponseObject toResponseObject() {
         return new OrderResponseObject(id, customerId, quantity, totalCost);

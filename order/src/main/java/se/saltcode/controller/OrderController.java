@@ -3,7 +3,7 @@ package se.saltcode.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.saltcode.model.order.Order;
+import se.saltcode.model.order.Orders;
 import se.saltcode.model.order.OrderCreationObject;
 import se.saltcode.model.order.OrderResponseObject;
 import se.saltcode.model.order.OrderUpdateObject;
@@ -29,9 +29,10 @@ public class OrderController {
     ResponseEntity<List<OrderResponseObject>> getOrders() {
         return ResponseEntity.ok(orderService.getOrders()
                 .stream()
-                .map(Order::toResponseObject)
+                .map(Orders::toResponseObject)
                 .toList());
     }
+
 
     @GetMapping("/{id}")
     ResponseEntity<OrderResponseObject> getOrder(@PathVariable UUID id) {
@@ -41,7 +42,7 @@ public class OrderController {
     @PostMapping
     ResponseEntity<URI> createOrder(@RequestBody OrderCreationObject orderCreationObject) throws URISyntaxException {
         return ResponseEntity
-                .created(new URI("/api/order/" + orderService.createOrder(new Order(orderCreationObject))))
+                .created(new URI("/api/order/" + orderService.createOrder(new Orders(orderCreationObject))))
                 .build();
     }
 
@@ -55,10 +56,8 @@ public class OrderController {
     ResponseEntity<OrderResponseObject> updateOrder(@RequestBody OrderUpdateObject orderUpdateObject) {
         return ResponseEntity
                 .ok(orderService
-                        .updateOrder(new Order(orderUpdateObject))
+                        .updateOrder(new Orders(orderUpdateObject))
                         .toResponseObject());
     }
-
-
 
 }
