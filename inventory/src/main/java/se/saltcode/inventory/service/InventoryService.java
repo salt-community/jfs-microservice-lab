@@ -27,9 +27,13 @@ public class InventoryService {
     }
 
     public Inventory createInventoryItem(Inventory inventory) {
-        inventory.setId(UUID.randomUUID());
+        if (inventory == null) {
+            throw new IllegalArgumentException("Inventory item cannot be null");
+        }
+        inventory.setId(UUID.randomUUID()); // Generate a random UUID for the new item
         return repo.saveInventoryItem(inventory);
     }
+
 
     public Inventory updateInventoryItem(UUID id, Inventory inventory) {
         return repo.updateInventoryItem(id, inventory);
