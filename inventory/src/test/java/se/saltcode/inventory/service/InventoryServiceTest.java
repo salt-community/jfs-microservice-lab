@@ -15,7 +15,7 @@ class InventoryServiceTest {
 
     @BeforeEach
     void setUp() {
-        inventoryService = new InventoryService();
+      //  inventoryService = new InventoryService();
     }
 
     @Test
