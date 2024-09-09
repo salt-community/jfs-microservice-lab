@@ -13,11 +13,11 @@ import java.util.UUID;
 @Service
 public class OrderService {
 
-  //  private final WebClient webClient;
+    private final WebClient webClient;
     private final OrderRepository orderRepository;
 
     public OrderService(OrderRepository orderRepository) {
-   //     this.webClient = webClient;
+        this.webClient = WebClient.create("http://localhost:8080/api/inventory/");
         this.orderRepository = orderRepository;
     }
 
@@ -57,25 +57,22 @@ public class OrderService {
     }
 
     private int getInventory(UUID id){
-       /* return Optional.ofNullable(webClient
+       return Optional.ofNullable(webClient
                 .get()
-                .uri("/api/inventory/" + id)
+                .uri( id.toString())
                 .retrieve()
                 .bodyToMono(Integer.class)
                 .block()).orElseThrow(InternalError::new);
 
-        */
-        return 0;
     }
     private void setInventory(UUID id, int quantity){
-        /*
+
             Optional.ofNullable(webClient
                 .post()
-                .uri("/api/inventory/" + id+"/"+quantity)
+                .uri( id+"/"+quantity)
                 .retrieve()
                 .bodyToMono(Boolean.class)
                 .block()).orElseThrow(InternalError::new);
 
-         */
     }
 }
