@@ -1,67 +1,58 @@
 package se.saltcode.inventory.service;
 
-import se.saltcode.inventory.model.Inventory;
 import org.springframework.stereotype.Service;
-import se.saltcode.inventory.model.InventoryRepository;
+import se.saltcode.inventory.model.Inventory;
+import se.saltcode.inventory.model.InventoryDBRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class InventoryService {
 
-    // list to simulate the inventory database
-    private final List<Inventory> inventoryList = new ArrayList<>();
+    private final InventoryDBRepository inventoryDBRepository;
 
-    // repo
-    InventoryRepository repo;
-
-    // default constructor
-    public InventoryService() {
-        // todo: this default constructor should not be used. But if removed the tests will fail.
+    public InventoryService(InventoryDBRepository inventoryDBRepository) {
+        this.inventoryDBRepository = inventoryDBRepository;
     }
 
-    // constructor with repository injected
-    public InventoryService(InventoryRepository repo) {
-        this.repo = repo;
-    }
-
+    // Get all inventory items
     public List<Inventory> getAllInventoryItems() {
-        return inventoryList;
+        return inventoryDBRepository.findAll();
     }
 
+    // Get a single inventory item by ID (UUID)
     public Inventory getInventoryItemById(UUID id) {
-        Optional<Inventory> item = inventoryList.stream()
-                .filter(inventory -> inventory.getId().equals(id))
-                .findFirst();
-        return item.orElse(null);
+        return inventoryDBRepository.findById(id).orElse(null);
     }
 
+    // Create a new inventory item
     public Inventory createInventoryItem(Inventory inventory) {
-        inventory.setId(UUID.randomUUID()); // Generate a random UUID for the new item
-        inventoryList.add(inventory);
-        return inventory;
-    }
-
-    public Inventory updateInventoryItem(UUID id, Inventory inventory) {
-        Optional<Inventory> existingItem = inventoryList.stream()
-                .filter(inv -> inv.getId().equals(id))
-                .findFirst();
-
-        if (existingItem.isPresent()) {
-            Inventory updatedItem = existingItem.get();
-            updatedItem.setProduct(inventory.getProduct());
-            updatedItem.setQuantity(inventory.getQuantity());
-            updatedItem.setReservedQuantity(inventory.getReservedQuantity());
-            return updatedItem;
-        } else {
-            return null;
+        if (inventory == null) {
+            throw new IllegalArgumentException("Inventory item cannot be null");
         }
+        inventory.setId(UUID.randomUUID()); // Generate a random UUID for the new item
+        return inventoryDBRepository.save(inventory);
     }
 
+    // Update an existing inventory item
+    public Inventory updateInventoryItem(UUID id, Inventory inventory) {
+        return inventoryDBRepository.findById(id)
+                .map(existingItem -> {
+                    existingItem.setProduct(inventory.getProduct());
+                    existingItem.setQuantity(inventory.getQuantity());
+                    existingItem.setReservedQuantity(inventory.getReservedQuantity());
+                    return inventoryDBRepository.save(existingItem);
+                })
+                .orElse(null);
+    }
+
+    // Delete an inventory item
     public boolean deleteInventoryItem(UUID id) {
-        return inventoryList.removeIf(inventory -> inventory.getId().equals(id));
+        if (inventoryDBRepository.existsById(id)) {
+            inventoryDBRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
