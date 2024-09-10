@@ -11,3 +11,8 @@ spring:
     jpa:
       repositories:
         bootstrap-mode: default
+  api:
+    base-path: /api
+    controllers:
+      orders: /order
+      transactions: /transaction
