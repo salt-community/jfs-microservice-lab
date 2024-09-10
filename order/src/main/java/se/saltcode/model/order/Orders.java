@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
@@ -12,15 +14,19 @@ import java.util.UUID;
 @Table(name="orders")
 public class Orders {
 
-    @UuidGenerator
     @Id
+    @UuidGenerator
     private UUID id;
+    @NotEmpty(message = "customerId cant be empty")
     @Column(name="customer_id")
     private UUID customerId;
-    @Column(name="product_id")
+    @NotEmpty(message = "inventoryId cant be empty")
+    @Column(name="inventory_id")
     private UUID inventoryId;
+    @Positive(message = "quantity must be positive")
     @Column(name = "quantity")
     private int quantity;
+    @Positive(message = "totalCost must be positive")
     @Column(name= "total_cost")
     private double totalCost;
 
@@ -38,15 +44,6 @@ public class Orders {
         this.quantity=orderUpdateObject.quantity();
         this.totalCost=orderUpdateObject.totalCost();
     }
-
-    public Orders(UUID id, UUID customerId, UUID inventoryId,int quantity, double totalCost) {
-        this.id = id;
-        this.customerId = customerId;
-        this.inventoryId =  inventoryId;
-        this.quantity = quantity;
-        this.totalCost = totalCost;
-    }
-
 
     public OrderResponseObject toResponseObject() {
         return new OrderResponseObject(id, customerId, inventoryId ,quantity, totalCost);
@@ -70,6 +67,10 @@ public class Orders {
 
     public UUID getInventoryId() {
         return inventoryId;
+    }
+
+    public void setInventoryId(UUID inventoryId) {
+        this.inventoryId = inventoryId;
     }
 
     public int getQuantity() {

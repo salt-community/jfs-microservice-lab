@@ -4,19 +4,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import java.util.NoSuchElementException;
-
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({NoSuchOrderException.class})
-    public ResponseEntity<String> notFoundHandler(NoSuchElementException ex) {
+    public ResponseEntity<String> notFoundHandler(NoSuchOrderException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({InsufficientInventoryException.class})
-    public ResponseEntity<String> illegalArgumentHandler(IllegalArgumentException ex) {
+    public ResponseEntity<String> illegalArgumentHandler(InsufficientInventoryException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
