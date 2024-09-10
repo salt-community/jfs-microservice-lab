@@ -14,12 +14,12 @@ import java.util.UUID;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/transaction")
+@RequestMapping("${api.base-path}${api.controllers.transactions}")
 public class TransactionController {
 
     private final TransactionService service;
 
-    @Value("/api/transaction/")
+    @Value("${api.base-path}${api.controllers.orders}/")
     public String API_CONTEXT_ROOT;
 
     public TransactionController(TransactionService service) {

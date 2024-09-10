@@ -1,5 +1,6 @@
 package se.saltcode.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +17,13 @@ import java.util.UUID;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/order")
+@RequestMapping("${api.base-path}${api.controllers.orders}")
 public class OrderController {
 
     private final OrderService orderService;
+
+    @Value("${api.base-path}${api.controllers.orders}/")
+    public String API_CONTEXT_ROOT;
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
@@ -42,7 +46,7 @@ public class OrderController {
     @PostMapping
     ResponseEntity<URI> createOrder(@RequestBody OrderCreationObject orderCreationObject) throws URISyntaxException {
         return ResponseEntity
-                .created(new URI("/api/order/" + orderService.createOrder(new Orders(orderCreationObject))))
+                .created(new URI(API_CONTEXT_ROOT + orderService.createOrder(new Orders(orderCreationObject))))
                 .build();
     }
 
