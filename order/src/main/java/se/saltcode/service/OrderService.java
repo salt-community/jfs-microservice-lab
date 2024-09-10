@@ -57,7 +57,7 @@ public class OrderService {
     }
 
     private int getInventory(UUID id){
-        /*
+
        return Optional.ofNullable(webClient
                 .get()
                 .uri(id+"/quantity")
@@ -65,12 +65,9 @@ public class OrderService {
                 .bodyToMono(Integer.class)
                 .block()).orElseThrow(InternalError::new);
 
-         */
-        return 1;
-
     }
     private void setInventory(UUID id, int quantity){
-/*
+
             Optional.ofNullable(webClient
                 .post()
                 .uri( id+"/"+quantity)
@@ -78,7 +75,7 @@ public class OrderService {
                 .bodyToMono(Boolean.class)
                 .block()).orElseThrow(InternalError::new);
 
- */
+
 
 
     }
