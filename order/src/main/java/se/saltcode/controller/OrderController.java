@@ -46,7 +46,7 @@ public class OrderController {
     @PostMapping
     ResponseEntity<URI> createOrder(@RequestBody OrderCreationObject orderCreationObject) throws URISyntaxException {
         return ResponseEntity
-                .created(new URI(API_CONTEXT_ROOT + orderService.createOrder(new Orders(orderCreationObject))))
+                .created(new URI("http://localhost:8080"+API_CONTEXT_ROOT+orderService.createOrder(new Orders(orderCreationObject))))
                 .build();
     }
 
