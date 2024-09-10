@@ -44,7 +44,7 @@ public class OrderService {
 
     public Orders updateOrder(Orders order) {
 
-        int newInventory = getInventory(order.getId())
+        int newInventory = getInventory(order.getProductId())
                 +orderRepository.getOrder(order.getId()).getQuantity()
                 -order.getQuantity();
 
