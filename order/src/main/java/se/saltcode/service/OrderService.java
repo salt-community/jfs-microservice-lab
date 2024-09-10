@@ -59,7 +59,7 @@ public class OrderService {
     private int getInventory(UUID id){
        return Optional.ofNullable(webClient
                 .get()
-                .uri( id.toString())
+                .uri(id+"/quantity")
                 .retrieve()
                 .bodyToMono(Integer.class)
                 .block()).orElseThrow(InternalError::new);
