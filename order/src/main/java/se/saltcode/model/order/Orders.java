@@ -18,7 +18,7 @@ public class Orders {
     @Column(name="customer_id")
     private UUID customerId;
     @Column(name="product_id")
-    private UUID productId;
+    private UUID inventoryId;
     @Column(name = "quantity")
     private int quantity;
     @Column(name= "total_cost")
@@ -27,29 +27,29 @@ public class Orders {
     public Orders() {}
     public Orders(OrderCreationObject orderCreationObject) {
         this.customerId=orderCreationObject.customerId();
-        this.productId=orderCreationObject.productId();
+        this.inventoryId=orderCreationObject.inventoryId();
         this.quantity=orderCreationObject.quantity();
         this.totalCost=orderCreationObject.totalCost();
     }
 
     public Orders(OrderUpdateObject orderUpdateObject) {
         this.customerId=orderUpdateObject.customerId();
-        this.productId=orderUpdateObject.productId();
+        this.inventoryId=orderUpdateObject.inventoryId();
         this.quantity=orderUpdateObject.quantity();
         this.totalCost=orderUpdateObject.totalCost();
     }
 
-    public Orders(UUID id, UUID customerId, UUID productId,int quantity, double totalCost) {
+    public Orders(UUID id, UUID customerId, UUID inventoryId,int quantity, double totalCost) {
         this.id = id;
         this.customerId = customerId;
-        this.productId =  productId;
+        this.inventoryId =  inventoryId;
         this.quantity = quantity;
         this.totalCost = totalCost;
     }
 
 
     public OrderResponseObject toResponseObject() {
-        return new OrderResponseObject(id, customerId, productId ,quantity, totalCost);
+        return new OrderResponseObject(id, customerId, inventoryId ,quantity, totalCost);
     }
 
     public UUID getId() {
@@ -68,8 +68,8 @@ public class Orders {
         this.customerId = customerId;
     }
 
-    public UUID getProductId() {
-        return productId;
+    public UUID getInventoryId() {
+        return inventoryId;
     }
 
     public int getQuantity() {
