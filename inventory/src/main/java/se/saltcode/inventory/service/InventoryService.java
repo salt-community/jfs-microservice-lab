@@ -55,4 +55,13 @@ public class InventoryService {
         }
         return false;
     }
+
+    public Inventory updateQuantityOfInventory(UUID id, int quantity) {
+        return inventoryDBRepository.findById(id)
+                .map(existingItem -> {
+                    existingItem.setQuantity(quantity);
+                    return inventoryDBRepository.save(existingItem);
+                })
+                .orElse(null);
+    }
 }

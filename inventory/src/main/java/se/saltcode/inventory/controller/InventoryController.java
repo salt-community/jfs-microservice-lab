@@ -67,6 +67,24 @@ public class InventoryController {
         }
     }
 
+    @GetMapping("/{id}/quantity")
+    public ResponseEntity<Integer> getQuantityOfInventory(@PathVariable("id") UUID id) {
+        Inventory item = inventoryService.getInventoryItemById(id);
+        if (item != null) {
+            return new ResponseEntity<>(item.getQuantity(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @PutMapping("/{id}/{quantity}")
+    public ResponseEntity<InventoryDTO> updateQuantityOfInventory(@PathVariable("id") UUID id, @PathVariable("id") int quantity) {
+        Inventory updatedItem = inventoryService.updateQuantityOfInventory(id, quantity);
+        if (updatedItem != null) {
+            return new ResponseEntity<>(convertToDTO(updatedItem), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
     // Helper methods to convert between DTO and Entity
     private InventoryDTO convertToDTO(Inventory inventory) {
         InventoryDTO dto = new InventoryDTO();
