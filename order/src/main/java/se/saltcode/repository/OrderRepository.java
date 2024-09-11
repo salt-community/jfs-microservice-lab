@@ -29,7 +29,6 @@ public class OrderRepository {
     }
 
     public void deleteOrder(UUID id) {
-
         if(!IOrderRepository.existsById(id)){
             throw new NoSuchOrderException();
         }
