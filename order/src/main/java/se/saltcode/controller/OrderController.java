@@ -37,7 +37,6 @@ public class OrderController {
                 .toList());
     }
 
-
     @GetMapping("/{id}")
     ResponseEntity<OrderResponseObject> getOrder(@PathVariable UUID id) {
         return ResponseEntity.ok(orderService.getOrder(id).toResponseObject());
