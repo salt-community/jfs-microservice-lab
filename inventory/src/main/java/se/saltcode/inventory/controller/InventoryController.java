@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/inventory")
 public class InventoryController {
 
