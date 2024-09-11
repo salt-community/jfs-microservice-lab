@@ -1,9 +1,3 @@
-api:
-  base-path: /api
-  controllers:
-    orders: /order
-    transactions: /transaction
-
 spring:
   datasource:
     url: jdbc:h2:mem:mydb
@@ -17,3 +11,8 @@ spring:
     jpa:
       repositories:
         bootstrap-mode: default
+  api:
+    base-path: /api
+    controllers:
+      orders: /order
+      transactions: /transaction

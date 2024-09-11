@@ -1,6 +1,5 @@
 package se.saltcode.order.database;
 
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -75,14 +74,15 @@ class InventoryDBRepositoryTest {
         entity.setCustomerId(UUID.randomUUID());
         entity.setQuantity(1234);
         entity.setTotalCost(12345D);
+        Orders savedEntity1 = repository.save(entity);
 
         // Act
-        Orders savedEntity = repository.findAll().getFirst();
-        savedEntity.setQuantity(500); // Update the quantity
-        repository.save(savedEntity);
+        Orders savedEntity2 = repository.findById(savedEntity1.getId()).orElse(null);
+        savedEntity2.setQuantity(500); // Update the quantity
+        repository.save(savedEntity2);
 
         // Assert
-        Orders updatedEntity = repository.findById(savedEntity.getId()).orElse(null);
+        Orders updatedEntity = repository.findById(savedEntity1.getId()).orElse(null);
         assertNotNull(updatedEntity);
         assertThat(updatedEntity.getQuantity()).isEqualTo(500);
     }

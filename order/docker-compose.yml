@@ -3,9 +3,9 @@ services:
     image: postgres:15
     container_name: order-db
     environment:
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: salt
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: orderdb
     ports:
       - "5434:5432"
     volumes:
