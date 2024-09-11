@@ -12,5 +12,3 @@ spring:
         hibernate:
             ddl-auto: create-drop  #create-drop, create, validate etc
         show-sql: true  #Set to true to enable SQL logging
-
-
