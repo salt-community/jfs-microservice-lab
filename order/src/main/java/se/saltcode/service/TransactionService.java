@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import se.saltcode.model.enums.Event;
 import se.saltcode.model.enums.Status;
 import se.saltcode.model.transaction.Transaction;
-import se.saltcode.model.transaction.TransactionRepository;
+import se.saltcode.repository.TransactionRepository;
 
 import java.util.List;
 import java.util.UUID;
