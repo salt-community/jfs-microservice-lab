@@ -1,16 +1,14 @@
 package se.saltcode.service;
-import org.springframework.http.MediaType;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import se.saltcode.components.MessageRelay;
 import se.saltcode.error.InsufficientInventoryException;
-import se.saltcode.model.enums.MessageType;
+import se.saltcode.error.NoSuchOrderException;
 import se.saltcode.model.message.Message;
 import se.saltcode.model.order.Orders;
 import se.saltcode.repository.IMessageRepository;
-import se.saltcode.repository.OrderRepository;
+import se.saltcode.repository.IOrderRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,77 +18,65 @@ import java.util.UUID;
 public class OrderService {
 
     private final WebClient webClient;
-    private final OrderRepository orderRepository;
+    private final IOrderRepository orderRepository;
     private final IMessageRepository messageRepository;
+    private final MessageRelay messageRelay;
 
-    public OrderService(OrderRepository orderRepository, IMessageRepository messageRepository) {
+    public OrderService(IOrderRepository orderRepository, IMessageRepository messageRepository,MessageRelay messageRelay) {
         this.webClient = WebClient.create("http://localhost:5000/api/inventory/");
         this.orderRepository = orderRepository;
         this.messageRepository = messageRepository;
+        this.messageRelay = messageRelay;
     }
 
     public List<Orders> getOrders() {
-        return orderRepository.getOrders();
+        return orderRepository.findAll();
     }
 
     public Orders getOrder(UUID id) {
-        return orderRepository.getOrder(id);
+        return orderRepository.findById(id).orElseThrow(NoSuchOrderException::new);
     }
 
-
     public UUID createOrder(Orders order) {
-
         int inventory = getInventory(order.getInventoryId())-order.getQuantity();
         if (inventory < 0) {
             throw new InsufficientInventoryException();
         }
-        UUID orderId = orderRepository.createOrder(order);
-        UUID messageId = messageRepository.save(
-                new Message(
-                "http://localhost:5000/api/inventory/"+order.getInventoryId()+"/"+inventory,
-                null,
-                MessageType.POST)).getId();
-
-
-        HttpStatusCode response = setInventory(order.getInventoryId(), inventory);
-        if(response == HttpStatus.OK) {
-            messageRepository.deleteById(messageId);
-        }
-
+        UUID orderId = orderRepository.save(order).getId();
+        messageRepository.save(new Message(
+                order.getInventoryId(),
+                order.getQuantity()));
+        messageRelay.sendUnfinishedMessages();
         return orderId;
     }
 
     public void deleteOrder(UUID id) {
-        orderRepository.deleteOrder(id);
+        if(orderRepository.existsById(id)){
+            throw new NoSuchOrderException();
+        }
+        orderRepository.deleteById(id);
     }
 
     @Transactional
     public Orders updateOrder(Orders order) {
+        if(!orderRepository.existsById(order.getId())){
+            throw new NoSuchOrderException();
+        }
 
-        int newInventory = getInventory(order.getInventoryId())
-                +orderRepository.getOrder(order.getId()).getQuantity()
-                -order.getQuantity();
+        int change =order.getQuantity()-orderRepository.findById(order.getId()).orElseThrow(NoSuchOrderException::new).getQuantity();
 
-        if (newInventory < 0) {
+
+        if (getInventory(order.getInventoryId())-change < 0) {
             throw new InsufficientInventoryException();
         }
-        Orders newOrder = orderRepository.updateOrder(order);
-        UUID messageId = messageRepository.save(
-                new Message(
-                        "http://localhost:8080/api/inventory/"+order.getInventoryId()+"/"+newInventory,
-                        null,
-                        MessageType.POST)).getId();
-
-        HttpStatusCode response = setInventory(order.getInventoryId(), newInventory);
-
-        if(response == HttpStatus.OK) {
-            messageRepository.deleteById(messageId);
-        }
-        return newOrder;
+        messageRepository.save(new Message(order.getInventoryId(), change));
+        orderRepository.save(order);
+        messageRelay.sendUnfinishedMessages();
+        return order;
 
     }
 
-    private int getInventory(UUID id){
+    public int getInventory(UUID id){
 
        return Optional.ofNullable(webClient
                 .get()
@@ -99,18 +85,6 @@ public class OrderService {
                 .bodyToMono(Integer.class)
                 .block()).orElseThrow(InternalError::new);
 
-    }
-
-    private HttpStatusCode setInventory(UUID id, int quantity){
-        
-        WebClient.ResponseSpec response = webClient
-                .post()
-                .uri(id+"/"+quantity)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve();
-        HttpStatusCode code=Optional.of(response.toBodilessEntity().block().getStatusCode()).get();
-        return code;
-      
     }
 
 }

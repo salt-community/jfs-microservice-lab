@@ -5,6 +5,7 @@ import se.saltcode.inventory.model.Inventory;
 import se.saltcode.inventory.model.InventoryDBRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -59,9 +60,9 @@ public class InventoryService {
     public Inventory updateQuantityOfInventory(UUID id, int quantity) {
         return inventoryDBRepository.findById(id)
                 .map(existingItem -> {
-                    existingItem.setQuantity(quantity);
+                    existingItem.setQuantity(existingItem.getQuantity()-quantity);
                     return inventoryDBRepository.save(existingItem);
                 })
-                .orElse(null);
+                .orElseThrow(NoSuchElementException::new);
     }
 }

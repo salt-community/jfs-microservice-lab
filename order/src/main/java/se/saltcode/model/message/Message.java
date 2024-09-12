@@ -2,7 +2,6 @@ package se.saltcode.model.message;
 
 
 import jakarta.persistence.*;
-import se.saltcode.model.enums.MessageType;
 
 import java.util.UUID;
 
@@ -13,28 +12,40 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String uri;
-    private String payload;
-    private MessageType messageType;
+    private int quantityChange;
+    private UUID inventoryId;
 
     public Message() {
 
     }
 
-    public Message( String uri, String payload,MessageType messageType) {
-        this.uri = uri;
-        this.payload = payload;
-        this.messageType = messageType;
+    public Message(UUID inventoryId, int quantityChange) {
+        this.inventoryId = inventoryId;
+        this.quantityChange = quantityChange;
     }
 
     public UUID getId() {
-        return this.id;
+        return id;
     }
-    public String getUri() {
-        return this.uri;
+
+    public void setId(UUID id) {
+        this.id = id;
     }
-    public MessageType getMessageType() {
-        return this.messageType;
+
+    public int getQuantityChange() {
+        return quantityChange;
+    }
+
+    public void setQuantityChange(int quantityChange) {
+        this.quantityChange = quantityChange;
+    }
+
+    public UUID getInventoryId() {
+        return inventoryId;
+    }
+
+    public void setInventoryId(UUID inventoryId) {
+        this.inventoryId = inventoryId;
     }
 }
 

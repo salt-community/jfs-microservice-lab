@@ -80,11 +80,8 @@ public class InventoryController {
     @PutMapping("/{id}/{quantity}")
     public ResponseEntity<InventoryDTO> updateQuantityOfInventory(@PathVariable("id") UUID id, @PathVariable("quantity") int quantity) {
         Inventory updatedItem = inventoryService.updateQuantityOfInventory(id, quantity);
-        if (updatedItem != null) {
-            return new ResponseEntity<>(convertToDTO(updatedItem), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(convertToDTO(updatedItem), HttpStatus.OK);
+
     }
     // Helper methods to convert between DTO and Entity
     private InventoryDTO convertToDTO(Inventory inventory) {

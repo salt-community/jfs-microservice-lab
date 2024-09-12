@@ -47,12 +47,7 @@ public class OrderController {
     }
 
     @PostMapping
-    ResponseEntity<UUID> createOrder(@RequestBody OrderCreationObject orderCreationObject) throws URISyntaxException {
-        /*return ResponseEntity
-                .created(new URI("http://localhost:8080"+API_CONTEXT_ROOT+orderService.createOrder(new Orders(orderCreationObject))))
-                .build();
-
-         */
+    ResponseEntity<UUID> createOrder(@RequestBody OrderCreationObject orderCreationObject){
         return new ResponseEntity<>(orderService.createOrder(new Orders(orderCreationObject)), HttpStatus.CREATED);
 
     }
@@ -75,4 +70,9 @@ public class OrderController {
     ResponseEntity<List<Message>> getMessages() {
         return ResponseEntity.ok(messageRepository.findAll());
     }
+    @GetMapping("/test1/{id}")
+    ResponseEntity<Integer> test1(@PathVariable UUID id) {
+        return ResponseEntity.ok(orderService.getInventory(id));
+    }
+
 }
