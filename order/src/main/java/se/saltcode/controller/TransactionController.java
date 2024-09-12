@@ -41,16 +41,13 @@ public class TransactionController {
     @PostMapping
     public ResponseEntity<TransactionDTO> createTransaction(@RequestBody AddTransactionDTO transactionDto) {
         Transaction transaction = new Transaction(
-                UUID.randomUUID(),
-                transactionDto.orderId(),
                 transactionDto.eventType(),
-                transactionDto.status(),
                 transactionDto.payload()
         );
 
         Transaction createdTransaction = service.createTransaction(transaction);
         TransactionDTO dto = TransactionDTO.fromTransaction(createdTransaction);
-        return ResponseEntity.created(URI.create(API_CONTEXT_ROOT + createdTransaction.getEventID())).body(dto);
+        return ResponseEntity.created(URI.create(API_CONTEXT_ROOT + createdTransaction.getId())).body(dto);
     }
 
     @PutMapping("/{eventID}")
@@ -59,9 +56,7 @@ public class TransactionController {
 
         Transaction updatedTransaction = service.updateTransaction(
                 eventID,
-                transactionDto.orderId(),
                 transactionDto.eventType(),
-                transactionDto.status(),
                 transactionDto.payload()
         );
 

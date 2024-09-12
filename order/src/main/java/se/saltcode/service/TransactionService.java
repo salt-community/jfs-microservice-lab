@@ -7,6 +7,7 @@ import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.TransactionRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -31,11 +32,9 @@ public class TransactionService {
         return repository.save(transaction);
     }
 
-    public Transaction updateTransaction(UUID eventID, UUID orderId, Event eventType, Status status, String payload) {
+    public Transaction updateTransaction(UUID eventID,  Event eventType,  Map<String, String> payload) {
         Transaction transaction = getTransactionById(eventID);
-        transaction.setOrderId(orderId);
         transaction.setEventType(eventType);
-        transaction.setStatus(status);
         transaction.setPayload(payload);
         return repository.save(transaction);
     }
@@ -43,4 +42,5 @@ public class TransactionService {
     public void deleteTransaction(UUID eventID) {
         repository.deleteById(eventID);
     }
+
 }

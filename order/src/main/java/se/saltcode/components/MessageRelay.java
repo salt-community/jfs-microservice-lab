@@ -1,44 +1,52 @@
 package se.saltcode.components;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
-import se.saltcode.model.message.Message;
-import se.saltcode.repository.IMessageRepository;
+import se.saltcode.model.transaction.Transaction;
+import se.saltcode.repository.TransactionDbRepository;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 @Component
 public class MessageRelay {
 
-    private final IMessageRepository messageRepository;
     private final WebClient webClient;
+    private final TransactionDbRepository transactionRepository;
 
-    public MessageRelay(IMessageRepository messageRepository) {
-        this.messageRepository = messageRepository;
+    public MessageRelay(TransactionDbRepository transactionRepository) {
         this.webClient = WebClient.create("http://localhost:5000/api/inventory/");
+        this.transactionRepository = transactionRepository;
     }
-
-
     public void sendUnfinishedMessages() {
-        messageRepository.findAll().forEach(this::sendMessage);
+        transactionRepository.findAll().forEach(this::sendMessage);
 
     }
 
-    private void sendMessage(Message message) {
+    private void sendMessage(Transaction transaction) {
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        Map <String, String> payload =  transaction.getPayload();
+        payload.keySet().forEach(key ->
+                multiValueMap.put(key, Collections.singletonList(payload.get(key)))
+        );
 
-        HttpStatusCode response = Objects.requireNonNull(
+        HttpStatusCode response =  Objects.requireNonNull(
                 webClient.put()
-                        .uri(message.getInventoryId()+"/"+message.getQuantityChange())
+                        .uri(uriBuilder -> uriBuilder
+                                .path("update/quantity")
+                                .queryParams(multiValueMap)
+                                .build())
                         .accept(MediaType.APPLICATION_JSON)
                         .retrieve()
                         .toBodilessEntity()
                         .block()).getStatusCode();
-
         if(response.is2xxSuccessful()){
-            messageRepository.deleteById(message.getId());
+            transactionRepository.deleteById(transaction.getId());
         }
     }
 }

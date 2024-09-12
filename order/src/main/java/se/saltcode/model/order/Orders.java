@@ -45,13 +45,6 @@ public class Orders {
         this.totalCost=orderUpdateObject.totalCost();
     }
 
-    public Orders(UUID customerId, UUID inventoryId, int quantity, double totalCost) {
-        this.customerId = customerId;
-        this.inventoryId = inventoryId;
-        this.quantity = quantity;
-        this.totalCost = totalCost;
-    }
-
     public OrderResponseObject toResponseObject() {
         return new OrderResponseObject(id, customerId, inventoryId ,quantity, totalCost);
     }

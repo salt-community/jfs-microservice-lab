@@ -1,3 +1,4 @@
+
 api:
   base-path: /api
   controllers:

@@ -4,16 +4,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.saltcode.model.message.Message;
 import se.saltcode.model.order.Orders;
 import se.saltcode.model.order.OrderCreationObject;
 import se.saltcode.model.order.OrderResponseObject;
 import se.saltcode.model.order.OrderUpdateObject;
-import se.saltcode.repository.IMessageRepository;
 import se.saltcode.service.OrderService;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,14 +19,12 @@ import java.util.UUID;
 public class OrderController {
 
     private final OrderService orderService;
-    private final IMessageRepository messageRepository;
 
     @Value("${api.base-path}${api.controllers.orders}/")
     public String API_CONTEXT_ROOT;
 
-    public OrderController(OrderService orderService, IMessageRepository messageRepository) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.messageRepository = messageRepository;
     }
 
     @GetMapping
