@@ -21,7 +21,7 @@ spring:
   cloud:
     gcp:
       sql:
-        instance-connection-name: "${INSTANCE_CONNECTION_NAME}"
+        instance-connection-name: ${INSTANCE_CONNECTION_NAME}
         database-name: ${DATABASE_NAME}
       credentials:
         location: ${GCP_AUTH_LOCATION}
