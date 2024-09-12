@@ -72,8 +72,7 @@ public class OrderController {
     }
 
     @GetMapping("/messages")
-    ResponseEntity<List<Message>> getOrder() {
+    ResponseEntity<List<Message>> getMessages() {
         return ResponseEntity.ok(messageRepository.findAll());
     }
-
 }
