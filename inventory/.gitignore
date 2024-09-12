@@ -1,3 +1,4 @@
+src/main/resources/microservice-lab-434611-fe3ec8273fae.json
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -31,4 +32,4 @@ build/
 
 ### VS Code ###
 .vscode/
-.env
+src/main/resources/.env
