@@ -66,13 +66,5 @@ public class OrderController {
                         .toResponseObject());
     }
 
-    @GetMapping("/messages")
-    ResponseEntity<List<Message>> getMessages() {
-        return ResponseEntity.ok(messageRepository.findAll());
-    }
-    @GetMapping("/test1/{id}")
-    ResponseEntity<Integer> test1(@PathVariable UUID id) {
-        return ResponseEntity.ok(orderService.getInventory(id));
-    }
 
 }
