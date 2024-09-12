@@ -29,7 +29,6 @@ public class AppSetup implements InitializingBean {
 
     private void sendUnfinishedMessages() {
         messageRepository.findAll().forEach(this::sendMessage);
-        System.out.println("called sendUnfinishedMessages");
 
     }
 
@@ -44,8 +43,6 @@ public class AppSetup implements InitializingBean {
 
         if(response.is2xxSuccessful()){
             messageRepository.deleteById(message.getId());
-            System.out.println("successfully deleted message");
         }
-
     }
 }

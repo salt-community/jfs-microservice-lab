@@ -1,5 +1,5 @@
 package se.saltcode.service;
-
+import org.springframework.http.MediaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -13,6 +13,7 @@ import se.saltcode.repository.IMessageRepository;
 import se.saltcode.repository.OrderRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,7 +24,7 @@ public class OrderService {
     private final IMessageRepository messageRepository;
 
     public OrderService(OrderRepository orderRepository, IMessageRepository messageRepository) {
-        this.webClient = WebClient.create("http://localhost:8080/api/inventory/");
+        this.webClient = WebClient.create("http://localhost:5000/api/inventory/");
         this.orderRepository = orderRepository;
         this.messageRepository = messageRepository;
     }
@@ -36,7 +37,7 @@ public class OrderService {
         return orderRepository.getOrder(id);
     }
 
-    @Transactional
+
     public UUID createOrder(Orders order) {
 
         int inventory = getInventory(order.getInventoryId())-order.getQuantity();
@@ -49,6 +50,7 @@ public class OrderService {
                 "http://localhost:5000/api/inventory/"+order.getInventoryId()+"/"+inventory,
                 null,
                 MessageType.POST)).getId();
+
 
         HttpStatusCode response = setInventory(order.getInventoryId(), inventory);
         if(response == HttpStatus.OK) {
@@ -89,7 +91,6 @@ public class OrderService {
     }
 
     private int getInventory(UUID id){
-        /*
 
        return Optional.ofNullable(webClient
                 .get()
@@ -98,20 +99,17 @@ public class OrderService {
                 .bodyToMono(Integer.class)
                 .block()).orElseThrow(InternalError::new);
 
-         */
-        return 8;
     }
 
     private HttpStatusCode setInventory(UUID id, int quantity){
-        /*
+        
         WebClient.ResponseSpec response = webClient
                 .post()
                 .uri(id+"/"+quantity)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve();
-
-        return Optional.of(response.toBodilessEntity().block().getStatusCode()).get();
-        */
-        return HttpStatus.OK;
+        HttpStatusCode code=Optional.of(response.toBodilessEntity().block().getStatusCode()).get();
+        return code;
+      
     }
 }

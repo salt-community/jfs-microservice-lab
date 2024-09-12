@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.saltcode.model.message.Message;
 import se.saltcode.model.order.Orders;
 import se.saltcode.model.order.OrderCreationObject;
 import se.saltcode.model.order.OrderResponseObject;
 import se.saltcode.model.order.OrderUpdateObject;
+import se.saltcode.repository.IMessageRepository;
 import se.saltcode.service.OrderService;
 
 import java.net.URI;
@@ -21,12 +23,14 @@ import java.util.UUID;
 public class OrderController {
 
     private final OrderService orderService;
+    private final IMessageRepository messageRepository;
 
     @Value("${api.base-path}${api.controllers.orders}/")
     public String API_CONTEXT_ROOT;
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, IMessageRepository messageRepository) {
         this.orderService = orderService;
+        this.messageRepository = messageRepository;
     }
 
     @GetMapping
@@ -43,10 +47,14 @@ public class OrderController {
     }
 
     @PostMapping
-    ResponseEntity<URI> createOrder(@RequestBody OrderCreationObject orderCreationObject) throws URISyntaxException {
-        return ResponseEntity
+    ResponseEntity<UUID> createOrder(@RequestBody OrderCreationObject orderCreationObject) throws URISyntaxException {
+        /*return ResponseEntity
                 .created(new URI("http://localhost:8080"+API_CONTEXT_ROOT+orderService.createOrder(new Orders(orderCreationObject))))
                 .build();
+
+         */
+        return new ResponseEntity<>(orderService.createOrder(new Orders(orderCreationObject)), HttpStatus.CREATED);
+
     }
 
     @DeleteMapping("/{id}")
@@ -61,6 +69,11 @@ public class OrderController {
                 .ok(orderService
                         .updateOrder(new Orders(orderUpdateObject))
                         .toResponseObject());
+    }
+
+    @GetMapping("/messages")
+    ResponseEntity<List<Message>> getOrder() {
+        return ResponseEntity.ok(messageRepository.findAll());
     }
 
 }
