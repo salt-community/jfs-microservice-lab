@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/inventory")
 public class InventoryController {
 
@@ -76,14 +77,11 @@ public class InventoryController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PutMapping("/{id}/{quantity}")
-    public ResponseEntity<InventoryDTO> updateQuantityOfInventory(@PathVariable("id") UUID id, @PathVariable("quantity") int quantity) {
-        Inventory updatedItem = inventoryService.updateQuantityOfInventory(id, quantity);
-        if (updatedItem != null) {
-            return new ResponseEntity<>(convertToDTO(updatedItem), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @PutMapping("/update/quantity")
+    public ResponseEntity<?> updateQuantityOfInventory(@RequestParam String id, @RequestParam String change) {
+        inventoryService.updateQuantityOfInventory(UUID.fromString(id), Integer.parseInt(change));
+        return new ResponseEntity<>( HttpStatus.OK);
+
     }
     // Helper methods to convert between DTO and Entity
     private InventoryDTO convertToDTO(Inventory inventory) {

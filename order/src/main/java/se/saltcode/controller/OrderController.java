@@ -1,7 +1,6 @@
 package se.saltcode.controller;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.saltcode.model.order.Orders;
@@ -11,7 +10,6 @@ import se.saltcode.model.order.OrderUpdateObject;
 import se.saltcode.service.OrderService;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,23 +35,22 @@ public class OrderController {
                 .toList());
     }
 
-
     @GetMapping("/{id}")
     ResponseEntity<OrderResponseObject> getOrder(@PathVariable UUID id) {
         return ResponseEntity.ok(orderService.getOrder(id).toResponseObject());
     }
 
     @PostMapping
-    ResponseEntity<URI> createOrder(@RequestBody OrderCreationObject orderCreationObject) throws URISyntaxException {
-        return ResponseEntity
-                .created(new URI("http://localhost:8080"+API_CONTEXT_ROOT+orderService.createOrder(new Orders(orderCreationObject))))
-                .build();
+    ResponseEntity<UUID> createOrder(@RequestBody OrderCreationObject orderCreationObject){
+        UUID orderId = orderService.createOrder(new Orders(orderCreationObject));
+        URI location = URI.create("http://localhost:8080" + API_CONTEXT_ROOT + orderId);
+        return ResponseEntity.created(location).body(orderId);
     }
 
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteOrder(@PathVariable UUID id) {
         orderService.deleteOrder(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping()
@@ -63,5 +60,6 @@ public class OrderController {
                         .updateOrder(new Orders(orderUpdateObject))
                         .toResponseObject());
     }
+
 
 }

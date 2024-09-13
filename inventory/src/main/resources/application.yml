@@ -1,14 +1,22 @@
 server:
     port: 5000
 spring:
+    config:
+        import: secrets.yml
     application:
         name: inventory
     datasource:
-        url: jdbc:postgresql://localhost:5433/inventorydb
-        username: salt
-        password: secret
+        username: ${database.username}
+        password: ${database.password}
     jpa:
         database-platform: org.hibernate.dialect.PostgreSQLDialect
         hibernate:
             ddl-auto: create-drop  #create-drop, create, validate etc
         show-sql: true  #Set to true to enable SQL logging
+    cloud:
+        gcp:
+            sql:
+                instance-connection-name: ${database.instance-connection-name}
+                database-name: ${database.name}
+            credentials:
+                location: ${database.gcp-auth-location}

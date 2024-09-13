@@ -1,9 +1,10 @@
 package se.saltcode.model.transaction;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import org.springframework.util.MultiValueMap;
 import se.saltcode.model.enums.Event;
-import se.saltcode.model.enums.Status;
-
 import java.util.UUID;
 
 @Entity
@@ -12,39 +13,20 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID eventID;
-
-    private UUID orderId;
+    private UUID id;
     private Event eventType;
-    private Status status;
-    private String payload;
+    @JdbcTypeCode(SqlTypes.JSON)
+    private MultiValueMap<String, String> payload;
 
-    public Transaction(UUID eventID, UUID orderId, Event eventType, Status status, String payload) {
-        this.eventID = eventID;
-        this.orderId = orderId;
+    public Transaction() {}
+
+    public Transaction(Event eventType,MultiValueMap<String, String>  payload) {
         this.eventType = eventType;
-        this.status = status;
         this.payload = payload;
     }
 
-    public Transaction() {
-
-    }
-
-    public UUID getEventID() {
-        return eventID;
-    }
-
-    public void setEventID(UUID eventID) {
-        this.eventID = eventID;
-    }
-
-    public UUID getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(UUID orderId) {
-        this.orderId = orderId;
+    public UUID getId() {
+        return id;
     }
 
     public Event getEventType() {
@@ -55,19 +37,14 @@ public class Transaction {
         this.eventType = eventType;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String getPayload() {
+    public MultiValueMap<String, String> getPayload() {
         return payload;
     }
 
-    public void setPayload(String payload) {
+    public void setPayload(MultiValueMap<String, String> payload) {
         this.payload = payload;
     }
+
+
+
 }
