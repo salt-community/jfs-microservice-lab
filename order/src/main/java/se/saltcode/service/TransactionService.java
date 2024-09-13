@@ -6,6 +6,7 @@ import se.saltcode.model.enums.Event;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.TransactionRepository;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -30,7 +31,7 @@ public class TransactionService {
         return repository.save(transaction);
     }
 
-    public Transaction updateTransaction(UUID eventID, Event eventType, MultiValueMap<String, String> payload) {
+    public Transaction updateTransaction(UUID eventID, Event eventType, Map<String, String> payload) {
         Transaction transaction = getTransactionById(eventID);
         transaction.setEventType(eventType);
         transaction.setPayload(payload);

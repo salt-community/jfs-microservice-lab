@@ -5,6 +5,8 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.util.MultiValueMap;
 import se.saltcode.model.enums.Event;
+
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -16,11 +18,11 @@ public class Transaction {
     private UUID id;
     private Event eventType;
     @JdbcTypeCode(SqlTypes.JSON)
-    private MultiValueMap<String, String> payload;
+    private Map<String, String> payload;
 
     public Transaction() {}
 
-    public Transaction(Event eventType,MultiValueMap<String, String>  payload) {
+    public Transaction(Event eventType,Map<String, String>  payload) {
         this.eventType = eventType;
         this.payload = payload;
     }
@@ -37,11 +39,11 @@ public class Transaction {
         this.eventType = eventType;
     }
 
-    public MultiValueMap<String, String> getPayload() {
+    public Map<String, String> getPayload() {
         return payload;
     }
 
-    public void setPayload(MultiValueMap<String, String> payload) {
+    public void setPayload(Map<String, String> payload) {
         this.payload = payload;
     }
 

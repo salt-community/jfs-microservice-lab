@@ -54,9 +54,9 @@ public class OrderService {
             throw new InsufficientInventoryException();
         }
 
-        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-        multiValueMap.put("id", Collections.singletonList(order.getInventoryId().toString()));
-        multiValueMap.put("change", Collections.singletonList(String.valueOf(order.getQuantity())));
+        HashMap<String, String> multiValueMap = new HashMap<>();
+        multiValueMap.put("id", order.getInventoryId().toString());
+        multiValueMap.put("change", String.valueOf(order.getQuantity()));
 
         UUID orderId = orderRepository.save(order).getId();
         transactionRepository.save(new Transaction(Event.PURCHASE,multiValueMap));
@@ -80,9 +80,9 @@ public class OrderService {
 
         orderRepository.save(order);
 
-        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-        multiValueMap.put("id", Collections.singletonList(order.getInventoryId().toString()));
-        multiValueMap.put("change", Collections.singletonList(String.valueOf(change)));
+        HashMap<String, String> multiValueMap = new HashMap<>();
+        multiValueMap.put("id", order.getInventoryId().toString());
+        multiValueMap.put("change", String.valueOf(change));
         transactionRepository.save(new Transaction(Event.CHANGE, multiValueMap));
 
         messageRelay.sendUnfinishedMessages();

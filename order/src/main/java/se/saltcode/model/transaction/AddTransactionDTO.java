@@ -1,7 +1,7 @@
 package se.saltcode.model.transaction;
 
-import org.springframework.util.MultiValueMap;
 import se.saltcode.model.enums.Event;
+import java.util.Map;
 
-public record AddTransactionDTO( Event eventType,  MultiValueMap<String, String> payload) {
+public record AddTransactionDTO( Event eventType,  Map<String, String> payload) {
 }
