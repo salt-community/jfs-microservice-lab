@@ -25,21 +25,8 @@ public class MessageRelay {
     }
 
     private void sendMessage(Transaction transaction) {
-        webClient.put()
-                .uri(uriBuilder -> uriBuilder
-                        .queryParams(transaction.getPayload())
-                        .build())
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .toBodilessEntity()
-                .publishOn(Schedulers.boundedElastic())
-                .doOnSuccess(response -> {
-                    if (response != null && response.getStatusCode().is2xxSuccessful()) {
-                        transactionRepository.deleteById(transaction.getId());
-                    }
-                })
-                .subscribe();
-        /*
+
+
         HttpStatusCode response =  Objects.requireNonNull(
                 webClient.put()
                         .uri(uriBuilder -> uriBuilder
@@ -54,6 +41,6 @@ public class MessageRelay {
         if(response.is2xxSuccessful()){
             transactionRepository.deleteById(transaction.getId());
         }
-         */
+
     }
 }
