@@ -2,12 +2,12 @@ server:
     port: 5000
 spring:
     config:
-        import: optional:file:.env[.properties]
+        import: secrets.yml
     application:
         name: inventory
     datasource:
-        username: ${DATABASE_USERNAME}
-        password: ${DATABASE_PASSWORD}
+        username: ${database.username}
+        password: ${database.password}
     jpa:
         database-platform: org.hibernate.dialect.PostgreSQLDialect
         hibernate:
@@ -16,7 +16,7 @@ spring:
     cloud:
         gcp:
             sql:
-                instance-connection-name: "${INSTANCE_CONNECTION_NAME}"
-                database-name: ${DATABASE_NAME}
+                instance-connection-name: ${database.instance-connection-name}
+                database-name: ${database.name}
             credentials:
-                location: ${GCP_AUTH_LOCATION}
+                location: ${database.gcp-auth-location}
