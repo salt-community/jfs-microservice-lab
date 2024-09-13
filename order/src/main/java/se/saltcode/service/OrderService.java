@@ -1,6 +1,8 @@
 package se.saltcode.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import se.saltcode.components.MessageRelay;
 import se.saltcode.error.InsufficientInventoryException;
@@ -10,11 +12,7 @@ import se.saltcode.model.order.Orders;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.IOrderRepository;
 import se.saltcode.repository.TransactionDbRepository;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -39,52 +37,54 @@ public class OrderService {
         return orderRepository.findById(id).orElseThrow(NoSuchOrderException::new);
     }
 
+    public void deleteOrder(UUID id) {
+
+        if(orderRepository.existsById(id)){
+            throw new NoSuchOrderException();
+        }
+
+        orderRepository.deleteById(id);
+    }
+
+    @Transactional
     public UUID createOrder(Orders order) {
+
         int inventory = getInventory(order.getInventoryId())-order.getQuantity();
         if (inventory < 0) {
             throw new InsufficientInventoryException();
         }
+
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.put("id", Collections.singletonList(order.getInventoryId().toString()));
+        multiValueMap.put("change", Collections.singletonList(String.valueOf(order.getQuantity())));
+
         UUID orderId = orderRepository.save(order).getId();
-        transactionRepository.save(
-                new Transaction(
-                        Event.PURCHASE,
-                        Map.of("id",
-                                order.getInventoryId().toString(),
-                                "change",
-                                String.valueOf(order.getQuantity()))));
+        transactionRepository.save(new Transaction(Event.PURCHASE,multiValueMap));
 
         messageRelay.sendUnfinishedMessages();
         return orderId;
     }
 
-    public void deleteOrder(UUID id) {
-        if(orderRepository.existsById(id)){
-            throw new NoSuchOrderException();
-        }
-        orderRepository.deleteById(id);
-    }
-
     @Transactional
     public Orders updateOrder(Orders order) {
 
-        if(!orderRepository.existsById(order.getId())){
-            throw new NoSuchOrderException();
-        }
+        Orders oldOrder = orderRepository
+                .findById(order.getId())
+                .orElseThrow(NoSuchOrderException::new);
 
-        int change =order.getQuantity()-orderRepository.findById(order.getId()).orElseThrow(NoSuchOrderException::new).getQuantity();
+        int change = order.getQuantity() - oldOrder.getQuantity();
 
         if (getInventory(order.getInventoryId())-change < 0) {
             throw new InsufficientInventoryException();
         }
 
         orderRepository.save(order);
-        transactionRepository.save(
-                new Transaction(
-                        Event.CHANGE,
-                        Map.of("id",
-                                order.getInventoryId().toString(),
-                                "change",
-                                String.valueOf(change))));
+
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.put("id", Collections.singletonList(order.getInventoryId().toString()));
+        multiValueMap.put("change", Collections.singletonList(String.valueOf(change)));
+        transactionRepository.save(new Transaction(Event.CHANGE, multiValueMap));
+
         messageRelay.sendUnfinishedMessages();
         return order;
 
@@ -97,7 +97,5 @@ public class OrderService {
                 .retrieve()
                 .bodyToMono(Integer.class)
                 .block()).orElseThrow(InternalError::new);
-
     }
-
 }

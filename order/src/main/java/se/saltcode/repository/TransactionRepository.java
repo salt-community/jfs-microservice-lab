@@ -2,7 +2,6 @@ package se.saltcode.repository;
 
 import org.springframework.stereotype.Repository;
 import se.saltcode.model.transaction.Transaction;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

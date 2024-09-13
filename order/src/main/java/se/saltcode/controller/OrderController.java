@@ -1,7 +1,6 @@
 package se.saltcode.controller;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.saltcode.model.order.Orders;
@@ -10,6 +9,7 @@ import se.saltcode.model.order.OrderResponseObject;
 import se.saltcode.model.order.OrderUpdateObject;
 import se.saltcode.service.OrderService;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,14 +42,15 @@ public class OrderController {
 
     @PostMapping
     ResponseEntity<UUID> createOrder(@RequestBody OrderCreationObject orderCreationObject){
-        return new ResponseEntity<>(orderService.createOrder(new Orders(orderCreationObject)), HttpStatus.CREATED);
-
+        UUID orderId = orderService.createOrder(new Orders(orderCreationObject));
+        URI location = URI.create("http://localhost:8080" + API_CONTEXT_ROOT + orderId);
+        return ResponseEntity.created(location).body(orderId);
     }
 
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteOrder(@PathVariable UUID id) {
         orderService.deleteOrder(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping()
