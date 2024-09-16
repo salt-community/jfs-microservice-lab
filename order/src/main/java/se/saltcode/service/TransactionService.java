@@ -1,7 +1,6 @@
 package se.saltcode.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 import se.saltcode.model.enums.Event;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.TransactionRepository;

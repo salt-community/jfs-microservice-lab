@@ -6,13 +6,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.scheduler.Schedulers;
+import reactor.core.publisher.Mono;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.TransactionDbRepository;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 
 @Component
 public class MessageRelay {
@@ -24,6 +23,7 @@ public class MessageRelay {
         this.webClient = WebClient.create("http://localhost:5000/api/inventory/");
         this.transactionRepository = transactionRepository;
     }
+
     public void sendUnfinishedMessages() {
         transactionRepository.findAll().forEach(this::sendMessage);
 
@@ -36,7 +36,7 @@ public class MessageRelay {
         payload.keySet().forEach(key ->
                 multiValueMap.put(key, Collections.singletonList(payload.get(key)))
         );
-        HttpStatusCode response =  Objects.requireNonNull(
+
                 webClient.put()
                         .uri(uriBuilder -> uriBuilder
                                 .path("update/quantity")
@@ -44,12 +44,12 @@ public class MessageRelay {
                                 .build())
                         .accept(MediaType.APPLICATION_JSON)
                         .retrieve()
-                        .toBodilessEntity()
-                        .block()).getStatusCode();
-
-        if(response.is2xxSuccessful()){
-            transactionRepository.deleteById(transaction.getId());
-        }
-
+                        .onStatus(HttpStatusCode::is2xxSuccessful, clientResponse -> {
+                            transactionRepository.deleteById(transaction.getId());
+                            return Mono.empty();
+                        })
+                        .bodyToMono(Void.class)
+                        .onErrorResume(Exception.class, ex -> Mono.error(new RuntimeException("Service B is unavailable")))
+                        .subscribe();
     }
 }
