@@ -8,20 +8,24 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import se.saltcode.model.transaction.Transaction;
+import se.saltcode.repository.IOrderRepository;
 import se.saltcode.repository.TransactionDbRepository;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 public class MessageRelay {
 
     private final WebClient webClient;
     private final TransactionDbRepository transactionRepository;
+    private final IOrderRepository orderRepository;
 
-    public MessageRelay(TransactionDbRepository transactionRepository) {
+    public MessageRelay(TransactionDbRepository transactionRepository,  IOrderRepository orderRepository) {
         this.webClient = WebClient.create("http://localhost:5000/api/inventory/");
         this.transactionRepository = transactionRepository;
+        this.orderRepository = orderRepository;
     }
 
     public void sendUnfinishedMessages() {
@@ -46,6 +50,11 @@ public class MessageRelay {
                         .retrieve()
                         .onStatus(HttpStatusCode::is2xxSuccessful, clientResponse -> {
                             transactionRepository.deleteById(transaction.getId());
+                            return Mono.empty();
+                        })
+                        .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+                            transactionRepository.deleteById(transaction.getId());
+                            orderRepository.deleteById(UUID.fromString(transaction.getPayload().get("orderId")));
                             return Mono.empty();
                         })
                         .bodyToMono(Void.class)

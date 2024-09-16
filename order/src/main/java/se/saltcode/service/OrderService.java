@@ -46,7 +46,8 @@ public class OrderService {
         transactionRepository.save(
                 new Transaction(Event.PURCHASE,
                         Map.of("id", order.getInventoryId().toString(),
-                                "change", String.valueOf(order.getQuantity()))));
+                                "change", String.valueOf(order.getQuantity()),
+                                "orderId", order.getId().toString())));
 
         messageRelay.sendUnfinishedMessages();
         return orderId;
@@ -65,8 +66,9 @@ public class OrderService {
 
         transactionRepository.save(
                 new Transaction(Event.CHANGE,
-                        Map.of("id", order.getInventoryId().toString(),
-                                "change", String.valueOf(change))));
+                        Map.of("id", order.getInventoryId().toString()
+                                ,"change", String.valueOf(change)
+                                ,"orderId", order.getId().toString())));
 
         messageRelay.sendUnfinishedMessages();
         return order;
