@@ -81,7 +81,6 @@ public class InventoryController {
     public ResponseEntity<?> updateQuantityOfInventory(@RequestParam String id, @RequestParam String change) {
         inventoryService.updateQuantityOfInventory(UUID.fromString(id), Integer.parseInt(change));
         return new ResponseEntity<>( HttpStatus.OK);
-
     }
     // Helper methods to convert between DTO and Entity
     private InventoryDTO convertToDTO(Inventory inventory) {
