@@ -12,7 +12,6 @@ public class InventoryDTO {
 
     private int reservedQuantity;
 
-    // Getters and Setters
     public UUID getId() {
         return id;
     }

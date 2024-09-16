@@ -58,11 +58,12 @@ public class InventoryService {
     }
 
     public Inventory updateQuantityOfInventory(UUID id, int quantity) {
-        return inventoryDBRepository.findById(id)
-                .map(existingItem -> {
-                    existingItem.setQuantity(existingItem.getQuantity()-quantity);
-                    return inventoryDBRepository.save(existingItem);
-                })
-                .orElseThrow(NoSuchElementException::new);
+        Inventory inventory =  inventoryDBRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        inventory.setQuantity(inventory.getQuantity()-quantity);
+        if (inventory.getQuantity()<0) {
+            throw new IllegalArgumentException("Inventory item quantity cannot be negative");
+        }
+        return inventoryDBRepository.save(inventory);
+
     }
 }
