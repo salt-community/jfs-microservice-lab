@@ -3,7 +3,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 
             'europe-west1-docker.pkg.dev/microservice-lab-434611/pgp-microservice/order', 
-           './order']
+           , '-f', './order/Dockerfile', './order']
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 
