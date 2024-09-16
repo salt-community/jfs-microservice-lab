@@ -34,7 +34,7 @@ public class MessageRelay {
     }
 
     private void sendMessage(Transaction transaction) {
-/*
+
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         Map<String, String> payload = transaction.getPayload();
         payload.keySet().forEach(key ->
@@ -61,6 +61,6 @@ public class MessageRelay {
                         .onErrorResume(Exception.class, ex -> Mono.error(new RuntimeException("Service B is unavailable")))
                         .subscribe();
 
- */
+
     }
 }
