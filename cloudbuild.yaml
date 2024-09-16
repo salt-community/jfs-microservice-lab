@@ -16,3 +16,5 @@ steps:
 images:
   - europe-west1-docker.pkg.dev/microservice-lab-434611/pgp-microservice/order
 
+options:
+  logging: CLOUD_LOGGING_ONLY
