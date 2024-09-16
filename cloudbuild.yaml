@@ -9,9 +9,9 @@ steps:
     args: ['push', 
            'europe-west1-docker.pkg.dev/microservice-lab-434611/pgp-microservice/order']
 
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
-  args: ['run', 'deploy', 'order-microservice', '--image', 'europe-west1-docker.pkg.dev/microservice-lab-434611/pgp-microservice/order', '--region', 'europe-west1']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: ['run', 'deploy', 'order-microservice', '--image', 'europe-west1-docker.pkg.dev/microservice-lab-434611/pgp-microservice/order', '--region', 'europe-west1']
 
 images:
   - europe-west1-docker.pkg.dev/microservice-lab-434611/pgp-microservice/order
