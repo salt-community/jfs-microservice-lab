@@ -1,52 +1,49 @@
 package se.saltcode.model.transaction;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-import org.springframework.util.MultiValueMap;
-import se.saltcode.model.enums.Event;
-
 import java.util.Map;
 import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import se.saltcode.model.enums.Event;
 
 @Entity
 @Table
 public class Transaction {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-    private Event eventType;
-    @JdbcTypeCode(SqlTypes.JSON)
-    private Map<String, String> payload;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
-    public Transaction() {}
+  private Event eventType;
 
-    public Transaction(Event eventType,Map<String, String>  payload) {
-        this.eventType = eventType;
-        this.payload = payload;
-    }
+  @JdbcTypeCode(SqlTypes.JSON)
+  private Map<String, String> payload;
 
-    public UUID getId() {
-        return id;
-    }
+  public Transaction() {}
 
-    public Event getEventType() {
-        return eventType;
-    }
+  public Transaction(Event eventType, Map<String, String> payload) {
+    this.eventType = eventType;
+    this.payload = payload;
+  }
 
-    public void setEventType(Event eventType) {
-        this.eventType = eventType;
-    }
+  public UUID getId() {
+    return id;
+  }
 
-    public Map<String, String> getPayload() {
-        return payload;
-    }
+  public Event getEventType() {
+    return eventType;
+  }
 
-    public void setPayload(Map<String, String> payload) {
-        this.payload = payload;
-    }
+  public void setEventType(Event eventType) {
+    this.eventType = eventType;
+  }
 
+  public Map<String, String> getPayload() {
+    return payload;
+  }
 
-
+  public void setPayload(Map<String, String> payload) {
+    this.payload = payload;
+  }
 }

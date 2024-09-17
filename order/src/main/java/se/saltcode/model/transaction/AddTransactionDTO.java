@@ -1,7 +1,6 @@
 package se.saltcode.model.transaction;
 
-import se.saltcode.model.enums.Event;
 import java.util.Map;
+import se.saltcode.model.enums.Event;
 
-public record AddTransactionDTO( Event eventType,  Map<String, String> payload) {
-}
+public record AddTransactionDTO(Event eventType, Map<String, String> payload) {}

@@ -1,33 +1,33 @@
 package se.saltcode.repository;
 
-import org.springframework.stereotype.Repository;
-import se.saltcode.model.transaction.Transaction;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.stereotype.Repository;
+import se.saltcode.model.transaction.Transaction;
 
 @Repository
 public class TransactionRepository {
 
-    private final TransactionDbRepository repo;
+  private final TransactionDbRepository repo;
 
-    public TransactionRepository(TransactionDbRepository repo) {
-        this.repo = repo;
-    }
+  public TransactionRepository(TransactionDbRepository repo) {
+    this.repo = repo;
+  }
 
-    public List<Transaction> findAll() {
-        return repo.findAll();
-    }
+  public List<Transaction> findAll() {
+    return repo.findAll();
+  }
 
-    public Optional<Transaction> findById(UUID eventID) {
-        return repo.findById(eventID);
-    }
+  public Optional<Transaction> findById(UUID eventID) {
+    return repo.findById(eventID);
+  }
 
-    public Transaction save(Transaction transaction) {
-        return repo.save(transaction);
-    }
+  public Transaction save(Transaction transaction) {
+    return repo.save(transaction);
+  }
 
-    public void deleteById(UUID eventID) {
-        repo.deleteById(eventID);
-    }
+  public void deleteById(UUID eventID) {
+    repo.deleteById(eventID);
+  }
 }
