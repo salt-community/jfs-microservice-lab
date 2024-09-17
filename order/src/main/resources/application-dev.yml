@@ -1,0 +1,22 @@
+api:
+  base-path: /api
+  controllers:
+    orders: /order
+    transactions: /transaction
+server:
+  port: 8080
+spring:
+  config:
+    import: secrets.yml
+  application:
+    name: inventory
+  datasource:
+    url: ${database.url}
+    username: ${database.username}
+    password: ${database.password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true

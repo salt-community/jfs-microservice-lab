@@ -8,4 +8,4 @@ FROM eclipse-temurin:21
 EXPOSE 8080
 RUN mkdir /app
 COPY --from=build /target/*.jar /app/inventory.jar
-ENTRYPOINT ["java", "-jar","/app/inventory.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar","/app/inventory.jar"]

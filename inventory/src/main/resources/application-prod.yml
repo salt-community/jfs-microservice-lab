@@ -1,0 +1,19 @@
+server:
+  port: 5000
+spring:
+  config:
+    activate:
+      on-profile: prod
+    import: classpath:secret/supabase-config-inventory
+  application:
+    name: inventory
+  datasource:
+    url: ${database.url}
+    username: ${database.username}
+    password: ${database.password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
