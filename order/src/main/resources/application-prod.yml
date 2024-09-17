@@ -11,7 +11,7 @@ spring:
   config:
     activate:
       on-profile: prod
-    import: file:/config/
+    import: file:/config/supabase-config-order
   application:
     name: inventory
   datasource:
