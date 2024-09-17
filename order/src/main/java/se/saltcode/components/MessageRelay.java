@@ -22,8 +22,8 @@ public class MessageRelay {
   private final IOrderRepository orderRepository;
 
   public MessageRelay(
-      TransactionDbRepository transactionRepository, IOrderRepository orderRepository) {
-    this.webClient = WebClient.create("http://localhost:5000/api/inventory/");
+      TransactionDbRepository transactionRepository, IOrderRepository orderRepository, WebClient webClient) {
+    this.webClient = webClient;
     this.transactionRepository = transactionRepository;
     this.orderRepository = orderRepository;
   }
@@ -39,7 +39,6 @@ public class MessageRelay {
     payload
         .keySet()
         .forEach(key -> multiValueMap.put(key, Collections.singletonList(payload.get(key))));
-
     webClient
         .put()
         .uri(uriBuilder -> uriBuilder.path("update/quantity").queryParams(multiValueMap).build())

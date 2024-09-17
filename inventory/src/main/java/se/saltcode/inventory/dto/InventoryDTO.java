@@ -4,43 +4,43 @@ import java.util.UUID;
 
 public class InventoryDTO {
 
-    private UUID id;
+  private UUID id;
 
-    private String product;
+  private String product;
 
-    private int quantity;
+  private int quantity;
 
-    private int reservedQuantity;
+  private int reservedQuantity;
 
-    public UUID getId() {
-        return id;
-    }
+  public UUID getId() {
+    return id;
+  }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-    public String getProduct() {
-        return product;
-    }
+  public String getProduct() {
+    return product;
+  }
 
-    public void setProduct(String product) {
-        this.product = product;
-    }
+  public void setProduct(String product) {
+    this.product = product;
+  }
 
-    public int getQuantity() {
-        return quantity;
-    }
+  public int getQuantity() {
+    return quantity;
+  }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
 
-    public int getReservedQuantity() {
-        return reservedQuantity;
-    }
+  public int getReservedQuantity() {
+    return reservedQuantity;
+  }
 
-    public void setReservedQuantity(int reservedQuantity) {
-        this.reservedQuantity = reservedQuantity;
-    }
+  public void setReservedQuantity(int reservedQuantity) {
+    this.reservedQuantity = reservedQuantity;
+  }
 }

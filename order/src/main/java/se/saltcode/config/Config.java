@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class Config {
@@ -21,5 +22,17 @@ public class Config {
   @Profile({"prod"})
   public String applicationUriProd() {
     return "https://order-983583191360.europe-west1.run.app" + contextPath;
+  }
+
+  @Bean
+  @Profile({"dev"})
+  public WebClient webClientDev() {
+    return WebClient.create("http://localhost:5000/api/inventory/");
+  }
+
+  @Bean
+  @Profile({"prod"})
+  public WebClient webClientProd() {
+    return WebClient.create("https://inventory-983583191360.europe-west1.run.app/api/inventory/");
   }
 }

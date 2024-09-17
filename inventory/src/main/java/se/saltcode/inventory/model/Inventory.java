@@ -4,58 +4,58 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import org.hibernate.annotations.UuidGenerator;
-
 import java.util.UUID;
+import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Table(name = "inventory")
 public class Inventory {
 
-    @UuidGenerator
-    @Id
-    private UUID id;
-    @Column(name = "product")
-    private String product;
-    @Column(name = "quantity")
-    private int quantity;
-    @Column(name = "reserved_quantity")
-    private int reservedQuantity;
+  @UuidGenerator @Id private UUID id;
 
-    // Constructors
-    // Default constructor
-    public Inventory() {}
+  @Column(name = "product")
+  private String product;
 
-    // Getters and Setters
-    public UUID getId() {
-        return id;
-    }
+  @Column(name = "quantity")
+  private int quantity;
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+  @Column(name = "reserved_quantity")
+  private int reservedQuantity;
 
-    public String getProduct() {
-        return product;
-    }
+  // Constructors
+  // Default constructor
+  public Inventory() {}
 
-    public void setProduct(String product) {
-        this.product = product;
-    }
+  // Getters and Setters
+  public UUID getId() {
+    return id;
+  }
 
-    public int getQuantity() {
-        return quantity;
-    }
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+  public String getProduct() {
+    return product;
+  }
 
-    public int getReservedQuantity() {
-        return reservedQuantity;
-    }
+  public void setProduct(String product) {
+    this.product = product;
+  }
 
-    public void setReservedQuantity(int reservedQuantity) {
-        this.reservedQuantity = reservedQuantity;
-    }
+  public int getQuantity() {
+    return quantity;
+  }
+
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
+
+  public int getReservedQuantity() {
+    return reservedQuantity;
+  }
+
+  public void setReservedQuantity(int reservedQuantity) {
+    this.reservedQuantity = reservedQuantity;
+  }
 }
