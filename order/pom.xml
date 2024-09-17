@@ -8,6 +8,7 @@
 		<version>3.3.3</version>
 		<relativePath/>
 	</parent>
+
 	<groupId>se.saltcode</groupId>
 	<artifactId>order</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -84,7 +85,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.google.cloud</groupId>
-			<artifactId>spring-cloud-gcp-starter-secretmanager</artifactId>
+			<artifactId>google-cloud-secretmanager</artifactId>
 		</dependency>
 	</dependencies>
 
