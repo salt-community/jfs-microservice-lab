@@ -11,7 +11,7 @@ spring:
   config:
     activate:
       on-profile: prod
-    import: gcp-secret-manager:/projects/microservice-lab-434611/secrets/supabase-config-order/versions/latest
+    import: file:/config/
   application:
     name: inventory
   datasource:
