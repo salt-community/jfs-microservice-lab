@@ -3,8 +3,10 @@ api:
   controllers:
     orders: /order
     transactions: /transaction
+
 server:
   port: 8080
+
 spring:
   config:
     import: secrets.yml
