@@ -1,5 +1,11 @@
+api:
+  base-path: /api
+  controllers:
+    inventory: /inventory
+
 server:
   port: 5000
+
 spring:
   config:
     import: secrets.yml

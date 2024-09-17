@@ -1,5 +1,10 @@
+api:
+  base-path: /api
+  controllers:
+    inventory: /inventory
+
 server:
-  port: 5000
+  port: 8080
 
 spring:
   config:
