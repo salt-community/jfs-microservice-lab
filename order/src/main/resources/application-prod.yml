@@ -11,13 +11,12 @@ spring:
   config:
     activate:
       on-profile: prod
-    import: file:/config/supabase-config-order
   application:
     name: inventory
   datasource:
-    url: ${database.url}
-    username: ${database.username}
-    password: ${database.password}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect

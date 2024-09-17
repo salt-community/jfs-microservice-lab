@@ -1,4 +1,7 @@
 FROM ubuntu:latest AS build
+ENV DB_USERNAME=${DB_USERNAME}
+ENV DB_PASSWORD=${DB_PASSWORD}
+ENV DB_URL=${DB_URL}
 RUN apt-get update && apt-get install -y maven
 RUN apt-get update
 RUN apt-get install openjdk-21-jdk -y
