@@ -6,7 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.saltcode.inventory.dto.InventoryDTO;
+import se.saltcode.inventory.model.AddInventoryDTO;
+import se.saltcode.inventory.model.InventoryDTO;
 import se.saltcode.inventory.model.Inventory;
 import se.saltcode.inventory.service.InventoryService;
 
@@ -41,9 +42,8 @@ public class InventoryController {
   }
 
   @PostMapping
-  public ResponseEntity<InventoryDTO> createInventoryItem(@RequestBody InventoryDTO inventoryDTO) {
-    Inventory inventory = convertToEntity(inventoryDTO);
-    Inventory createdItem = inventoryService.createInventoryItem(inventory);
+  public ResponseEntity<InventoryDTO> createInventoryItem(@RequestBody AddInventoryDTO inventoryDTO) {
+    Inventory createdItem = inventoryService.createInventoryItem(new Inventory(inventoryDTO));
     return new ResponseEntity<>(convertToDTO(createdItem), HttpStatus.CREATED);
   }
 

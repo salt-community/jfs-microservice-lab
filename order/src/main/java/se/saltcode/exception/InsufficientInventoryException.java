@@ -1,4 +1,4 @@
-package se.saltcode.error;
+package se.saltcode.exception;
 
 public class InsufficientInventoryException extends IllegalArgumentException {
   public InsufficientInventoryException() {

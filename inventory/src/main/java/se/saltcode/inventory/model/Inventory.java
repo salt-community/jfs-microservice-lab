@@ -26,6 +26,12 @@ public class Inventory {
   // Default constructor
   public Inventory() {}
 
+  public Inventory(AddInventoryDTO addInventoryDTO) {
+    this.product = addInventoryDTO.product();
+    this.quantity = addInventoryDTO.quantity();
+    this.reservedQuantity = 0;
+  }
+
   // Getters and Setters
   public UUID getId() {
     return id;

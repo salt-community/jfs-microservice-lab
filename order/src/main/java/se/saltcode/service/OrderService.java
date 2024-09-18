@@ -4,7 +4,7 @@ import java.util.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.saltcode.components.MessageRelay;
-import se.saltcode.error.NoSuchOrderException;
+import se.saltcode.exception.NoSuchOrderException;
 import se.saltcode.model.enums.Event;
 import se.saltcode.model.order.Orders;
 import se.saltcode.model.transaction.Transaction;

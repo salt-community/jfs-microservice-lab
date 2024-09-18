@@ -1,4 +1,4 @@
-package se.saltcode.error;
+package se.saltcode.exception;
 
 import java.util.NoSuchElementException;
 

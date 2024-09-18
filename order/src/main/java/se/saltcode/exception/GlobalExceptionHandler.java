@@ -1,4 +1,4 @@
-package se.saltcode.error;
+package se.saltcode.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

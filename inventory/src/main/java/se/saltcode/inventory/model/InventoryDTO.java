@@ -1,4 +1,4 @@
-package se.saltcode.inventory.dto;
+package se.saltcode.inventory.model;
 
 import java.util.UUID;
 
