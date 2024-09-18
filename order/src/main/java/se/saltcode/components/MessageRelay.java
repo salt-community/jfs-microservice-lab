@@ -1,18 +1,16 @@
 package se.saltcode.components;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.IOrderRepository;
 import se.saltcode.repository.TransactionDbRepository;
+
+import static org.hibernate.query.sqm.tree.SqmNode.log;
 
 @Component
 public class MessageRelay {
@@ -55,8 +53,14 @@ public class MessageRelay {
               return Mono.empty();
             })
         .bodyToMono(Void.class)
-        .onErrorResume(
+            .doOnError(Throwable::printStackTrace)
+            .onErrorResume(
             Exception.class, ex -> Mono.error(new RuntimeException("Service B is unavailable")))
         .subscribe();
+
+
+
+
+
   }
 }
