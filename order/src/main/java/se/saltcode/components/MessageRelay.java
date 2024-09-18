@@ -36,8 +36,8 @@ public class MessageRelay {
     webClient
         .put()
         .uri(uriBuilder -> uriBuilder.path("update/quantity")
-                .queryParam("id", transaction.getPayload().get(("id")))
-                .queryParam("change", transaction.getPayload().get(("change")))
+                .queryParam("id", transaction.getInventoryId())
+                .queryParam("change", transaction.getChange())
                 .build())
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
@@ -51,7 +51,7 @@ public class MessageRelay {
             HttpStatusCode::is4xxClientError,
             clientResponse -> {
               transactionRepository.deleteById(transaction.getId());
-              orderRepository.deleteById(UUID.fromString(transaction.getPayload().get("orderId")));
+              orderRepository.deleteById(transaction.getOrderId());
               return Mono.empty();
             })
         .bodyToMono(Void.class)

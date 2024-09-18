@@ -40,7 +40,12 @@ public class TransactionController {
   @PostMapping
   public ResponseEntity<TransactionDTO> createTransaction(
       @RequestBody AddTransactionDTO transactionDto) {
-    Transaction transaction = new Transaction(transactionDto.eventType(), transactionDto.payload());
+    Transaction transaction = new Transaction(
+            transactionDto.eventType(),
+            transactionDto.orderId(),
+            transactionDto.inventoryId(),
+            transactionDto.change()
+            );
 
     Transaction createdTransaction = service.createTransaction(transaction);
     TransactionDTO dto = TransactionDTO.fromTransaction(createdTransaction);
@@ -53,7 +58,11 @@ public class TransactionController {
       @PathVariable UUID eventID, @RequestBody AddTransactionDTO transactionDto) {
 
     Transaction updatedTransaction =
-        service.updateTransaction(eventID, transactionDto.eventType(), transactionDto.payload());
+        service.updateTransaction(eventID,
+                transactionDto.eventType(),
+                transactionDto.orderId(),
+                transactionDto.inventoryId(),
+                transactionDto.change());
 
     return ResponseEntity.ok(TransactionDTO.fromTransaction(updatedTransaction));
   }

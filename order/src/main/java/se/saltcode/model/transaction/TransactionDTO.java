@@ -4,10 +4,10 @@ import java.util.Map;
 import java.util.UUID;
 import se.saltcode.model.enums.Event;
 
-public record TransactionDTO(UUID id, Event eventType, Map<String, String> payload) {
+public record TransactionDTO(UUID id, Event eventType, UUID orderId, UUID inventoryId, int change) {
 
   public static TransactionDTO fromTransaction(Transaction transaction) {
     return new TransactionDTO(
-        transaction.getId(), transaction.getEventType(), transaction.getPayload());
+        transaction.getId(), transaction.getEventType(), transaction.getOrderId(), transaction.getInventoryId(), transaction.getChange());
   }
 }

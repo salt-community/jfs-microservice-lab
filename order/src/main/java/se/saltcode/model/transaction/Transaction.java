@@ -3,8 +3,6 @@ package se.saltcode.model.transaction;
 import jakarta.persistence.*;
 import java.util.Map;
 import java.util.UUID;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import se.saltcode.model.enums.Event;
 
 @Entity
@@ -17,18 +15,28 @@ public class Transaction {
 
   private Event eventType;
 
-  @JdbcTypeCode(SqlTypes.JSON)
-  private Map<String, String> payload;
+  private UUID orderId;
+
+  private UUID inventoryId;
+
+  private int change;
 
   public Transaction() {}
 
-  public Transaction(Event eventType, Map<String, String> payload) {
+  public Transaction(Event eventType, UUID orderId, UUID inventoryId, int change) {
     this.eventType = eventType;
-    this.payload = payload;
+    this.orderId=orderId;
+    this.inventoryId=inventoryId;
+    this.change=change;
   }
+
 
   public UUID getId() {
     return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   public Event getEventType() {
@@ -39,11 +47,27 @@ public class Transaction {
     this.eventType = eventType;
   }
 
-  public Map<String, String> getPayload() {
-    return payload;
+  public UUID getOrderId() {
+    return orderId;
   }
 
-  public void setPayload(Map<String, String> payload) {
-    this.payload = payload;
+  public void setOrderId(UUID orderId) {
+    this.orderId = orderId;
+  }
+
+  public UUID getInventoryId() {
+    return inventoryId;
+  }
+
+  public void setInventoryId(UUID inventoryId) {
+    this.inventoryId = inventoryId;
+  }
+
+  public int getChange() {
+    return change;
+  }
+
+  public void setChange(int change) {
+    this.change = change;
   }
 }

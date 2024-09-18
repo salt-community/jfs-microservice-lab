@@ -31,10 +31,12 @@ public class TransactionService {
     return repository.save(transaction);
   }
 
-  public Transaction updateTransaction(UUID eventID, Event eventType, Map<String, String> payload) {
+  public Transaction updateTransaction(UUID eventID,   Event eventType, UUID orderId, UUID inventoryId, int change) {
     Transaction transaction = getTransactionById(eventID);
     transaction.setEventType(eventType);
-    transaction.setPayload(payload);
+    transaction.setOrderId(orderId);
+    transaction.setInventoryId(inventoryId);
+    transaction.setChange(change);
     return repository.save(transaction);
   }
 
