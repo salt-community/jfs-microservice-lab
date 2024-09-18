@@ -10,6 +10,8 @@ import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.IOrderRepository;
 import se.saltcode.repository.TransactionDbRepository;
 
+import java.util.Objects;
+
 import static org.hibernate.query.sqm.tree.SqmNode.log;
 
 @Component
@@ -31,36 +33,29 @@ public class MessageRelay {
   }
 
   private void sendMessage(Transaction transaction) {
-    webClient
-        .put()
-        .uri(uriBuilder -> uriBuilder.path("update/quantity")
-                .queryParam("id", transaction.getInventoryId())
-                .queryParam("change", transaction.getChange())
-                .build())
-        .accept(MediaType.APPLICATION_JSON)
-        .retrieve()
-        .onStatus(
-            HttpStatusCode::is2xxSuccessful,
-            clientResponse -> {
-              transactionRepository.deleteById(transaction.getId());
-              return Mono.empty();
-            })
-        .onStatus(
-            HttpStatusCode::is4xxClientError,
-            clientResponse -> {
-              transactionRepository.deleteById(transaction.getId());
-              orderRepository.deleteById(transaction.getOrderId());
-              return Mono.empty();
-            })
-        .bodyToMono(Void.class)
-            .doOnError(Throwable::printStackTrace)
-            .onErrorResume(
-            Exception.class, ex -> Mono.error(new RuntimeException("Service B is unavailable")))
-        .subscribe();
+    try {
+      HttpStatusCode response =  Objects.requireNonNull(
+              webClient.put()
+                      .uri(uriBuilder -> uriBuilder.path("update/quantity")
+                              .queryParam("id", transaction.getInventoryId())
+                              .queryParam("change", transaction.getChange())
+                              .build())
+                      .accept(MediaType.APPLICATION_JSON)
+                      .retrieve()
+                      .toBodilessEntity()
+                      .block()).getStatusCode();
+      if(response.is2xxSuccessful()){
+        transactionRepository.deleteById(transaction.getId());
+      }
 
+      if(response.is4xxClientError()){
+        transactionRepository.deleteById(transaction.getId());
+        orderRepository.deleteById(transaction.getOrderId());
 
-
-
-
+      }
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+    }
   }
 }
