@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.saltcode.model.order.OrderCreationObject;
-import se.saltcode.model.order.OrderResponseObject;
-import se.saltcode.model.order.OrderUpdateObject;
+import se.saltcode.model.order.AddOrderDTO;
+import se.saltcode.model.order.OrderDTO;
+import se.saltcode.model.order.UpdateOrderDTO;
 import se.saltcode.model.order.Orders;
 import se.saltcode.service.OrderService;
 
@@ -25,21 +25,21 @@ public class OrderController {
   }
 
   @GetMapping
-  ResponseEntity<List<OrderResponseObject>> getOrders() {
+  ResponseEntity<List<OrderDTO>> getOrders() {
     return ResponseEntity.ok(
         orderService.getOrders().stream().map(Orders::toResponseObject).toList());
   }
 
   @GetMapping("/{id}")
-  ResponseEntity<OrderResponseObject> getOrder(@PathVariable UUID id) {
+  ResponseEntity<OrderDTO> getOrder(@PathVariable UUID id) {
     return ResponseEntity.ok(orderService.getOrder(id).toResponseObject());
   }
 
   @PostMapping
-  ResponseEntity<OrderResponseObject> createOrder(
-      @RequestBody OrderCreationObject orderCreationObject) {
-    OrderResponseObject order =
-        orderService.createOrder(new Orders(orderCreationObject)).toResponseObject();
+  ResponseEntity<OrderDTO> createOrder(
+      @RequestBody AddOrderDTO addOrderDTO) {
+    OrderDTO order =
+        orderService.createOrder(new Orders(addOrderDTO)).toResponseObject();
     return ResponseEntity.created(URI.create(apiUri + "/" + order.id())).body(order);
   }
 
@@ -50,9 +50,9 @@ public class OrderController {
   }
 
   @PutMapping()
-  ResponseEntity<OrderResponseObject> updateOrder(
-      @RequestBody OrderUpdateObject orderUpdateObject) {
+  ResponseEntity<OrderDTO> updateOrder(
+      @RequestBody UpdateOrderDTO updateOrderDTO) {
     return ResponseEntity.ok(
-        orderService.updateOrder(new Orders(orderUpdateObject)).toResponseObject());
+        orderService.updateOrder(new Orders(updateOrderDTO)).toResponseObject());
   }
 }

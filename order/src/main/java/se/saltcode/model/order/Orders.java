@@ -33,22 +33,22 @@ public class Orders {
 
   public Orders() {}
 
-  public Orders(OrderCreationObject orderCreationObject) {
-    this.customerId = orderCreationObject.customerId();
-    this.inventoryId = orderCreationObject.inventoryId();
-    this.quantity = orderCreationObject.quantity();
-    this.totalCost = orderCreationObject.totalCost();
+  public Orders(AddOrderDTO addOrderDTO) {
+    this.customerId = addOrderDTO.customerId();
+    this.inventoryId = addOrderDTO.inventoryId();
+    this.quantity = addOrderDTO.quantity();
+    this.totalCost = addOrderDTO.totalCost();
   }
 
-  public Orders(OrderUpdateObject orderUpdateObject) {
-    this.customerId = orderUpdateObject.customerId();
-    this.inventoryId = orderUpdateObject.inventoryId();
-    this.quantity = orderUpdateObject.quantity();
-    this.totalCost = orderUpdateObject.totalCost();
+  public Orders(UpdateOrderDTO updateOrderDTO) {
+    this.customerId = updateOrderDTO.customerId();
+    this.inventoryId = updateOrderDTO.inventoryId();
+    this.quantity = updateOrderDTO.quantity();
+    this.totalCost = updateOrderDTO.totalCost();
   }
 
-  public OrderResponseObject toResponseObject() {
-    return new OrderResponseObject(id, customerId, inventoryId, quantity, totalCost);
+  public OrderDTO toResponseObject() {
+    return new OrderDTO(id, customerId, inventoryId, quantity, totalCost);
   }
 
   public UUID getId() {
