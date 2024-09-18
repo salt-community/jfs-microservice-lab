@@ -33,15 +33,12 @@ public class MessageRelay {
   }
 
   private void sendMessage(Transaction transaction) {
-
-    MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-    Map<String, String> payload = transaction.getPayload();
-    payload
-        .keySet()
-        .forEach(key -> multiValueMap.put(key, Collections.singletonList(payload.get(key))));
     webClient
         .put()
-        .uri(uriBuilder -> uriBuilder.path("update/quantity").queryParams(multiValueMap).build())
+        .uri(uriBuilder -> uriBuilder.path("update/quantity")
+                .queryParam("id", transaction.getPayload().get(("id")))
+                .queryParam("change", transaction.getPayload().get(("change")))
+                .build())
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
         .onStatus(
