@@ -2,6 +2,7 @@ package se.saltcode.components;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,6 +26,7 @@ public class MessageRelay {
     this.orderRepository = orderRepository;
   }
 
+  @Scheduled(fixedRate = 60000)
   public void sendUnfinishedMessages() {
     transactionRepository.findAll().forEach(this::sendMessage);
   }
