@@ -5,14 +5,11 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.IOrderRepository;
 import se.saltcode.repository.TransactionDbRepository;
 
 import java.util.Objects;
-
-import static org.hibernate.query.sqm.tree.SqmNode.log;
 
 @Component
 public class MessageRelay {
