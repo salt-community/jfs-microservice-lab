@@ -1,7 +1,12 @@
 package se.saltcode.model.transaction;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.cglib.core.Local;
 import se.saltcode.model.enums.Event;
 
 @Entity
@@ -19,6 +24,9 @@ public class Transaction {
   private UUID inventoryId;
 
   private int change;
+
+  @CreationTimestamp
+  private LocalDateTime createdAt;
 
   public Transaction() {}
 
@@ -68,5 +76,12 @@ public class Transaction {
 
   public void setChange(int change) {
     this.change = change;
+  }
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
   }
 }
