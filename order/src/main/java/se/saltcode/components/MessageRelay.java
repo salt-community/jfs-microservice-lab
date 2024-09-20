@@ -6,6 +6,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import org.springframework.web.reactive.function.client.WebClient;
+import se.saltcode.exception.NoSuchOrderException;
+import se.saltcode.model.enums.Event;
+import se.saltcode.model.order.Orders;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.IOrderRepository;
 import se.saltcode.repository.TransactionDbRepository;
@@ -46,11 +49,18 @@ public class MessageRelay {
       if(response.is2xxSuccessful()){
         transactionRepository.deleteById(transaction.getId());
       }
-
       if(response.is4xxClientError()){
-        transactionRepository.deleteById(transaction.getId());
-        orderRepository.deleteById(transaction.getOrderId());
-
+        if (transaction.getEventType().equals(Event.PURCHASE)){
+          transactionRepository.deleteById(transaction.getId());
+          orderRepository.deleteById(transaction.getOrderId());
+        }
+        if(transaction.getEventType().equals(Event.CHANGE)){
+          Orders order = orderRepository.findById(transaction.getOrderId())
+                  .orElseThrow(NoSuchOrderException::new);
+          order.setQuantity(order.getQuantity() - transaction.getChange());
+          orderRepository.save(order);
+          transactionRepository.deleteById(transaction.getId());
+       }
       }
     }
     catch(Exception e) {
