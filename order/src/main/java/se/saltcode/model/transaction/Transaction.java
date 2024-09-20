@@ -6,12 +6,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.cglib.core.Local;
 import se.saltcode.model.enums.Event;
+import se.saltcode.model.order.Order;
 
 @Entity
 @Table
-public class Transaction {
+public class Transaction implements Comparable<Transaction>{
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,6 +37,10 @@ public class Transaction {
     this.change=change;
   }
 
+  @Override
+  public int compareTo(Transaction o) {
+    return createdAt.compareTo(o.getCreatedAt());
+  }
 
   public UUID getId() {
     return id;

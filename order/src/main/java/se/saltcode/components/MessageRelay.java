@@ -32,6 +32,7 @@ public class MessageRelay {
 
   @Scheduled(fixedRate = 60000)
   public void sendUnfinishedMessages() {
+    tra
     transactionRepository.findAll().forEach(this::sendMessage);
   }
 
