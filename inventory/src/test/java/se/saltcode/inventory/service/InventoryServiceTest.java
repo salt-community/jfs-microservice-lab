@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import se.saltcode.inventory.model.Inventory;
-import se.saltcode.inventory.model.InventoryDBRepository;
+import se.saltcode.inventory.repository.InventoryDBRepository;
 
 class InventoryServiceTest {
 
@@ -40,7 +40,7 @@ class InventoryServiceTest {
   @Test
   void shouldCreateInventoryItemSuccessfully() {
     // Arrange
-    Inventory newItem = new Inventory();
+    Inventory newItem = new Inventory(inventoryDTO);
     newItem.setProduct("Test Product");
     newItem.setQuantity(10);
     newItem.setReservedQuantity(2);
@@ -69,7 +69,7 @@ class InventoryServiceTest {
   @Test
   void shouldReturnInventoryItem_whenItemExists() {
     // Arrange
-    Inventory newItem = new Inventory();
+    Inventory newItem = new Inventory(inventoryDTO);
     newItem.setProduct("Test Product");
     newItem.setQuantity(10);
     newItem.setReservedQuantity(2);
@@ -105,12 +105,12 @@ class InventoryServiceTest {
     // Arrange
     UUID id = UUID.randomUUID();
 
-    Inventory existingItem = new Inventory();
+    Inventory existingItem = new Inventory(inventoryDTO);
     existingItem.setProduct("Existing Product");
     existingItem.setQuantity(10);
     existingItem.setReservedQuantity(1);
 
-    Inventory updatedItemData = new Inventory();
+    Inventory updatedItemData = new Inventory(inventoryDTO);
     updatedItemData.setProduct("Updated Product");
     updatedItemData.setQuantity(15);
     updatedItemData.setReservedQuantity(3);
@@ -133,7 +133,7 @@ class InventoryServiceTest {
   void shouldReturnNull_whenUpdateItemDoesNotExist() {
     // Arrange
     UUID id = UUID.randomUUID();
-    Inventory updatedItemData = new Inventory();
+    Inventory updatedItemData = new Inventory(inventoryDTO);
     updatedItemData.setProduct("Updated Product");
     updatedItemData.setQuantity(15);
     updatedItemData.setReservedQuantity(3);

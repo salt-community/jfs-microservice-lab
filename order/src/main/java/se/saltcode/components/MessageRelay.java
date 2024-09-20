@@ -12,7 +12,7 @@ import se.saltcode.model.enums.Event;
 import se.saltcode.model.order.Order;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.IOrderRepository;
-import se.saltcode.repository.TransactionDbRepository;
+import se.saltcode.repository.ITransactionRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,11 +22,11 @@ import java.util.Objects;
 public class MessageRelay {
 
   private final WebClient webClient;
-  private final TransactionDbRepository transactionRepository;
+  private final ITransactionRepository transactionRepository;
   private final IOrderRepository orderRepository;
 
   public MessageRelay(
-      TransactionDbRepository transactionRepository, IOrderRepository orderRepository, WebClient webClient) {
+          ITransactionRepository transactionRepository, IOrderRepository orderRepository, WebClient webClient) {
     this.webClient = webClient;
     this.transactionRepository = transactionRepository;
     this.orderRepository = orderRepository;

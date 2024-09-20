@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import se.saltcode.inventory.model.Inventory;
-import se.saltcode.inventory.model.InventoryDBRepository;
+import se.saltcode.inventory.repository.InventoryDBRepository;
 
 /**
  * The purpose of this test class is to test the in memory database, which itself is used for
@@ -25,7 +25,7 @@ public class H2DatabaseTest {
   public void testH2Database() {
 
     // Arrange
-    Inventory entity = new Inventory();
+    Inventory entity = new Inventory(inventoryDTO);
     entity.setQuantity(1234);
 
     // Act

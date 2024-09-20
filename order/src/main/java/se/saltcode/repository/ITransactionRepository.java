@@ -6,4 +6,4 @@ import org.springframework.stereotype.Repository;
 import se.saltcode.model.transaction.Transaction;
 
 @Repository
-public interface TransactionDbRepository extends ListCrudRepository<Transaction, UUID> {}
+public interface ITransactionRepository extends ListCrudRepository<Transaction, UUID> {}
