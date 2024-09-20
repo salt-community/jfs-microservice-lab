@@ -1,6 +1,5 @@
 package se.saltcode.model.transaction;
 
-import java.util.Map;
 import java.util.UUID;
 import se.saltcode.model.enums.Event;
 

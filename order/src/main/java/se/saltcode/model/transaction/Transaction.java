@@ -1,7 +1,6 @@
 package se.saltcode.model.transaction;
 
 import jakarta.persistence.*;
-import java.util.Map;
 import java.util.UUID;
 import se.saltcode.model.enums.Event;
 

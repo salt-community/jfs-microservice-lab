@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import se.saltcode.components.MessageRelay;
 import se.saltcode.exception.NoSuchOrderException;
 import se.saltcode.model.enums.Event;
-import se.saltcode.model.order.Orders;
+import se.saltcode.model.order.Order;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.IOrderRepository;
 import se.saltcode.repository.TransactionDbRepository;
@@ -27,11 +27,11 @@ public class OrderService {
     this.messageRelay = messageRelay;
   }
 
-  public List<Orders> getOrders() {
+  public List<Order> getOrders() {
     return orderRepository.findAll();
   }
 
-  public Orders getOrder(UUID id) {
+  public Order getOrder(UUID id) {
     return orderRepository.findById(id).orElseThrow(NoSuchOrderException::new);
   }
 
@@ -43,9 +43,9 @@ public class OrderService {
   }
 
   @Transactional
-  public Orders createOrder(Orders order) {
+  public Order createOrder(Order order) {
 
-    Orders newOrder = orderRepository.save(order);
+    Order newOrder = orderRepository.save(order);
 
     transactionRepository.save(
         new Transaction(Event.PURCHASE, newOrder.getId(), newOrder.getInventoryId(), newOrder.getQuantity()));
@@ -55,9 +55,9 @@ public class OrderService {
   }
 
   @Transactional
-  public Orders updateOrder(Orders order) {
+  public Order updateOrder(Order order) {
 
-    Orders oldOrder =
+    Order oldOrder =
         orderRepository.findById(order.getId()).orElseThrow(NoSuchOrderException::new);
 
     int change = order.getQuantity() - oldOrder.getQuantity();

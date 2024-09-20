@@ -1,7 +1,6 @@
 package se.saltcode.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import se.saltcode.model.enums.Event;

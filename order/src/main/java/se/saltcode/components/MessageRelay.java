@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import se.saltcode.exception.NoSuchOrderException;
 import se.saltcode.model.enums.Event;
-import se.saltcode.model.order.Orders;
+import se.saltcode.model.order.Order;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.IOrderRepository;
 import se.saltcode.repository.TransactionDbRepository;
@@ -55,7 +55,7 @@ public class MessageRelay {
           orderRepository.deleteById(transaction.getOrderId());
         }
         if(transaction.getEventType().equals(Event.CHANGE)){
-          Orders order = orderRepository.findById(transaction.getOrderId())
+          Order order = orderRepository.findById(transaction.getOrderId())
                   .orElseThrow(NoSuchOrderException::new);
           order.setQuantity(order.getQuantity() - transaction.getChange());
           orderRepository.save(order);

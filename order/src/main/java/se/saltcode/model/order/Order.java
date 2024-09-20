@@ -11,7 +11,7 @@ import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Table(name = "orders")
-public class Orders {
+public class Order {
 
   @Id @UuidGenerator private UUID id;
 
@@ -31,16 +31,16 @@ public class Orders {
   @Column(name = "total_cost")
   private double totalCost;
 
-  public Orders() {}
+  public Order() {}
 
-  public Orders(AddOrderDTO addOrderDTO) {
+  public Order(AddOrderDTO addOrderDTO) {
     this.customerId = addOrderDTO.customerId();
     this.inventoryId = addOrderDTO.inventoryId();
     this.quantity = addOrderDTO.quantity();
     this.totalCost = addOrderDTO.totalCost();
   }
 
-  public Orders(UpdateOrderDTO updateOrderDTO) {
+  public Order(UpdateOrderDTO updateOrderDTO) {
     this.customerId = updateOrderDTO.customerId();
     this.inventoryId = updateOrderDTO.inventoryId();
     this.quantity = updateOrderDTO.quantity();
