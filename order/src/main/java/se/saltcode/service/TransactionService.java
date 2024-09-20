@@ -5,29 +5,29 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import se.saltcode.model.enums.Event;
 import se.saltcode.model.transaction.Transaction;
-import se.saltcode.repository.TransactionRepository;
+import se.saltcode.repository.TransactionDbRepository;
 
 @Service
 public class TransactionService {
 
-  private final TransactionRepository repository;
+  private final TransactionDbRepository transactionService;
 
-  public TransactionService(TransactionRepository repository) {
-    this.repository = repository;
+  public TransactionService(TransactionDbRepository transactionService) {
+    this.transactionService = transactionService;
   }
 
   public List<Transaction> getAllTransactions() {
-    return repository.findAll();
+    return transactionService.findAll();
   }
 
   public Transaction getTransactionById(UUID eventID) {
-    return repository
+    return transactionService
         .findById(eventID)
         .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
   }
 
   public Transaction createTransaction(Transaction transaction) {
-    return repository.save(transaction);
+    return transactionService.save(transaction);
   }
 
   public Transaction updateTransaction(UUID eventID,   Event eventType, UUID orderId, UUID inventoryId, int change) {
@@ -36,10 +36,10 @@ public class TransactionService {
     transaction.setOrderId(orderId);
     transaction.setInventoryId(inventoryId);
     transaction.setChange(change);
-    return repository.save(transaction);
+    return transactionService.save(transaction);
   }
 
   public void deleteTransaction(UUID eventID) {
-    repository.deleteById(eventID);
+    transactionService.deleteById(eventID);
   }
 }
