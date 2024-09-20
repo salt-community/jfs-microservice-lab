@@ -5,14 +5,14 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import se.saltcode.model.enums.Event;
 import se.saltcode.model.transaction.Transaction;
-import se.saltcode.repository.TransactionDbRepository;
+import se.saltcode.repository.ITransactionRepository;
 
 @Service
 public class TransactionService {
 
-  private final TransactionDbRepository transactionService;
+  private final ITransactionRepository transactionService;
 
-  public TransactionService(TransactionDbRepository transactionService) {
+  public TransactionService(ITransactionRepository transactionService) {
     this.transactionService = transactionService;
   }
 

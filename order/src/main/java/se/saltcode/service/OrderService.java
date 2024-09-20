@@ -9,19 +9,19 @@ import se.saltcode.model.enums.Event;
 import se.saltcode.model.order.Order;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.IOrderRepository;
-import se.saltcode.repository.TransactionDbRepository;
+import se.saltcode.repository.ITransactionRepository;
 
 @Service
 public class OrderService {
 
   private final IOrderRepository orderRepository;
-  private final TransactionDbRepository transactionRepository;
+  private final ITransactionRepository transactionRepository;
   private final MessageRelay messageRelay;
 
   public OrderService(
       IOrderRepository orderRepository,
       MessageRelay messageRelay,
-      TransactionDbRepository transactionRepository) {
+      ITransactionRepository transactionRepository) {
     this.orderRepository = orderRepository;
     this.transactionRepository = transactionRepository;
     this.messageRelay = messageRelay;

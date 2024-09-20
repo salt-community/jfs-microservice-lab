@@ -22,17 +22,18 @@ public class Inventory {
   @Column(name = "reserved_quantity")
   private int reservedQuantity;
 
-  // Constructors
-  // Default constructor
-  public Inventory() {}
+  public Inventory(InventoryDto inventoryDTO) {}
 
-  public Inventory(AddInventoryDTO addInventoryDTO) {
+  public Inventory(AddInventoryDto addInventoryDTO) {
     this.product = addInventoryDTO.product();
     this.quantity = addInventoryDTO.quantity();
     this.reservedQuantity = 0;
   }
 
-  // Getters and Setters
+  public InventoryDto toResponseObject() {
+    return new InventoryDto(id, product, quantity, reservedQuantity);
+  }
+
   public UUID getId() {
     return id;
   }

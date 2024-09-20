@@ -41,7 +41,7 @@ class InventoryControllerTest {
   @Test
   void testCreateInventoryItem() throws Exception {
     // Arrange
-    Inventory newItem = new Inventory();
+    Inventory newItem = new Inventory(inventoryDTO);
     newItem.setId(UUID.randomUUID());
     newItem.setProduct("New Product");
     newItem.setQuantity(10);
@@ -65,7 +65,7 @@ class InventoryControllerTest {
   @Test
   void testGetInventoryItemById_found() throws Exception {
     // Arrange
-    Inventory item = new Inventory();
+    Inventory item = new Inventory(inventoryDTO);
     item.setId(UUID.randomUUID());
     item.setProduct("Existing Product");
     item.setQuantity(10);
@@ -110,7 +110,7 @@ class InventoryControllerTest {
   @Test
   void testUpdateInventoryItem() throws Exception {
     // Arrange
-    Inventory updatedItem = new Inventory();
+    Inventory updatedItem = new Inventory(inventoryDTO);
     updatedItem.setId(UUID.randomUUID());
     updatedItem.setProduct("Updated Product");
     updatedItem.setQuantity(15);

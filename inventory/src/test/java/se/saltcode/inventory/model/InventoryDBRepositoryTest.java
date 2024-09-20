@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import se.saltcode.inventory.repository.InventoryDBRepository;
 
 @SpringBootTest
 class InventoryDBRepositoryTest {
@@ -23,7 +24,7 @@ class InventoryDBRepositoryTest {
   public void shouldCreateOneItem() {
 
     // Arrange
-    Inventory entity = new Inventory();
+    Inventory entity = new Inventory(inventoryDTO);
     entity.setQuantity(1234);
 
     // Act
@@ -40,7 +41,7 @@ class InventoryDBRepositoryTest {
   public void shouldFindItemById() {
 
     // Arrange
-    Inventory entity = new Inventory();
+    Inventory entity = new Inventory(inventoryDTO);
     entity.setProduct("Product 1");
     entity.setQuantity(100);
     entity.setReservedQuantity(10);
@@ -62,7 +63,7 @@ class InventoryDBRepositoryTest {
   public void shouldUpdateItemQuantity() {
 
     // Arrange
-    Inventory entity = new Inventory();
+    Inventory entity = new Inventory(inventoryDTO);
     entity.setProduct("Product 2");
     entity.setQuantity(200);
     repository.save(entity);
@@ -85,7 +86,7 @@ class InventoryDBRepositoryTest {
   public void shouldDeleteItem() {
 
     // Arrange
-    Inventory entity = new Inventory();
+    Inventory entity = new Inventory(inventoryDTO);
     entity.setProduct("Product 3");
     entity.setQuantity(300);
     Inventory savedEntity = repository.save(entity);
@@ -104,10 +105,10 @@ class InventoryDBRepositoryTest {
   public void shouldFindAllItems() {
 
     // Arrange
-    Inventory entity1 = new Inventory();
+    Inventory entity1 = new Inventory(inventoryDTO);
     entity1.setProduct("Product 4");
     entity1.setQuantity(400);
-    Inventory entity2 = new Inventory();
+    Inventory entity2 = new Inventory(inventoryDTO);
     entity2.setProduct("Product 5");
     entity2.setQuantity(500);
 
@@ -127,7 +128,7 @@ class InventoryDBRepositoryTest {
   @Rollback(value = true)
   public void shouldFindByProductName() {
     // Arrange
-    Inventory entity = new Inventory();
+    Inventory entity = new Inventory(inventoryDTO);
     entity.setProduct("Unique Product");
     entity.setQuantity(600);
     repository.save(entity);

@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.saltcode.inventory.model.AddInventoryDTO;
-import se.saltcode.inventory.model.InventoryDTO;
+import se.saltcode.inventory.model.AddInventoryDto;
 import se.saltcode.inventory.model.Inventory;
+import se.saltcode.inventory.model.InventoryDto;
 import se.saltcode.inventory.service.InventoryService;
 
 @RestController
@@ -23,37 +23,37 @@ public class InventoryController {
   }
 
   @GetMapping
-  public ResponseEntity<List<InventoryDTO>> getAllInventoryItems() {
-    List<InventoryDTO> items =
+  public ResponseEntity<List<InventoryDto>> getAllInventoryItems() {
+    List<InventoryDto> items =
         inventoryService.getAllInventoryItems().stream()
-            .map(this::convertToDTO)
+            .map(Inventory::toResponseObject)
             .collect(Collectors.toList());
     return new ResponseEntity<>(items, HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<InventoryDTO> getInventoryItemById(@PathVariable("id") UUID id) {
+  public ResponseEntity<InventoryDto> getInventoryItemById(@PathVariable("id") UUID id) {
     Inventory item = inventoryService.getInventoryItemById(id);
     if (item != null) {
-      return new ResponseEntity<>(convertToDTO(item), HttpStatus.OK);
+      return new ResponseEntity<>(item.toResponseObject(), HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
 
   @PostMapping
-  public ResponseEntity<InventoryDTO> createInventoryItem(@RequestBody AddInventoryDTO inventoryDTO) {
+  public ResponseEntity<InventoryDto> createInventoryItem(@RequestBody AddInventoryDto inventoryDTO) {
     Inventory createdItem = inventoryService.createInventoryItem(new Inventory(inventoryDTO));
-    return new ResponseEntity<>(convertToDTO(createdItem), HttpStatus.CREATED);
+    return new ResponseEntity<>(createdItem.toResponseObject(), HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<InventoryDTO> updateInventoryItem(
-      @PathVariable("id") UUID id, @RequestBody InventoryDTO inventoryDTO) {
-    Inventory inventory = convertToEntity(inventoryDTO);
+  public ResponseEntity<InventoryDto> updateInventoryItem(
+      @PathVariable("id") UUID id, @RequestBody InventoryDto inventoryDTO) {
+    Inventory inventory = new Inventory(inventoryDTO);
     Inventory updatedItem = inventoryService.updateInventoryItem(id, inventory);
     if (updatedItem != null) {
-      return new ResponseEntity<>(convertToDTO(updatedItem), HttpStatus.OK);
+      return new ResponseEntity<>(updatedItem.toResponseObject(), HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -84,24 +84,5 @@ public class InventoryController {
       @RequestParam String id, @RequestParam String change) {
     inventoryService.updateQuantityOfInventory(UUID.fromString(id), Integer.parseInt(change));
     return new ResponseEntity<>(HttpStatus.OK);
-  }
-
-  // Helper methods to convert between DTO and Entity
-  private InventoryDTO convertToDTO(Inventory inventory) {
-    InventoryDTO dto = new InventoryDTO();
-    dto.setId(inventory.getId());
-    dto.setProduct(inventory.getProduct());
-    dto.setQuantity(inventory.getQuantity());
-    dto.setReservedQuantity(inventory.getReservedQuantity());
-    return dto;
-  }
-
-  private Inventory convertToEntity(InventoryDTO dto) {
-    Inventory inventory = new Inventory();
-    inventory.setId(dto.getId());
-    inventory.setProduct(dto.getProduct());
-    inventory.setQuantity(dto.getQuantity());
-    inventory.setReservedQuantity(dto.getReservedQuantity());
-    return inventory;
   }
 }

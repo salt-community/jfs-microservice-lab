@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import se.saltcode.inventory.model.Inventory;
-import se.saltcode.inventory.model.InventoryDBRepository;
+import se.saltcode.inventory.repository.InventoryDBRepository;
 
 @Service
 public class InventoryService {
