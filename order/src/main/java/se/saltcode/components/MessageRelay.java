@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import se.saltcode.exception.NoSuchOrderException;
 import se.saltcode.model.enums.Event;
 import se.saltcode.model.order.Order;
@@ -31,17 +32,22 @@ public class MessageRelay {
 
   @Scheduled(fixedRate = 60000)
   public void sendUnfinishedMessages() {
+    tra
     transactionRepository.findAll().forEach(this::sendMessage);
+  }
+
+  private String buildUpdateQuantityUrl(Transaction transaction) {
+    return UriComponentsBuilder.fromPath("update/quantity")
+            .queryParam("id", transaction.getInventoryId())
+            .queryParam("change", transaction.getChange())
+            .toUriString();
   }
 
   private void sendMessage(Transaction transaction) {
     try {
       HttpStatusCode response =  Objects.requireNonNull(
               webClient.put()
-                      .uri(uriBuilder -> uriBuilder.path("update/quantity")
-                              .queryParam("id", transaction.getInventoryId())
-                              .queryParam("change", transaction.getChange())
-                              .build())
+                      .uri(buildUpdateQuantityUrl(transaction))
                       .accept(MediaType.APPLICATION_JSON)
                       .retrieve()
                       .toBodilessEntity()

@@ -11,7 +11,7 @@ import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Order{
 
   @Id @UuidGenerator private UUID id;
 
@@ -90,4 +90,7 @@ public class Order {
   public void setTotalCost(double totalCost) {
     this.totalCost = totalCost;
   }
+
+
+
 }
