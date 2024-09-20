@@ -14,6 +14,8 @@ import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.IOrderRepository;
 import se.saltcode.repository.TransactionDbRepository;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -32,8 +34,9 @@ public class MessageRelay {
 
   @Scheduled(fixedRate = 60000)
   public void sendUnfinishedMessages() {
-    tra
-    transactionRepository.findAll().forEach(this::sendMessage);
+    List<Transaction> transactions = transactionRepository.findAll();
+    Collections.sort(transactions);
+    transactions.forEach(this::sendMessage);
   }
 
   private String buildUpdateQuantityUrl(Transaction transaction) {
