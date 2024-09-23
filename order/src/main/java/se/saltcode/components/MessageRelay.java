@@ -35,7 +35,7 @@ public class MessageRelay {
   @Scheduled(fixedRate = 60000)
   public void sendUnfinishedMessages() {
     List<Transaction> transactions = transactionRepository.findAll();
-    Collections.sort(transactions);
+    //Collections.sort(transactions);
     transactions.forEach(this::sendMessage);
   }
 
