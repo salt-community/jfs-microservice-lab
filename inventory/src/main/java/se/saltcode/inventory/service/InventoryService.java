@@ -4,16 +4,21 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
-import se.saltcode.inventory.model.Inventory;
+import se.saltcode.inventory.exception.DuplicateOrderException;
+import se.saltcode.inventory.model.cache.OrderCache;
+import se.saltcode.inventory.model.inventory.Inventory;
+import se.saltcode.inventory.repository.IOrderCacheRepository;
 import se.saltcode.inventory.repository.InventoryDBRepository;
 
 @Service
 public class InventoryService {
 
   private final InventoryDBRepository inventoryDBRepository;
+  private final IOrderCacheRepository orderCacheRepository;
 
-  public InventoryService(InventoryDBRepository inventoryDBRepository) {
+  public InventoryService(InventoryDBRepository inventoryDBRepository, IOrderCacheRepository orderCacheRepository) {
     this.inventoryDBRepository = inventoryDBRepository;
+      this.orderCacheRepository = orderCacheRepository;
   }
 
   // Get all inventory items
@@ -58,13 +63,17 @@ public class InventoryService {
     return false;
   }
 
-  public Inventory updateQuantityOfInventory(UUID id, int quantity) {
-    Inventory inventory =
-        inventoryDBRepository.findById(id).orElseThrow(NoSuchElementException::new);
+  public Inventory updateQuantityOfInventory(UUID id, int quantity, UUID transactionId) {
+    if(orderCacheRepository.existsById(transactionId)){
+     throw new DuplicateOrderException();
+    }
+    orderCacheRepository.save(new OrderCache(transactionId));
+    Inventory inventory = inventoryDBRepository.findById(id).orElseThrow(NoSuchElementException::new);
     inventory.setQuantity(inventory.getQuantity() - quantity);
     if (inventory.getQuantity() < 0) {
       throw new IllegalArgumentException("Inventory item quantity cannot be negative");
     }
     return inventoryDBRepository.save(inventory);
+
   }
 }

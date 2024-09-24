@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.saltcode.inventory.model.AddInventoryDto;
-import se.saltcode.inventory.model.Inventory;
-import se.saltcode.inventory.model.InventoryDto;
+import se.saltcode.inventory.model.inventory.AddInventoryDto;
+import se.saltcode.inventory.model.inventory.Inventory;
+import se.saltcode.inventory.model.inventory.InventoryDto;
 import se.saltcode.inventory.service.InventoryService;
 
 @RestController
@@ -81,8 +81,8 @@ public class InventoryController {
 
   @PutMapping("/update/quantity")
   public ResponseEntity<?> updateQuantityOfInventory(
-      @RequestParam String id, @RequestParam String change) {
-    inventoryService.updateQuantityOfInventory(UUID.fromString(id), Integer.parseInt(change));
+      @RequestParam String id, @RequestParam String change, @RequestParam String transactionId) {
+    inventoryService.updateQuantityOfInventory(UUID.fromString(id), Integer.parseInt(change),  UUID.fromString(transactionId));
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }

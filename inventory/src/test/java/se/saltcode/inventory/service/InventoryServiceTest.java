@@ -9,7 +9,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import se.saltcode.inventory.model.Inventory;
+import se.saltcode.inventory.model.inventory.Inventory;
 import se.saltcode.inventory.repository.InventoryDBRepository;
 
 class InventoryServiceTest {

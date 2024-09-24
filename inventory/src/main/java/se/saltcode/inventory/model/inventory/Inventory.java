@@ -1,6 +1,5 @@
-package se.saltcode.inventory.model;
+package se.saltcode.inventory.model.inventory;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;

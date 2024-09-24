@@ -1,4 +1,4 @@
-package se.saltcode.inventory.model;
+package se.saltcode.inventory.model.inventory;
 
 import java.util.UUID;
 
