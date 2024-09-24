@@ -24,7 +24,7 @@ public class TransactionService {
     return transactionRepository.findById(eventID).orElseThrow(NoSuchTransactionException::new);
   }
 
-  public Transaction createTransaction(Transaction transaction) {
+  public Transaction createTransaction(Transaction transaction, UUID orderId) {
     return transactionRepository.save(transaction);
   }
 
@@ -32,6 +32,7 @@ public class TransactionService {
     if (!transactionRepository.existsById(transaction.getId())) {
       throw new NoSuchTransactionException();
     }
+    transaction.setOrder(transactionRepository.findById(transaction.getId()).get().getOrder());
     return transactionRepository.save(transaction);
   }
 

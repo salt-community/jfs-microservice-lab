@@ -41,7 +41,7 @@ public class TransactionController {
   public ResponseEntity<TransactionDto> createTransaction(
       @RequestBody AddTransactionDto addTransactionDto) {
     TransactionDto transactionDto =
-        service.createTransaction(new Transaction(addTransactionDto)).toDto();
+        service.createTransaction(new Transaction(addTransactionDto),addTransactionDto.orderId()).toDto();
     return ResponseEntity.created(URI.create(apiUri + "/" + transactionDto.id()))
         .body(transactionDto);
   }

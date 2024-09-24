@@ -1,12 +1,12 @@
 package se.saltcode.model.transaction;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.hibernate.annotations.UuidGenerator;
 import se.saltcode.model.enums.Event;
+import se.saltcode.model.order.Order;
 
 @Entity
 @Table
@@ -18,49 +18,47 @@ public class Transaction implements Comparable<Transaction> {
   @Column(name = "event_type")
   private Event eventType;
 
-  @NotEmpty(message = "orderId cant be empty")
-  @Column(name = "order_id")
-  private UUID orderId;
-
-  @NotEmpty(message = "inventoryId cant be empty")
-  @Column(name = "inventory_id")
-  private UUID inventoryId;
-
   @Column(name = "change")
   private int change;
 
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
+
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "user_order")
+  private Order order;
+
   public Transaction() {}
 
-  public Transaction(Event eventType, UUID orderId, UUID inventoryId, int change) {
+  public Transaction(Event eventType, int change, Order order) {
     this.eventType = eventType;
-    this.orderId = orderId;
-    this.inventoryId = inventoryId;
+    this.change = change;
+    this.createdAt = LocalDateTime.now();
+    this.order = order;
+  }
+
+  public Transaction(Event eventType, int change) {
+    this.eventType = eventType;
     this.change = change;
     this.createdAt = LocalDateTime.now();
   }
 
   public Transaction(AddTransactionDto addTransactionDto) {
     this.eventType = addTransactionDto.eventType();
-    this.orderId = addTransactionDto.orderId();
-    this.inventoryId = addTransactionDto.inventoryId();
     this.change = addTransactionDto.change();
     this.createdAt = LocalDateTime.now();
   }
 
-  public Transaction(TransactionDto transactionDto) {
+  public Transaction(TransactionDto transactionDto ) {
     this.id = transactionDto.id();
     this.eventType = transactionDto.eventType();
-    this.orderId = transactionDto.orderId();
-    this.inventoryId = transactionDto.inventoryId();
     this.change = transactionDto.change();
     this.createdAt = transactionDto.createdAt();
   }
 
   public TransactionDto toDto() {
-    return new TransactionDto(id, eventType, orderId, inventoryId, change, createdAt);
+    return new TransactionDto(id, eventType,change, createdAt, order.getId());
   }
 
   @Override
@@ -84,22 +82,6 @@ public class Transaction implements Comparable<Transaction> {
     this.eventType = eventType;
   }
 
-  public UUID getOrderId() {
-    return orderId;
-  }
-
-  public void setOrderId(UUID orderId) {
-    this.orderId = orderId;
-  }
-
-  public UUID getInventoryId() {
-    return inventoryId;
-  }
-
-  public void setInventoryId(UUID inventoryId) {
-    this.inventoryId = inventoryId;
-  }
-
   public int getChange() {
     return change;
   }
@@ -114,5 +96,13 @@ public class Transaction implements Comparable<Transaction> {
 
   public LocalDateTime getCreatedAt() {
     return createdAt;
+  }
+
+  public Order getOrder() {
+    return this.order;
+  }
+
+  public void setOrder(Order order) {
+     this.order=order;
   }
 }

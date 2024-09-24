@@ -1,14 +1,16 @@
 package se.saltcode.model.order;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.hibernate.annotations.UuidGenerator;
+import se.saltcode.model.enums.Event;
+import se.saltcode.model.transaction.Transaction;
 
 @Entity
 @Table(name = "user_order")
@@ -28,12 +30,16 @@ public class Order {
   @Column(name = "total_cost")
   private double totalCost;
 
+  @OneToMany(mappedBy = "order",cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Transaction> transactions;
+
   public Order() {}
 
   public Order(AddOrderDto addOrderDTO) {
     this.inventoryId = addOrderDTO.inventoryId();
     this.quantity = addOrderDTO.quantity();
     this.totalCost = addOrderDTO.totalCost();
+    this.transactions = List.of(new Transaction(Event.PURCHASE,quantity,this));
   }
 
   public Order(OrderDto orderDTO) {
@@ -77,5 +83,14 @@ public class Order {
 
   public void setTotalCost(double totalCost) {
     this.totalCost = totalCost;
+  }
+
+  public void update(Order order) {
+  //  ArrayList<Transaction> newTransactions = new ArrayList<>(transactions);
+  //  newTransactions.add(new Transaction(Event.CHANGE,order.getQuantity() - quantity,this));
+    this.transactions.add(new Transaction(Event.CHANGE,order.getQuantity() - quantity,this)) ;
+    this.quantity = order.getQuantity();
+    this.totalCost = order.getTotalCost();
+   // this.transactions = newTransactions;
   }
 }

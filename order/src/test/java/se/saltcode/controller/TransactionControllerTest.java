@@ -63,7 +63,7 @@ class TransactionControllerTest {
 
   @Test
   void shouldCreateTransaction() throws Exception {
-    when(transactionService.createTransaction(any(Transaction.class))).thenReturn(transaction);
+    when(transactionService.createTransaction(any(Transaction.class), addTransactionDto.orderId())).thenReturn(transaction);
 
     mockMvc
         .perform(

@@ -7,7 +7,6 @@ import se.saltcode.model.enums.Event;
 public record TransactionDto(
     UUID id,
     Event eventType,
-    UUID orderId,
-    UUID inventoryId,
     int change,
-    LocalDateTime createdAt) {}
+    LocalDateTime createdAt,
+    UUID orderId) {}

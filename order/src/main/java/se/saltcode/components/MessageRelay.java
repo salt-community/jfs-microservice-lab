@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
-import se.saltcode.exception.NoSuchOrderException;
 import se.saltcode.model.enums.Event;
 import se.saltcode.model.enums.UpdateResult;
 import se.saltcode.model.order.Order;
@@ -50,7 +49,7 @@ public class MessageRelay {
         .put()
         .uri(
             UriComponentsBuilder.fromPath(apiPath)
-                .queryParam("id", transaction.getInventoryId())
+                .queryParam("id", transaction.getOrder().getInventoryId())
                 .queryParam("change", transaction.getChange())
                 .queryParam("transactionId", transaction.getId())
                 .toUriString())
@@ -68,21 +67,17 @@ public class MessageRelay {
   private void handleUpdateResult(Transaction transaction, UpdateResult updateResult) {
     transactionRepository.deleteById(transaction.getId());
     switch (updateResult) {
-      case NO_SUCH_INVENTORY -> orderRepository.deleteById(transaction.getOrderId());
+      case NO_SUCH_INVENTORY -> orderRepository.deleteById(transaction.getOrder().getId());
       case INSUFFICIENT_QUANTITY -> {
         if (transaction.getEventType().equals(Event.PURCHASE)) {
-          orderRepository.deleteById(transaction.getOrderId());
+          orderRepository.deleteById(transaction.getOrder().getId());
         }
         if (transaction.getEventType().equals(Event.CHANGE)) {
-          Order order =
-              orderRepository
-                  .findById(transaction.getOrderId())
-                  .orElseThrow(NoSuchOrderException::new);
+          Order order = transaction.getOrder();
           order.setQuantity(order.getQuantity() - transaction.getChange());
           orderRepository.save(order);
         }
       }
-    }
-    ;
+    };
   }
 }
