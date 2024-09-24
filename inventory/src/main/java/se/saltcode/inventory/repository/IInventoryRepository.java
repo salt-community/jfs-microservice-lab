@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import se.saltcode.inventory.model.inventory.Inventory;
 
 @Repository
-public interface InventoryDBRepository extends JpaRepository<Inventory, UUID> {
+public interface IInventoryRepository extends JpaRepository<Inventory, UUID> {
 
   List<Inventory> findByProduct(String Product);
 }

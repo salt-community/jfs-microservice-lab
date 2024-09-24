@@ -2,6 +2,7 @@ package se.saltcode.inventory.service;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import se.saltcode.inventory.exception.NoSuchOrderCacheException;
 import se.saltcode.inventory.model.cache.OrderCache;
 import se.saltcode.inventory.model.inventory.Inventory;
 import se.saltcode.inventory.repository.IOrderCacheRepository;
@@ -26,7 +27,7 @@ public class OrderCacheService {
     }
 
     public OrderCache getOrderCacheById(UUID id) {
-        return orderCacheRepository.findById(id).orElse(null);
+        return orderCacheRepository.findById(id).orElseThrow(NoSuchOrderCacheException::new);
     }
 
     public OrderCache createOrderCacheItem(OrderCache orderCache) {

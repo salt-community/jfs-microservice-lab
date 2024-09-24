@@ -8,15 +8,15 @@ import se.saltcode.inventory.model.enums.UpdateResult;
 import se.saltcode.inventory.model.cache.OrderCache;
 import se.saltcode.inventory.model.inventory.Inventory;
 import se.saltcode.inventory.repository.IOrderCacheRepository;
-import se.saltcode.inventory.repository.InventoryDBRepository;
+import se.saltcode.inventory.repository.IInventoryRepository;
 
 @Service
 public class InventoryService {
 
-  private final InventoryDBRepository inventoryDBRepository;
+  private final IInventoryRepository inventoryDBRepository;
   private final IOrderCacheRepository orderCacheRepository;
 
-  public InventoryService(InventoryDBRepository inventoryDBRepository, IOrderCacheRepository orderCacheRepository) {
+  public InventoryService(IInventoryRepository inventoryDBRepository, IOrderCacheRepository orderCacheRepository) {
     this.inventoryDBRepository = inventoryDBRepository;
       this.orderCacheRepository = orderCacheRepository;
   }
