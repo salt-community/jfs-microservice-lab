@@ -4,8 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -13,38 +11,40 @@ import java.util.UUID;
 @Table
 public class OrderCache {
 
-    @Id
-    private UUID id;
+  @Id private UUID id;
 
-    @Column(name ="created_at")
-    private ZonedDateTime createdAt;
+  @Column(name = "created_at")
+  private ZonedDateTime createdAt;
 
-    public OrderCache(UUID id) {
-        this.id = id;
-        this.createdAt = ZonedDateTime.now();
-    }
+  public OrderCache(UUID id) {
+    this.id = id;
+    this.createdAt = ZonedDateTime.now();
+  }
 
-    public OrderCache() {
-    }
+  public OrderCache() {}
 
-    public OrderCache(CreateOrderCacheDto createOrderCacheDto) {
-        this.id = createOrderCacheDto.id();
-        this.createdAt = ZonedDateTime.now();
-    }
+  public OrderCache(CreateOrderCacheDto createOrderCacheDto) {
+    this.id = createOrderCacheDto.id();
+    this.createdAt = ZonedDateTime.now();
+  }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+  public OrderCacheDto toDto() {
+    return new OrderCacheDto(id, createdAt);
+  }
 
-    public UUID getId() {
-        return id;
-    }
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
-    public ZonedDateTime getCreatedAt() {
-        return createdAt;
-    }
+  public UUID getId() {
+    return id;
+  }
 
-    public void setCreatedAt(ZonedDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+  public ZonedDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(ZonedDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
 }

@@ -1,4 +1,6 @@
 package se.saltcode.inventory.model.cache;
 
-public record OrderCacheDto() {
-}
+import java.time.ZonedDateTime;
+import java.util.UUID;
+
+public record OrderCacheDto(UUID id, ZonedDateTime createdAt) {}

@@ -35,12 +35,12 @@ public class InventoryController {
   @GetMapping("/{id}")
   public ResponseEntity<InventoryDto> getInventoryItemById(@PathVariable("id") UUID id) {
     Inventory item = inventoryService.getInventoryItemById(id);
-      return new ResponseEntity<>(item.toResponseObject(), HttpStatus.OK);
-
+    return new ResponseEntity<>(item.toResponseObject(), HttpStatus.OK);
   }
 
   @PostMapping
-  public ResponseEntity<InventoryDto> createInventoryItem(@RequestBody AddInventoryDto addInventoryDTO) {
+  public ResponseEntity<InventoryDto> createInventoryItem(
+      @RequestBody AddInventoryDto addInventoryDTO) {
     Inventory createdItem = inventoryService.createInventoryItem(new Inventory(addInventoryDTO));
     return new ResponseEntity<>(createdItem.toResponseObject(), HttpStatus.CREATED);
   }
@@ -61,18 +61,18 @@ public class InventoryController {
   public ResponseEntity<Void> deleteInventoryItem(@PathVariable("id") UUID id) {
     boolean deleted = inventoryService.deleteInventoryItem(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
   }
 
   @GetMapping("/{id}/quantity")
   public ResponseEntity<Integer> getQuantityOfInventory(@PathVariable("id") UUID id) {
     Inventory item = inventoryService.getInventoryItemById(id);
-      return new ResponseEntity<>(item.getQuantity(), HttpStatus.OK);
+    return new ResponseEntity<>(item.getQuantity(), HttpStatus.OK);
   }
 
   @PutMapping("/update/quantity")
   public ResponseEntity<UpdateResult> updateQuantityOfInventory(
       @RequestParam UUID id, @RequestParam int change, @RequestParam UUID transactionId) {
-    return new ResponseEntity<>(inventoryService.updateQuantityOfInventory(id, change,  transactionId),HttpStatus.OK );
+    return new ResponseEntity<>(
+        inventoryService.updateQuantityOfInventory(id, change, transactionId), HttpStatus.OK);
   }
 }
