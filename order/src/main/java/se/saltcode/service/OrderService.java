@@ -42,7 +42,6 @@ public class OrderService {
     orderRepository.deleteById(id);
   }
 
-  @Transactional
   public Order createOrder(Order order) {
 
     Order newOrder = orderRepository.save(order);
@@ -54,7 +53,6 @@ public class OrderService {
     return newOrder;
   }
 
-  @Transactional
   public Order updateOrder(Order order) {
 
     Order oldOrder =

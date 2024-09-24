@@ -38,12 +38,14 @@ public class MessageRelay {
     List<Transaction> transactions = transactionRepository.findAll();
     Collections.sort(transactions);
     transactions.forEach(this::sendMessage);
+
   }
 
   private String buildUpdateQuantityUrl(Transaction transaction) {
     return UriComponentsBuilder.fromPath("update/quantity")
             .queryParam("id", transaction.getInventoryId())
             .queryParam("change", transaction.getChange())
+            .queryParam("transactionId", transaction.getId())
             .toUriString();
   }
 
