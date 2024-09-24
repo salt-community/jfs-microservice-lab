@@ -6,14 +6,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
-import java.util.UUID;
-
 import jakarta.validation.constraints.PositiveOrZero;
+import java.util.UUID;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Table(name = "user_order")
-public class Order{
+public class Order {
 
   @Id @UuidGenerator private UUID id;
 
@@ -31,21 +30,21 @@ public class Order{
 
   public Order() {}
 
-  public Order(AddOrderDTO addOrderDTO) {
+  public Order(AddOrderDto addOrderDTO) {
     this.inventoryId = addOrderDTO.inventoryId();
     this.quantity = addOrderDTO.quantity();
     this.totalCost = addOrderDTO.totalCost();
   }
-  public Order(OrderDTO orderDTO) {
+
+  public Order(OrderDto orderDTO) {
     this.id = orderDTO.id();
     this.inventoryId = orderDTO.inventoryId();
     this.quantity = orderDTO.quantity();
     this.totalCost = orderDTO.totalCost();
   }
 
-
-  public OrderDTO toResponseObject() {
-    return new OrderDTO(id, inventoryId, quantity, totalCost);
+  public OrderDto toDto() {
+    return new OrderDto(id, inventoryId, quantity, totalCost);
   }
 
   public UUID getId() {
@@ -79,7 +78,4 @@ public class Order{
   public void setTotalCost(double totalCost) {
     this.totalCost = totalCost;
   }
-
-
-
 }

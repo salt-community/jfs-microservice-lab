@@ -23,3 +23,12 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+
+this:
+  base-uri: https://order-983583191360.europe-west1.run.app
+
+inventory:
+  base-uri: https://inventory-983583191360.europe-west1.run.app
+  endpoints:
+    update-inventory-quantity: /api/inventory/update/quantity

@@ -2,7 +2,6 @@ package se.saltcode.service;
 
 import java.util.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import se.saltcode.components.MessageRelay;
 import se.saltcode.exception.NoSuchOrderException;
 import se.saltcode.model.enums.Event;
@@ -36,7 +35,7 @@ public class OrderService {
   }
 
   public void deleteOrder(UUID id) {
-    if (orderRepository.existsById(id)) {
+    if (!orderRepository.existsById(id)) {
       throw new NoSuchOrderException();
     }
     orderRepository.deleteById(id);
@@ -45,9 +44,9 @@ public class OrderService {
   public Order createOrder(Order order) {
 
     Order newOrder = orderRepository.save(order);
-
     transactionRepository.save(
-        new Transaction(Event.PURCHASE, newOrder.getId(), newOrder.getInventoryId(), newOrder.getQuantity()));
+        new Transaction(
+            Event.PURCHASE, newOrder.getId(), newOrder.getInventoryId(), newOrder.getQuantity()));
 
     messageRelay.sendUnfinishedMessages();
     return newOrder;
@@ -55,14 +54,13 @@ public class OrderService {
 
   public Order updateOrder(Order order) {
 
-    Order oldOrder =
-        orderRepository.findById(order.getId()).orElseThrow(NoSuchOrderException::new);
+    Order oldOrder = orderRepository.findById(order.getId()).orElseThrow(NoSuchOrderException::new);
 
     int change = order.getQuantity() - oldOrder.getQuantity();
 
     orderRepository.save(order);
     transactionRepository.save(
-            new Transaction(Event.CHANGE, order.getId(), order.getInventoryId(), change));
+        new Transaction(Event.CHANGE, order.getId(), order.getInventoryId(), change));
     messageRelay.sendUnfinishedMessages();
     return order;
   }

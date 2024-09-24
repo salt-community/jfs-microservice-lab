@@ -24,13 +24,15 @@ spring:
       ddl-auto: update
     show-sql: true
 
+this:
+  base-uri: http://localhost:8080
 
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE
+inventory:
+  base-uri: http://localhost:5000
+  endpoints:
+    update-inventory-quantity: /api/inventory/update/quantity
+
+
+
+
+

@@ -6,9 +6,10 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.saltcode.model.transaction.AddTransactionDTO;
+import se.saltcode.model.transaction.AddTransactionDto;
 import se.saltcode.model.transaction.Transaction;
-import se.saltcode.model.transaction.TransactionDTO;
+import se.saltcode.model.transaction.TransactionDto;
+import se.saltcode.service.OrderService;
 import se.saltcode.service.TransactionService;
 
 @RestController
@@ -17,59 +18,47 @@ import se.saltcode.service.TransactionService;
 public class TransactionController {
 
   private final TransactionService service;
+  private final OrderService orderService;
+  public String apiUri;
 
-  @Value("${api.base-path}${api.controllers.transactions}/")
-  public String API_CONTEXT_ROOT;
-
-  public TransactionController(TransactionService service) {
+  public TransactionController(
+      TransactionService service,
+      @Value("${this.base-uri}${api.base-path}${api.controllers.transactions}") String apiUri,
+      OrderService orderService) {
     this.service = service;
+    this.apiUri = apiUri;
+    this.orderService = orderService;
   }
 
   @GetMapping
-  public ResponseEntity<List<TransactionDTO>> getAllTransactions() {
-    List<Transaction> transactions = service.getAllTransactions();
-    return ResponseEntity.ok(transactions.stream().map(TransactionDTO::fromTransaction).toList());
+  public ResponseEntity<List<TransactionDto>> getAllTransactions() {
+    return ResponseEntity.ok(
+        service.getAllTransactions().stream().map(Transaction::toDto).toList());
   }
 
   @GetMapping("/{eventID}")
-  public ResponseEntity<TransactionDTO> getTransactionById(@PathVariable UUID eventID) {
-    Transaction transaction = service.getTransactionById(eventID);
-    return ResponseEntity.ok(TransactionDTO.fromTransaction(transaction));
+  public ResponseEntity<TransactionDto> getTransactionById(@PathVariable UUID id) {
+    return ResponseEntity.ok(service.getTransactionById(id).toDto());
   }
 
   @PostMapping
-  public ResponseEntity<TransactionDTO> createTransaction(
-      @RequestBody AddTransactionDTO transactionDto) {
-    Transaction transaction = new Transaction(
-            transactionDto.eventType(),
-            transactionDto.orderId(),
-            transactionDto.inventoryId(),
-            transactionDto.change()
-            );
+  public ResponseEntity<TransactionDto> createTransaction(
+      @RequestBody AddTransactionDto addTransactionDto) {
+    TransactionDto transactionDto =
+        service.createTransaction(new Transaction(addTransactionDto)).toDto();
+    return ResponseEntity.created(URI.create(apiUri + "/" + transactionDto.id()))
+        .body(transactionDto);
+  }
 
-    Transaction createdTransaction = service.createTransaction(transaction);
-    TransactionDTO dto = TransactionDTO.fromTransaction(createdTransaction);
-    return ResponseEntity.created(URI.create(API_CONTEXT_ROOT + createdTransaction.getId()))
-        .body(dto);
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteTransaction(@PathVariable UUID id) {
+    service.deleteTransaction(id);
+    return ResponseEntity.noContent().build();
   }
 
   @PutMapping("/{eventID}")
-  public ResponseEntity<TransactionDTO> updateTransaction(
-      @PathVariable UUID eventID, @RequestBody AddTransactionDTO transactionDto) {
-
-    Transaction updatedTransaction =
-        service.updateTransaction(eventID,
-                transactionDto.eventType(),
-                transactionDto.orderId(),
-                transactionDto.inventoryId(),
-                transactionDto.change());
-
-    return ResponseEntity.ok(TransactionDTO.fromTransaction(updatedTransaction));
-  }
-
-  @DeleteMapping("/{eventID}")
-  public ResponseEntity<Void> deleteTransaction(@PathVariable UUID eventID) {
-    service.deleteTransaction(eventID);
-    return ResponseEntity.noContent().build();
+  public ResponseEntity<TransactionDto> updateTransaction(
+      @RequestBody TransactionDto transactionDto) {
+    return ResponseEntity.ok(service.updateTransaction(new Transaction(transactionDto)).toDto());
   }
 }
