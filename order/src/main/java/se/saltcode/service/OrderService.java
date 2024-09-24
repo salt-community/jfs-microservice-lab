@@ -1,4 +1,5 @@
 package se.saltcode.service;
+
 import java.util.*;
 import org.springframework.stereotype.Service;
 import se.saltcode.components.MessageRelay;

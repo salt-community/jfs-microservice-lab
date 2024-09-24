@@ -1,11 +1,10 @@
 package se.saltcode.model.transaction;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import org.hibernate.annotations.UuidGenerator;
 import se.saltcode.model.enums.Event;
 
@@ -13,9 +12,7 @@ import se.saltcode.model.enums.Event;
 @Table
 public class Transaction implements Comparable<Transaction> {
 
-  @Id
-  @UuidGenerator
-  private UUID id;
+  @Id @UuidGenerator private UUID id;
 
   @NotNull(message = "eventType cant be null")
   @Column(name = "event_type")

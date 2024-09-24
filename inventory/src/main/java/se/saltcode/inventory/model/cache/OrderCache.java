@@ -14,7 +14,7 @@ public class OrderCache {
 
     @Id
     private UUID id;
-    @Column(unique=true)
+    @Column(name ="created_at")
     private LocalDateTime createdAt;
 
     public OrderCache(UUID id) {

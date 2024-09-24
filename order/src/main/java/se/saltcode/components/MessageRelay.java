@@ -38,46 +38,48 @@ public class MessageRelay {
   public void sendUnfinishedMessages() {
     List<Transaction> transactions = transactionRepository.findAll();
     Collections.sort(transactions);
-    while(!transactions.isEmpty()) {
-        if(!sendMessage(transactions.removeFirst())) {break;}
+    while (!transactions.isEmpty()) {
+      if (!sendMessage(transactions.removeFirst())) {
+        break;
+      }
     }
   }
 
-  public  Boolean sendMessage(Transaction transaction) {
-      return webClient
-              .put()
-              .uri(buildUpdateQuantityUri(transaction))
-              .retrieve()
-              .bodyToMono(UpdateResult.class)
-              .map(response -> {
-                  handleReturnValue(transaction, response);
-                  return true;
-              })
-              .onErrorReturn(false)
-              .block();
-  }
-
-    private String buildUpdateQuantityUri(Transaction transaction) {
-        return UriComponentsBuilder.fromPath(apiPath)
+  public Boolean sendMessage(Transaction transaction) {
+    return webClient
+        .put()
+        .uri(UriComponentsBuilder.fromPath(apiPath)
                 .queryParam("id", transaction.getInventoryId())
                 .queryParam("change", transaction.getChange())
                 .queryParam("transactionId", transaction.getId())
-                .toUriString();
-    }
+                .toUriString())
+        .retrieve()
+        .bodyToMono(UpdateResult.class)
+        .map(
+            response -> {
+              handleUpdateResult(transaction, response);
+              return true;
+            })
+        .onErrorReturn(false)
+        .block();
+  }
 
-    private void handleReturnValue(Transaction transaction,UpdateResult updateResult ) {
-        transactionRepository.deleteById(transaction.getId());
-        switch (updateResult) {
-            case NO_SUCH_INVENTORY -> orderRepository.deleteById(transaction.getOrderId());
-            case INSUFFICIENT_QUANTITY -> {
-                if (transaction.getEventType().equals(Event.PURCHASE)) {
-                    orderRepository.deleteById(transaction.getOrderId());
-                } else if (transaction.getEventType().equals(Event.CHANGE)) {
-                    Order order = orderRepository.findById(transaction.getOrderId()).orElseThrow(NoSuchOrderException::new);
-                    order.setQuantity(order.getQuantity() - transaction.getChange());
-                    orderRepository.save(order);
-                }
-            }
-        };
-    }
+  private void handleUpdateResult(Transaction transaction, UpdateResult updateResult) {
+    transactionRepository.deleteById(transaction.getId());
+    switch (updateResult) {
+      case NO_SUCH_INVENTORY -> orderRepository.deleteById(transaction.getOrderId());
+      case INSUFFICIENT_QUANTITY -> {
+        if (transaction.getEventType().equals(Event.PURCHASE)) {
+          orderRepository.deleteById(transaction.getOrderId());
+        } else if (transaction.getEventType().equals(Event.CHANGE)) {
+          Order order =
+              orderRepository
+                  .findById(transaction.getOrderId())
+                  .orElseThrow(NoSuchOrderException::new);
+          order.setQuantity(order.getQuantity() - transaction.getChange());
+          orderRepository.save(order);
+        }
+      }
+    };
+  }
 }

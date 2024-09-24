@@ -53,7 +53,8 @@ public class TransactionController {
   }
 
   @PutMapping()
-  public ResponseEntity<TransactionDto> updateTransaction(@RequestBody TransactionDto transactionDto) {
+  public ResponseEntity<TransactionDto> updateTransaction(
+      @RequestBody TransactionDto transactionDto) {
     return ResponseEntity.ok(service.updateTransaction(new Transaction(transactionDto)).toDto());
   }
 }

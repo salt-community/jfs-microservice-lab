@@ -5,5 +5,9 @@ import java.util.UUID;
 import se.saltcode.model.enums.Event;
 
 public record TransactionDto(
-    UUID id, Event eventType, UUID orderId, UUID inventoryId, int change, LocalDateTime createdAt) {
-}
+    UUID id,
+    Event eventType,
+    UUID orderId,
+    UUID inventoryId,
+    int change,
+    LocalDateTime createdAt) {}
