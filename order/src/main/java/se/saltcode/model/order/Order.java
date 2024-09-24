@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.hibernate.annotations.UuidGenerator;
@@ -49,6 +47,12 @@ public class Order {
     this.totalCost = orderDTO.totalCost();
   }
 
+  public void update(Order order) {
+    this.transactions.add(new Transaction(Event.CHANGE,order.getQuantity() - quantity,this)) ;
+    this.quantity = order.getQuantity();
+    this.totalCost = order.getTotalCost();
+  }
+
   public OrderDto toDto() {
     return new OrderDto(id, inventoryId, quantity, totalCost);
   }
@@ -83,14 +87,5 @@ public class Order {
 
   public void setTotalCost(double totalCost) {
     this.totalCost = totalCost;
-  }
-
-  public void update(Order order) {
-  //  ArrayList<Transaction> newTransactions = new ArrayList<>(transactions);
-  //  newTransactions.add(new Transaction(Event.CHANGE,order.getQuantity() - quantity,this));
-    this.transactions.add(new Transaction(Event.CHANGE,order.getQuantity() - quantity,this)) ;
-    this.quantity = order.getQuantity();
-    this.totalCost = order.getTotalCost();
-   // this.transactions = newTransactions;
   }
 }

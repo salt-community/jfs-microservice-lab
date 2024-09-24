@@ -38,25 +38,6 @@ public class Transaction implements Comparable<Transaction> {
     this.order = order;
   }
 
-  public Transaction(Event eventType, int change) {
-    this.eventType = eventType;
-    this.change = change;
-    this.createdAt = LocalDateTime.now();
-  }
-
-  public Transaction(AddTransactionDto addTransactionDto) {
-    this.eventType = addTransactionDto.eventType();
-    this.change = addTransactionDto.change();
-    this.createdAt = LocalDateTime.now();
-  }
-
-  public Transaction(TransactionDto transactionDto ) {
-    this.id = transactionDto.id();
-    this.eventType = transactionDto.eventType();
-    this.change = transactionDto.change();
-    this.createdAt = transactionDto.createdAt();
-  }
-
   public TransactionDto toDto() {
     return new TransactionDto(id, eventType,change, createdAt, order.getId());
   }

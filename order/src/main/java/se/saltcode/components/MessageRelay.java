@@ -38,9 +38,7 @@ public class MessageRelay {
     List<Transaction> transactions = transactionRepository.findAll();
     Collections.sort(transactions);
     for (Transaction transaction : transactions) {
-      if (!sendMessage(transaction)) {
-        break;
-      }
+      if (!sendMessage(transaction)) {break;}
     }
   }
 
@@ -49,7 +47,7 @@ public class MessageRelay {
         .put()
         .uri(
             UriComponentsBuilder.fromPath(apiPath)
-                .queryParam("id", transaction.getOrder().getInventoryId())
+                .queryParam("inventoryId", transaction.getOrder().getInventoryId())
                 .queryParam("change", transaction.getChange())
                 .queryParam("transactionId", transaction.getId())
                 .toUriString())

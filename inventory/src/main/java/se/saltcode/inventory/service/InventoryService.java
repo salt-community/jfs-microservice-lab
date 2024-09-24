@@ -55,16 +55,16 @@ public class InventoryService {
     return false;
   }
 
-  public UpdateResult updateQuantityOfInventory(UUID id, int quantity, UUID transactionId) {
+  public UpdateResult updateQuantityOfInventory(UUID inventoryId, int quantity, UUID transactionId) {
     if (orderCacheRepository.existsById(transactionId)) {
       return UpdateResult.DUPLICATE_MESSAGE;
     }
     orderCacheRepository.save(new OrderCache(transactionId));
-    if (!inventoryDBRepository.existsById(id)) {
+    if (!inventoryDBRepository.existsById(inventoryId)) {
       return UpdateResult.NO_SUCH_INVENTORY;
     }
     Inventory inventory =
-        inventoryDBRepository.findById(id).orElseThrow(NoSuchInventoryException::new);
+        inventoryDBRepository.findById(inventoryId).orElseThrow(NoSuchInventoryException::new);
     inventory.setQuantity(inventory.getQuantity() - quantity);
     if (inventory.getQuantity() < 0) {
       return UpdateResult.INSUFFICIENT_QUANTITY;

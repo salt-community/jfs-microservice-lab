@@ -23,23 +23,4 @@ public class TransactionService {
   public Transaction getTransactionById(UUID eventID) {
     return transactionRepository.findById(eventID).orElseThrow(NoSuchTransactionException::new);
   }
-
-  public Transaction createTransaction(Transaction transaction, UUID orderId) {
-    return transactionRepository.save(transaction);
-  }
-
-  public Transaction updateTransaction(Transaction transaction) {
-    if (!transactionRepository.existsById(transaction.getId())) {
-      throw new NoSuchTransactionException();
-    }
-    transaction.setOrder(transactionRepository.findById(transaction.getId()).get().getOrder());
-    return transactionRepository.save(transaction);
-  }
-
-  public void deleteTransaction(UUID eventID) {
-    if (!transactionRepository.existsById(eventID)) {
-      throw new NoSuchTransactionException();
-    }
-    transactionRepository.deleteById(eventID);
-  }
 }

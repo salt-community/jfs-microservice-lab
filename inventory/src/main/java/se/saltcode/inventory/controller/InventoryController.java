@@ -71,8 +71,8 @@ public class InventoryController {
 
   @PutMapping("/update/quantity")
   public ResponseEntity<UpdateResult> updateQuantityOfInventory(
-      @RequestParam UUID id, @RequestParam int change, @RequestParam UUID transactionId) {
+      @RequestParam UUID inventoryId, @RequestParam int change, @RequestParam UUID transactionId) {
     return new ResponseEntity<>(
-        inventoryService.updateQuantityOfInventory(id, change, transactionId), HttpStatus.OK);
+        inventoryService.updateQuantityOfInventory(inventoryId, change, transactionId), HttpStatus.OK);
   }
 }

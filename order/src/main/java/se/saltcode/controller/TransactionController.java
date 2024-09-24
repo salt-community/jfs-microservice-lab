@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.saltcode.model.transaction.AddTransactionDto;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.model.transaction.TransactionDto;
 import se.saltcode.service.TransactionService;
@@ -35,26 +34,5 @@ public class TransactionController {
   @GetMapping("/{id}")
   public ResponseEntity<TransactionDto> getTransactionById(@PathVariable UUID id) {
     return ResponseEntity.ok(service.getTransactionById(id).toDto());
-  }
-
-  @PostMapping
-  public ResponseEntity<TransactionDto> createTransaction(
-      @RequestBody AddTransactionDto addTransactionDto) {
-    TransactionDto transactionDto =
-        service.createTransaction(new Transaction(addTransactionDto),addTransactionDto.orderId()).toDto();
-    return ResponseEntity.created(URI.create(apiUri + "/" + transactionDto.id()))
-        .body(transactionDto);
-  }
-
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteTransaction(@PathVariable UUID id) {
-    service.deleteTransaction(id);
-    return ResponseEntity.noContent().build();
-  }
-
-  @PutMapping()
-  public ResponseEntity<TransactionDto> updateTransaction(
-      @RequestBody TransactionDto transactionDto) {
-    return ResponseEntity.ok(service.updateTransaction(new Transaction(transactionDto)).toDto());
   }
 }
