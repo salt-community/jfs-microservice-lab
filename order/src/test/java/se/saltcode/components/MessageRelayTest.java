@@ -6,10 +6,10 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.reactive.function.client.WebClient;
 import se.saltcode.model.order.AddOrderDTO;
-import se.saltcode.model.order.Orders;
+import se.saltcode.model.order.Order;
 import se.saltcode.repository.ITransactionRepository;
 import se.saltcode.repository.IOrderRepository;
-import se.saltcode.repository.TransactionRepository;
+import se.saltcode.repository.ITransactionRepository;
 import se.saltcode.service.OrderService;
 
 import java.io.IOException;
@@ -60,9 +60,9 @@ class MessageRelayTest {
                 .setStatus("HTTP/1.1 200 OK")
                 .addHeader("Content-Type", "application/json"));
 
-        AddOrderDTO addOrderDTO = new AddOrderDTO(UUID.randomUUID(), UUID.randomUUID(), 10, 10);
-        Orders orders = new Orders(addOrderDTO);
-        orderService.createOrder(orders);
+        AddOrderDTO addOrderDTO = new AddOrderDTO(UUID.randomUUID(), 10, 10);
+        Order order = new Order(addOrderDTO);
+        orderService.createOrder(order);
 
 
         assertEquals(0, transactionRepository.findAll().size());
@@ -71,9 +71,9 @@ class MessageRelayTest {
     @Test
     void sendUnfinishedMessages_WhenServiceIsDown_ShouldNotDeleteTransaction() throws Exception {
         mockBackEnd.enqueue(new MockResponse().setHttp2ErrorCode(500));
-        AddOrderDTO addOrderDTO = new AddOrderDTO(UUID.randomUUID(), UUID.randomUUID(), 10, 10);
-        Orders orders = new Orders(addOrderDTO);
-        orderService.createOrder(orders);
+        AddOrderDTO addOrderDTO = new AddOrderDTO(UUID.randomUUID(), 10, 10);
+        Order order = new Order(addOrderDTO);
+        orderService.createOrder(order);
 
         assertEquals(1, transactionRepository.findAll().size());
     }

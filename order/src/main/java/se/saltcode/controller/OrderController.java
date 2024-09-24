@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.saltcode.model.order.AddOrderDTO;
 import se.saltcode.model.order.OrderDTO;
-import se.saltcode.model.order.UpdateOrderDTO;
 import se.saltcode.model.order.Order;
 import se.saltcode.service.OrderService;
 
@@ -51,8 +50,8 @@ public class OrderController {
 
   @PutMapping()
   ResponseEntity<OrderDTO> updateOrder(
-      @RequestBody UpdateOrderDTO updateOrderDTO) {
+      @RequestBody OrderDTO orderDTO) {
     return ResponseEntity.ok(
-        orderService.updateOrder(new Order(updateOrderDTO)).toResponseObject());
+        orderService.updateOrder(new Order(orderDTO)).toResponseObject());
   }
 }

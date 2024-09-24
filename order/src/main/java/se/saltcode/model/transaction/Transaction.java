@@ -11,7 +11,7 @@ import se.saltcode.model.order.Order;
 
 @Entity
 @Table
-public class Transaction /*implements Comparable<Transaction>*/{
+public class Transaction implements Comparable<Transaction>{
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -24,27 +24,26 @@ public class Transaction /*implements Comparable<Transaction>*/{
   private UUID inventoryId;
 
   private int change;
-/*
-  @CreationTimestamp
+
   private LocalDateTime createdAt;
 
- */
-
-  public Transaction() {}
+  public Transaction() {
+    this.createdAt = LocalDateTime.now();
+  }
 
   public Transaction(Event eventType, UUID orderId, UUID inventoryId, int change) {
     this.eventType = eventType;
     this.orderId=orderId;
     this.inventoryId=inventoryId;
     this.change=change;
+    this.createdAt=LocalDateTime.now();
   }
-/*
+
+
   @Override
   public int compareTo(Transaction o) {
     return createdAt.compareTo(o.getCreatedAt());
   }
-
- */
 
   public UUID getId() {
     return id;
@@ -85,7 +84,7 @@ public class Transaction /*implements Comparable<Transaction>*/{
   public void setChange(int change) {
     this.change = change;
   }
-  /*
+
   public void setCreatedAt(LocalDateTime createdAt) {
     this.createdAt = createdAt;
   }
@@ -94,5 +93,5 @@ public class Transaction /*implements Comparable<Transaction>*/{
     return createdAt;
   }
 
-   */
+
 }

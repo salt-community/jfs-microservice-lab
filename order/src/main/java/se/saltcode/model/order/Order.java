@@ -7,17 +7,15 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import java.util.UUID;
+
+import jakarta.validation.constraints.PositiveOrZero;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "user_order")
 public class Order{
 
   @Id @UuidGenerator private UUID id;
-
-  @NotEmpty(message = "customerId cant be empty")
-  @Column(name = "customer_id")
-  private UUID customerId;
 
   @NotEmpty(message = "inventoryId cant be empty")
   @Column(name = "inventory_id")
@@ -27,28 +25,27 @@ public class Order{
   @Column(name = "quantity")
   private int quantity;
 
-  @Positive(message = "totalCost must be positive")
+  @PositiveOrZero(message = "totalCost must be positive or zero")
   @Column(name = "total_cost")
   private double totalCost;
 
   public Order() {}
 
   public Order(AddOrderDTO addOrderDTO) {
-    this.customerId = addOrderDTO.customerId();
     this.inventoryId = addOrderDTO.inventoryId();
     this.quantity = addOrderDTO.quantity();
     this.totalCost = addOrderDTO.totalCost();
   }
-
-  public Order(UpdateOrderDTO updateOrderDTO) {
-    this.customerId = updateOrderDTO.customerId();
-    this.inventoryId = updateOrderDTO.inventoryId();
-    this.quantity = updateOrderDTO.quantity();
-    this.totalCost = updateOrderDTO.totalCost();
+  public Order(OrderDTO orderDTO) {
+    this.id = orderDTO.id();
+    this.inventoryId = orderDTO.inventoryId();
+    this.quantity = orderDTO.quantity();
+    this.totalCost = orderDTO.totalCost();
   }
 
+
   public OrderDTO toResponseObject() {
-    return new OrderDTO(id, customerId, inventoryId, quantity, totalCost);
+    return new OrderDTO(id, inventoryId, quantity, totalCost);
   }
 
   public UUID getId() {
@@ -57,14 +54,6 @@ public class Order{
 
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  public UUID getCustomerId() {
-    return customerId;
-  }
-
-  public void setCustomerId(UUID customerId) {
-    this.customerId = customerId;
   }
 
   public UUID getInventoryId() {
