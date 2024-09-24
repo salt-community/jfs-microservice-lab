@@ -42,7 +42,8 @@ public class OrderCacheService {
   @Scheduled(fixedRate = 6000000)
   public void clearCacheItems() {
     orderCacheRepository.findAll().stream()
-        .filter(e -> Duration.between(e.getCreatedAt(), ZonedDateTime.now()).get(ChronoUnit.HOURS) > 48)
+        .filter(
+            e -> Duration.between(e.getCreatedAt(), ZonedDateTime.now()).get(ChronoUnit.HOURS) > 48)
         .forEach(e -> orderCacheRepository.deleteById(e.getId()));
   }
 }

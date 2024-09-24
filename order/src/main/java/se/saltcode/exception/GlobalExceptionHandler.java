@@ -12,6 +12,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<String> NoSuchTransaction(NoSuchTransactionException ex) {
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
   }
+
   @ExceptionHandler({NoSuchOrderException.class})
   public ResponseEntity<String> NoSuchOrder(NoSuchOrderException ex) {
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);

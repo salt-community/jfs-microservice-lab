@@ -39,14 +39,17 @@ public class MessageRelay {
     List<Transaction> transactions = transactionRepository.findAll();
     Collections.sort(transactions);
     for (Transaction transaction : transactions) {
-      if (!sendMessage(transaction)) {break;}
+      if (!sendMessage(transaction)) {
+        break;
+      }
     }
   }
 
   private Boolean sendMessage(Transaction transaction) {
     return webClient
         .put()
-        .uri(UriComponentsBuilder.fromPath(apiPath)
+        .uri(
+            UriComponentsBuilder.fromPath(apiPath)
                 .queryParam("id", transaction.getInventoryId())
                 .queryParam("change", transaction.getChange())
                 .queryParam("transactionId", transaction.getId())
@@ -69,14 +72,17 @@ public class MessageRelay {
       case INSUFFICIENT_QUANTITY -> {
         if (transaction.getEventType().equals(Event.PURCHASE)) {
           orderRepository.deleteById(transaction.getOrderId());
-        } else if (transaction.getEventType().equals(Event.CHANGE)) {
-          Order order = orderRepository
+        }
+        if (transaction.getEventType().equals(Event.CHANGE)) {
+          Order order =
+              orderRepository
                   .findById(transaction.getOrderId())
                   .orElseThrow(NoSuchOrderException::new);
           order.setQuantity(order.getQuantity() - transaction.getChange());
           orderRepository.save(order);
         }
       }
-    };
+    }
+    ;
   }
 }

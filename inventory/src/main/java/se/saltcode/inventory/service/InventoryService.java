@@ -1,7 +1,6 @@
 package se.saltcode.inventory.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import se.saltcode.inventory.exception.NoSuchInventoryException;
@@ -65,7 +64,7 @@ public class InventoryService {
       return UpdateResult.NO_SUCH_INVENTORY;
     }
     Inventory inventory =
-        inventoryDBRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        inventoryDBRepository.findById(id).orElseThrow(NoSuchInventoryException::new);
     inventory.setQuantity(inventory.getQuantity() - quantity);
     if (inventory.getQuantity() < 0) {
       return UpdateResult.INSUFFICIENT_QUANTITY;

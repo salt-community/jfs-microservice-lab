@@ -65,7 +65,7 @@ public class Transaction implements Comparable<Transaction> {
 
   @Override
   public int compareTo(Transaction o) {
-    return createdAt.compareTo(o.getCreatedAt());
+    return o.getCreatedAt().compareTo(createdAt);
   }
 
   public UUID getId() {
