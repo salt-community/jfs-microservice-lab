@@ -24,7 +24,6 @@ public class Transaction implements Comparable<Transaction> {
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
-
   @ManyToOne(optional = false)
   @JoinColumn(name = "user_order")
   private Order order;

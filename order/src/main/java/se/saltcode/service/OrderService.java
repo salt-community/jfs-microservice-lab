@@ -47,7 +47,6 @@ public class OrderService {
     oldOrder.update(order);
     orderRepository.save(oldOrder);
     messageRelay.sendUnfinishedMessages();
-
     return order;
   }
 }
