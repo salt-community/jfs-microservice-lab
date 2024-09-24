@@ -23,8 +23,8 @@ public class OrderCache {
 
   public OrderCache() {}
 
-  public OrderCache(CreateOrderCacheDto createOrderCacheDto) {
-    this.id = createOrderCacheDto.id();
+  public OrderCache(AddOrderCacheDto addOrderCacheDto) {
+    this.id = addOrderCacheDto.id();
     this.createdAt = ZonedDateTime.now();
   }
 

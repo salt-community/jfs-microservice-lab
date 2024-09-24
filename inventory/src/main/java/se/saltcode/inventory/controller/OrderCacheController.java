@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.saltcode.inventory.model.cache.CreateOrderCacheDto;
+import se.saltcode.inventory.model.cache.AddOrderCacheDto;
 import se.saltcode.inventory.model.cache.OrderCache;
 import se.saltcode.inventory.model.cache.OrderCacheDto;
 import se.saltcode.inventory.service.OrderCacheService;
@@ -35,9 +35,9 @@ public class OrderCacheController {
 
   @PostMapping
   public ResponseEntity<OrderCacheDto> createOrderCacheItem(
-      @RequestBody CreateOrderCacheDto createOrderCacheDto) {
+      @RequestBody AddOrderCacheDto addOrderCacheDto) {
     return new ResponseEntity<>(
-        orderCacheService.createOrderCacheItem(new OrderCache(createOrderCacheDto)).toDto(),
+        orderCacheService.createOrderCacheItem(new OrderCache(addOrderCacheDto)).toDto(),
         HttpStatus.CREATED);
   }
 

@@ -1,5 +1,6 @@
 package se.saltcode.inventory.model.inventory;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -16,8 +17,11 @@ public class Inventory {
   @NotNull(message = "product cant be null")
   private String product;
 
+  @NotNull(message = "quantity cant be null")
+  @Column(name = "quantity")
   private int quantity;
 
+  @Column(name = "reserved_quantity")
   private int reservedQuantity;
 
   public Inventory(InventoryDto inventoryDTO) {
