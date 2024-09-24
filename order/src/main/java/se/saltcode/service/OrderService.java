@@ -1,5 +1,4 @@
 package se.saltcode.service;
-
 import java.util.*;
 import org.springframework.stereotype.Service;
 import se.saltcode.components.MessageRelay;
@@ -47,7 +46,6 @@ public class OrderService {
     transactionRepository.save(
         new Transaction(
             Event.PURCHASE, newOrder.getId(), newOrder.getInventoryId(), newOrder.getQuantity()));
-
     messageRelay.sendUnfinishedMessages();
     return newOrder;
   }

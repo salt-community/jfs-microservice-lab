@@ -14,10 +14,4 @@ public class Config {
   public WebClient webClientDev(@Value("${inventory.base-uri}") String baseUri) {
     return WebClient.create(baseUri);
   }
-
-  @Bean
-  public UriComponentsBuilder uriComponentsBuilderDev(
-      @Value("${inventory.endpoints.update-inventory-quantity}") String endpoint) {
-    return UriComponentsBuilder.fromPath(endpoint);
-  }
 }

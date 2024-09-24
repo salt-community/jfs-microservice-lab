@@ -19,13 +19,9 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>("Invalid input: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(DuplicateOrderException.class)
-  public ResponseEntity<String> handleDuplicateOrderException(DuplicateOrderException ex) {
-    return new ResponseEntity<>("Invalid input: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
-  }
-
   @ExceptionHandler(NoSuchElementException.class)
   public ResponseEntity<String> handleIllegalArgumentException(NoSuchElementException ex) {
+    System.out.println("Invalid input: " + ex.getMessage());
     return new ResponseEntity<>("Invalid input: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
   }
 }

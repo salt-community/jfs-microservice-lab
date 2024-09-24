@@ -1,5 +1,6 @@
 package se.saltcode.inventory.model.cache;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -13,6 +14,7 @@ public class OrderCache {
 
     @Id
     private UUID id;
+    @Column(unique=true)
     private LocalDateTime createdAt;
 
     public OrderCache(UUID id) {
@@ -21,7 +23,6 @@ public class OrderCache {
     }
 
     public OrderCache() {
-
     }
     public OrderCache(CreateOrderCacheDto createOrderCacheDto) {
         this.id = createOrderCacheDto.id();

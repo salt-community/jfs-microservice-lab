@@ -36,11 +36,14 @@ public class OrderCacheService {
         orderCacheRepository.deleteById(id);
         return true;
     }
-    @Scheduled(fixedRate = 60000)
+  //  @Scheduled(fixedRate = 60000)
     public void clearCacheItems() {
+        /*
         orderCacheRepository.findAll()
                 .stream()
                 .filter(e -> Duration.between(e.getCreatedAt(), LocalDateTime.now()).get(ChronoUnit.HOURS)>48 )
                 .forEach(e -> orderCacheRepository.deleteById(e.getId()));
+
+         */
     }
 }

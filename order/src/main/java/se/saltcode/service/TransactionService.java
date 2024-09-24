@@ -21,9 +21,7 @@ public class TransactionService {
   }
 
   public Transaction getTransactionById(UUID eventID) {
-    return transactionRepository
-        .findById(eventID)
-        .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
+    return transactionRepository.findById(eventID).orElseThrow(NoSuchTransactionException::new);
   }
 
   public Transaction createTransaction(Transaction transaction) {

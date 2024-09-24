@@ -13,9 +13,9 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
   }
 
-  @ExceptionHandler({InsufficientInventoryException.class})
-  public ResponseEntity<String> InsufficientInventoryException(InsufficientInventoryException ex) {
-    return ResponseEntity.badRequest().body(ex.getMessage());
+  @ExceptionHandler({NoSuchTransactionException.class})
+  public ResponseEntity<String> NoSuchTransaction(NoSuchTransactionException ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler({Exception.class})

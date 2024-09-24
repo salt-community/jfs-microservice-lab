@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
-import se.saltcode.inventory.exception.DuplicateOrderException;
+import se.saltcode.inventory.model.enums.UpdateResult;
 import se.saltcode.inventory.model.cache.OrderCache;
 import se.saltcode.inventory.model.inventory.Inventory;
 import se.saltcode.inventory.repository.IOrderCacheRepository;
@@ -21,17 +21,14 @@ public class InventoryService {
       this.orderCacheRepository = orderCacheRepository;
   }
 
-  // Get all inventory items
   public List<Inventory> getAllInventoryItems() {
     return inventoryDBRepository.findAll();
   }
 
-  // Get a single inventory item by ID (UUID)
   public Inventory getInventoryItemById(UUID id) {
     return inventoryDBRepository.findById(id).orElse(null);
   }
 
-  // Create a new inventory item
   public Inventory createInventoryItem(Inventory inventory) {
     if (inventory == null) {
       throw new IllegalArgumentException("Inventory item cannot be null");
@@ -40,7 +37,6 @@ public class InventoryService {
     return inventoryDBRepository.save(inventory);
   }
 
-  // Update an existing inventory item
   public Inventory updateInventoryItem(UUID id, Inventory inventory) {
     return inventoryDBRepository
         .findById(id)
@@ -54,7 +50,6 @@ public class InventoryService {
         .orElse(null);
   }
 
-  // Delete an inventory item
   public boolean deleteInventoryItem(UUID id) {
     if (inventoryDBRepository.existsById(id)) {
       inventoryDBRepository.deleteById(id);
@@ -63,17 +58,20 @@ public class InventoryService {
     return false;
   }
 
-  public Inventory updateQuantityOfInventory(UUID id, int quantity, UUID transactionId) {
+  public UpdateResult updateQuantityOfInventory(UUID id, int quantity, UUID transactionId) {
     if(orderCacheRepository.existsById(transactionId)){
-     throw new DuplicateOrderException();
+     return UpdateResult.DUPLICATE_MESSAGE;
     }
     orderCacheRepository.save(new OrderCache(transactionId));
+    if(!inventoryDBRepository.existsById(id)){
+      return UpdateResult.NO_SUCH_INVENTORY;
+    }
     Inventory inventory = inventoryDBRepository.findById(id).orElseThrow(NoSuchElementException::new);
     inventory.setQuantity(inventory.getQuantity() - quantity);
     if (inventory.getQuantity() < 0) {
-      throw new IllegalArgumentException("Inventory item quantity cannot be negative");
+      return UpdateResult.INSUFFICIENT_QUANTITY;
     }
-    return inventoryDBRepository.save(inventory);
-
+    inventoryDBRepository.save(inventory);
+    return UpdateResult.SUCCESS;
   }
 }

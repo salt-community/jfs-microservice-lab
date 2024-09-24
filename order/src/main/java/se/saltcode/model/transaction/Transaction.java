@@ -3,6 +3,10 @@ package se.saltcode.model.transaction;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.UuidGenerator;
 import se.saltcode.model.enums.Event;
 
 @Entity
@@ -10,22 +14,28 @@ import se.saltcode.model.enums.Event;
 public class Transaction implements Comparable<Transaction> {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
+  @UuidGenerator
   private UUID id;
 
+  @NotNull(message = "eventType cant be null")
+  @Column(name = "event_type")
   private Event eventType;
 
+  @NotEmpty(message = "orderId cant be empty")
+  @Column(name = "order_id")
   private UUID orderId;
 
+  @NotEmpty(message = "inventoryId cant be empty")
+  @Column(name = "inventory_id")
   private UUID inventoryId;
 
+  @Column(name = "change")
   private int change;
 
+  @Column(name = "created_at")
   private LocalDateTime createdAt;
 
-  public Transaction() {
-    this.createdAt = LocalDateTime.now();
-  }
+  public Transaction() {}
 
   public Transaction(Event eventType, UUID orderId, UUID inventoryId, int change) {
     this.eventType = eventType;

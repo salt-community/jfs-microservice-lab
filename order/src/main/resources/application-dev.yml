@@ -31,8 +31,3 @@ inventory:
   base-uri: http://localhost:5000
   endpoints:
     update-inventory-quantity: /api/inventory/update/quantity
-
-
-
-
-

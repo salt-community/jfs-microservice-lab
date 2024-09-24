@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import se.saltcode.model.transaction.AddTransactionDto;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.model.transaction.TransactionDto;
-import se.saltcode.service.OrderService;
 import se.saltcode.service.TransactionService;
 
 @RestController
@@ -18,16 +17,13 @@ import se.saltcode.service.TransactionService;
 public class TransactionController {
 
   private final TransactionService service;
-  private final OrderService orderService;
-  public String apiUri;
+  public final String apiUri;
 
   public TransactionController(
       TransactionService service,
-      @Value("${this.base-uri}${api.base-path}${api.controllers.transactions}") String apiUri,
-      OrderService orderService) {
+      @Value("${this.base-uri}${api.base-path}${api.controllers.transactions}") String apiUri) {
     this.service = service;
     this.apiUri = apiUri;
-    this.orderService = orderService;
   }
 
   @GetMapping
@@ -36,7 +32,7 @@ public class TransactionController {
         service.getAllTransactions().stream().map(Transaction::toDto).toList());
   }
 
-  @GetMapping("/{eventID}")
+  @GetMapping("/{id}")
   public ResponseEntity<TransactionDto> getTransactionById(@PathVariable UUID id) {
     return ResponseEntity.ok(service.getTransactionById(id).toDto());
   }
@@ -56,9 +52,8 @@ public class TransactionController {
     return ResponseEntity.noContent().build();
   }
 
-  @PutMapping("/{eventID}")
-  public ResponseEntity<TransactionDto> updateTransaction(
-      @RequestBody TransactionDto transactionDto) {
+  @PutMapping()
+  public ResponseEntity<TransactionDto> updateTransaction(@RequestBody TransactionDto transactionDto) {
     return ResponseEntity.ok(service.updateTransaction(new Transaction(transactionDto)).toDto());
   }
 }
