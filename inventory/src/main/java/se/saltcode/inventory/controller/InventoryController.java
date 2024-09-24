@@ -14,7 +14,7 @@ import se.saltcode.inventory.service.InventoryService;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/inventory")
+@RequestMapping("${api.base-path}${api.controllers.inventory}")
 public class InventoryController {
 
   private final InventoryService inventoryService;
@@ -35,16 +35,13 @@ public class InventoryController {
   @GetMapping("/{id}")
   public ResponseEntity<InventoryDto> getInventoryItemById(@PathVariable("id") UUID id) {
     Inventory item = inventoryService.getInventoryItemById(id);
-    if (item != null) {
       return new ResponseEntity<>(item.toResponseObject(), HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+
   }
 
   @PostMapping
-  public ResponseEntity<InventoryDto> createInventoryItem(@RequestBody AddInventoryDto inventoryDTO) {
-    Inventory createdItem = inventoryService.createInventoryItem(new Inventory(inventoryDTO));
+  public ResponseEntity<InventoryDto> createInventoryItem(@RequestBody AddInventoryDto addInventoryDTO) {
+    Inventory createdItem = inventoryService.createInventoryItem(new Inventory(addInventoryDTO));
     return new ResponseEntity<>(createdItem.toResponseObject(), HttpStatus.CREATED);
   }
 
@@ -63,26 +60,19 @@ public class InventoryController {
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteInventoryItem(@PathVariable("id") UUID id) {
     boolean deleted = inventoryService.deleteInventoryItem(id);
-    if (deleted) {
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
   }
 
   @GetMapping("/{id}/quantity")
   public ResponseEntity<Integer> getQuantityOfInventory(@PathVariable("id") UUID id) {
     Inventory item = inventoryService.getInventoryItemById(id);
-    if (item != null) {
       return new ResponseEntity<>(item.getQuantity(), HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
   }
 
   @PutMapping("/update/quantity")
   public ResponseEntity<UpdateResult> updateQuantityOfInventory(
-      @RequestParam String id, @RequestParam String change, @RequestParam String transactionId) {
-    return new ResponseEntity<>(inventoryService.updateQuantityOfInventory(UUID.fromString(id), Integer.parseInt(change),  UUID.fromString(transactionId)),HttpStatus.OK );
+      @RequestParam UUID id, @RequestParam int change, @RequestParam UUID transactionId) {
+    return new ResponseEntity<>(inventoryService.updateQuantityOfInventory(id, change,  transactionId),HttpStatus.OK );
   }
 }

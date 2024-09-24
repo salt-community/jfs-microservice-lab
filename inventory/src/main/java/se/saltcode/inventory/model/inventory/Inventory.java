@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
+
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
@@ -12,6 +14,7 @@ public class Inventory {
 
   @UuidGenerator @Id private UUID id;
 
+  @NotNull(message = "product cant be null")
   private String product;
 
   private int quantity;

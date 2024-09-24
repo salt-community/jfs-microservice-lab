@@ -26,6 +26,7 @@ public class OrderCache {
 
     public OrderCache() {
     }
+
     public OrderCache(CreateOrderCacheDto createOrderCacheDto) {
         this.id = createOrderCacheDto.id();
         this.createdAt = ZonedDateTime.now();

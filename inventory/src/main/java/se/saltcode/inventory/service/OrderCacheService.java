@@ -4,11 +4,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import se.saltcode.inventory.exception.NoSuchOrderCacheException;
 import se.saltcode.inventory.model.cache.OrderCache;
-import se.saltcode.inventory.model.inventory.Inventory;
 import se.saltcode.inventory.repository.IOrderCacheRepository;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -34,9 +32,9 @@ public class OrderCacheService {
         return orderCacheRepository.save(orderCache);
     }
 
-    public boolean deleteOrderCacheById(UUID id) {
+    public void deleteOrderCacheById(UUID id) {
+        if (!orderCacheRepository.existsById(id)) { throw new NoSuchOrderCacheException();}
         orderCacheRepository.deleteById(id);
-        return true;
     }
     @Scheduled(fixedRate = 6000000)
     public void clearCacheItems() {

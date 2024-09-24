@@ -42,7 +42,6 @@ public class OrderService {
   }
 
   public Order createOrder(Order order) {
-
     Order newOrder = orderRepository.save(order);
     transactionRepository.save(
         new Transaction(

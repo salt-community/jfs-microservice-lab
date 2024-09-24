@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
+import se.saltcode.inventory.exception.NoSuchInventoryException;
 import se.saltcode.inventory.model.enums.UpdateResult;
 import se.saltcode.inventory.model.cache.OrderCache;
 import se.saltcode.inventory.model.inventory.Inventory;
@@ -26,14 +27,10 @@ public class InventoryService {
   }
 
   public Inventory getInventoryItemById(UUID id) {
-    return inventoryDBRepository.findById(id).orElse(null);
+    return inventoryDBRepository.findById(id).orElseThrow(NoSuchInventoryException::new);
   }
 
   public Inventory createInventoryItem(Inventory inventory) {
-    if (inventory == null) {
-      throw new IllegalArgumentException("Inventory item cannot be null");
-    }
-    inventory.setId(UUID.randomUUID()); // Generate a random UUID for the new item
     return inventoryDBRepository.save(inventory);
   }
 
@@ -51,10 +48,10 @@ public class InventoryService {
   }
 
   public boolean deleteInventoryItem(UUID id) {
-    if (inventoryDBRepository.existsById(id)) {
-      inventoryDBRepository.deleteById(id);
-      return true;
+    if (!inventoryDBRepository.existsById(id)) {
+      throw new NoSuchInventoryException();
     }
+    inventoryDBRepository.deleteById(id);
     return false;
   }
 

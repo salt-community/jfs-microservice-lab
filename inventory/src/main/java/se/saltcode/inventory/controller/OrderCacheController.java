@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/order-cache")
+@RequestMapping("${api.base-path}${api.controllers.order-cache}")
 public class OrderCacheController {
 
     private final OrderCacheService orderCacheService;
@@ -29,29 +29,17 @@ public class OrderCacheController {
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderCache> getOrderCacheById(@PathVariable("id") UUID id) {
-        OrderCache item = orderCacheService.getOrderCacheById(id);
-        if (item != null) {
-            return new ResponseEntity<>(item, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(orderCacheService.getOrderCacheById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<OrderCache> createOrderCacheItem(@RequestBody CreateOrderCacheDto createOrderCacheDto) {
-        OrderCache createdItem = orderCacheService.createOrderCacheItem(new OrderCache(createOrderCacheDto));
-        return new ResponseEntity<>(createdItem, HttpStatus.CREATED);
+        return new ResponseEntity<>(orderCacheService.createOrderCacheItem(new OrderCache(createOrderCacheDto)), HttpStatus.CREATED);
     }
-
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrderCache(@PathVariable("id") UUID id) {
-        boolean deleted = orderCacheService.deleteOrderCacheById(id);
-        if (deleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        orderCacheService.deleteOrderCacheById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

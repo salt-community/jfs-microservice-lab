@@ -2,6 +2,7 @@ api:
   base-path: /api
   controllers:
     inventory: /inventory
+    order-cache: /order-cache
 
 server:
   port: 8080
