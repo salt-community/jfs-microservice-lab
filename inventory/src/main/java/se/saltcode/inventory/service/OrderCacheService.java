@@ -8,6 +8,7 @@ import se.saltcode.inventory.repository.IOrderCacheRepository;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
@@ -36,14 +37,14 @@ public class OrderCacheService {
         orderCacheRepository.deleteById(id);
         return true;
     }
-  //  @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 6000000)
     public void clearCacheItems() {
-        /*
+
         orderCacheRepository.findAll()
                 .stream()
-                .filter(e -> Duration.between(e.getCreatedAt(), LocalDateTime.now()).get(ChronoUnit.HOURS)>48 )
+                .filter(e -> Duration.between(e.getCreatedAt(), ZonedDateTime.now()).get(ChronoUnit.HOURS)>48 )
                 .forEach(e -> orderCacheRepository.deleteById(e.getId()));
 
-         */
+
     }
 }
