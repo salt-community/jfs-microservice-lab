@@ -11,12 +11,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import se.saltcode.inventory.model.inventory.Inventory;
-import se.saltcode.inventory.repository.InventoryDBRepository;
+import se.saltcode.inventory.repository.IInventoryRepository;
 
 @SpringBootTest
 class InventoryDBRepositoryTest {
 
-  @Autowired private InventoryDBRepository repository;
+  @Autowired private IInventoryRepository repository;
 
   // Test to check if database creates an item
   @Test

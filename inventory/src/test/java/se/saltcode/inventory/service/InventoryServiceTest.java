@@ -10,18 +10,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import se.saltcode.inventory.model.inventory.Inventory;
-import se.saltcode.inventory.repository.InventoryDBRepository;
+import se.saltcode.inventory.repository.IInventoryRepository;
+import se.saltcode.inventory.repository.IOrderCacheRepository;
 
 class InventoryServiceTest {
 
   private InventoryService inventoryService;
-  private InventoryDBRepository mockRepo;
+  private IInventoryRepository mockRepo;
+  private IOrderCacheRepository mockCacheRepo;
 
   @BeforeEach
   void setUp() {
     // Arrange
-    mockRepo = Mockito.mock(InventoryDBRepository.class);
-    inventoryService = new InventoryService(mockRepo);
+    mockRepo = Mockito.mock(IInventoryRepository.class);
+    mockCacheRepo = Mockito.mock(IOrderCacheRepository.class);
+    inventoryService = new InventoryService(mockRepo,mockCacheRepo);
   }
 
   @Test
