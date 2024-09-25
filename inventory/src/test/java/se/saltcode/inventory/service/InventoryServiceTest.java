@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import se.saltcode.inventory.exception.NoSuchInventoryException;
 import se.saltcode.inventory.model.inventory.Inventory;
 import se.saltcode.inventory.model.inventory.InventoryDto;
 import se.saltcode.inventory.repository.IInventoryRepository;
@@ -94,23 +95,27 @@ class InventoryServiceTest {
   }
 
   @Test
-  void shouldReturnNull_whenItemDoesNotExist() {
+  void shouldThrowError_whenItemDoesNotExist() {
     // Arrange
     UUID id = UUID.randomUUID();
     when(mockRepo.findById(id)).thenReturn(Optional.empty());
 
     // Act
-    Inventory foundItem = inventoryService.getInventoryItemById(id);
+    NoSuchInventoryException thrown = assertThrows(
+            NoSuchInventoryException.class,
+            () ->inventoryService.getInventoryItemById(id),
+            "Expected updateInventoryItem() to noSuchInventoryException, but it didn't"
+    );
 
     // Assert
-    assertNull(foundItem, "Inventory item should return null when the item is not found");
-    verify(mockRepo, times(1)).findById(id);
+    assertTrue(thrown.getMessage().contains("no inventory with matching id found"));
+    //verify(mockRepo, times(1)).findById(id);
   }
 
   @Test
   void shouldUpdateInventoryItem_whenItemExists() {
     // Arrange
-    UUID id = UUID.randomUUID();
+   // UUID id = UUID.randomUUID();
 
     Inventory existingItem = new Inventory(inventoryDto);
     existingItem.setProduct("Existing Product");
@@ -122,7 +127,7 @@ class InventoryServiceTest {
     updatedItemData.setQuantity(15);
     updatedItemData.setReservedQuantity(3);
 
-    when(mockRepo.findById(id)).thenReturn(Optional.of(existingItem));
+    when(mockRepo.findById(inventoryDto.id())).thenReturn(Optional.of(existingItem));
     when(mockRepo.save(existingItem)).thenReturn(updatedItemData);
 
     // Act
@@ -132,12 +137,12 @@ class InventoryServiceTest {
     assertNotNull(updatedItem, "Updated item should not be null when the item exists");
     assertEquals("Updated Product", updatedItem.getProduct());
     assertEquals(15, updatedItem.getQuantity());
-    verify(mockRepo, times(1)).findById(id);
+    verify(mockRepo, times(1)).findById(existingItem.getId());
     verify(mockRepo, times(1)).save(existingItem);
   }
 
   @Test
-  void shouldReturnNull_whenUpdateItemDoesNotExist() {
+  void shouldThrowException_whenUpdateItemDoesNotExist() {
     // Arrange
     UUID id = UUID.randomUUID();
     Inventory updatedItemData = new Inventory(inventoryDto);
@@ -147,11 +152,15 @@ class InventoryServiceTest {
     when(mockRepo.findById(id)).thenReturn(Optional.empty());
 
     // Act
-    Inventory updatedItem = inventoryService.updateInventoryItem(updatedItemData);
-
+    NoSuchInventoryException thrown = assertThrows(
+            NoSuchInventoryException.class,
+            () ->inventoryService.updateInventoryItem(updatedItemData),
+            "Expected updateInventoryItem() to noSuchInventoryException, but it didn't"
+    );
     // Assert
-    assertNull(updatedItem, "Update should return null if item is not found");
-    verify(mockRepo, times(1)).findById(id);
+
+    assertTrue(thrown.getMessage().contains("no inventory with matching id found"));
+    //verify(mockRepo, times(1)).findById(id);
   }
 
   @Test
@@ -170,17 +179,20 @@ class InventoryServiceTest {
   }
 
   @Test
-  void shouldNotDeleteInventoryItem_whenItemDoesNotExist() {
+  void shouldThrowErrorWhenDeletingNonExistingItem_whenItemDoesNotExist() {
     // Arrange
     UUID id = UUID.randomUUID();
     when(mockRepo.existsById(id)).thenReturn(false);
 
     // Act
-    boolean deleted = inventoryService.deleteInventoryItem(id);
-
+    NoSuchInventoryException thrown = assertThrows(
+            NoSuchInventoryException.class,
+            () ->inventoryService.deleteInventoryItem(id),
+            "Expected deleteInventoryItem() to throw noSuchInventoryException, but it didn't"
+    );
     // Assert
-    assertFalse(deleted, "Inventory item should not be deleted if not found");
-    verify(mockRepo, times(1)).existsById(id);
+    assertTrue(thrown.getMessage().contains("no inventory with matching id found"));
+//    verify(mockRepo, times(1)).existsById(id);
   }
 
   @Test

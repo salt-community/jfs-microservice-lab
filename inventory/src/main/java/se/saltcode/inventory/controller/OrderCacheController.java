@@ -40,8 +40,7 @@ public class OrderCacheController {
   @PostMapping
   public ResponseEntity<OrderCacheDto> createOrderCacheItem(
       @RequestBody AddOrderCacheDto addOrderCacheDto) {
-    OrderCacheDto orderCacheDto =
-        orderCacheService.createOrderCacheItem(new OrderCache(addOrderCacheDto)).toDto();
+    OrderCacheDto orderCacheDto = orderCacheService.createOrderCacheItem(new OrderCache(addOrderCacheDto)).toDto();
     return ResponseEntity.created(URI.create(apiUri + "/" + orderCacheDto.id()))
         .body(orderCacheDto);
   }
