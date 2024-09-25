@@ -3,10 +3,10 @@ package se.saltcode.inventory.exception;
 import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(RuntimeException.class)
@@ -20,18 +20,17 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(NoSuchOrderCacheException.class)
-  public ResponseEntity<String> handleIllegalArgumentException(NoSuchOrderCacheException ex) {
+  public ResponseEntity<String> handleNoSuchOrderCacheException(NoSuchOrderCacheException ex) {
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler(NoSuchInventoryException.class)
-  public ResponseEntity<String> handleIllegalArgumentException(NoSuchInventoryException ex) {
+  public ResponseEntity<String> handleNoSuchInventoryException(NoSuchInventoryException ex) {
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler(NoSuchElementException.class)
   public ResponseEntity<String> handleIllegalArgumentException(NoSuchElementException ex) {
-    System.out.println("Invalid input: " + ex.getMessage());
     return new ResponseEntity<>("Invalid input: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
   }
 }
