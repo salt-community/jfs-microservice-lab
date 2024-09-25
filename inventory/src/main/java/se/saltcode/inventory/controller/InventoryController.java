@@ -6,14 +6,15 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.saltcode.inventory.model.AddInventoryDto;
-import se.saltcode.inventory.model.Inventory;
-import se.saltcode.inventory.model.InventoryDto;
+import se.saltcode.inventory.model.enums.UpdateResult;
+import se.saltcode.inventory.model.inventory.AddInventoryDto;
+import se.saltcode.inventory.model.inventory.Inventory;
+import se.saltcode.inventory.model.inventory.InventoryDto;
 import se.saltcode.inventory.service.InventoryService;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/inventory")
+@RequestMapping("${api.base-path}${api.controllers.inventory}")
 public class InventoryController {
 
   private final InventoryService inventoryService;
@@ -34,16 +35,13 @@ public class InventoryController {
   @GetMapping("/{id}")
   public ResponseEntity<InventoryDto> getInventoryItemById(@PathVariable("id") UUID id) {
     Inventory item = inventoryService.getInventoryItemById(id);
-    if (item != null) {
-      return new ResponseEntity<>(item.toResponseObject(), HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(item.toResponseObject(), HttpStatus.OK);
   }
 
   @PostMapping
-  public ResponseEntity<InventoryDto> createInventoryItem(@RequestBody AddInventoryDto inventoryDTO) {
-    Inventory createdItem = inventoryService.createInventoryItem(new Inventory(inventoryDTO));
+  public ResponseEntity<InventoryDto> createInventoryItem(
+      @RequestBody AddInventoryDto addInventoryDTO) {
+    Inventory createdItem = inventoryService.createInventoryItem(new Inventory(addInventoryDTO));
     return new ResponseEntity<>(createdItem.toResponseObject(), HttpStatus.CREATED);
   }
 
@@ -62,27 +60,19 @@ public class InventoryController {
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteInventoryItem(@PathVariable("id") UUID id) {
     boolean deleted = inventoryService.deleteInventoryItem(id);
-    if (deleted) {
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @GetMapping("/{id}/quantity")
   public ResponseEntity<Integer> getQuantityOfInventory(@PathVariable("id") UUID id) {
     Inventory item = inventoryService.getInventoryItemById(id);
-    if (item != null) {
-      return new ResponseEntity<>(item.getQuantity(), HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(item.getQuantity(), HttpStatus.OK);
   }
 
   @PutMapping("/update/quantity")
-  public ResponseEntity<?> updateQuantityOfInventory(
-      @RequestParam String id, @RequestParam String change) {
-    inventoryService.updateQuantityOfInventory(UUID.fromString(id), Integer.parseInt(change));
-    return new ResponseEntity<>(HttpStatus.OK);
+  public ResponseEntity<UpdateResult> updateQuantityOfInventory(
+      @RequestParam UUID inventoryId, @RequestParam int change, @RequestParam UUID transactionId) {
+    return new ResponseEntity<>(
+        inventoryService.updateQuantityOfInventory(inventoryId, change, transactionId), HttpStatus.OK);
   }
 }

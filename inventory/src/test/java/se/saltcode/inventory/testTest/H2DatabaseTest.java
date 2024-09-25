@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import se.saltcode.inventory.model.Inventory;
-import se.saltcode.inventory.repository.InventoryDBRepository;
+import se.saltcode.inventory.model.inventory.Inventory;
+import se.saltcode.inventory.repository.IInventoryRepository;
 
 /**
  * The purpose of this test class is to test the in memory database, which itself is used for
@@ -17,7 +17,7 @@ import se.saltcode.inventory.repository.InventoryDBRepository;
 @SpringBootTest
 public class H2DatabaseTest {
 
-  @Autowired private InventoryDBRepository repository;
+  @Autowired private IInventoryRepository repository;
 
   @Test
   @Transactional

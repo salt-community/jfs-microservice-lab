@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  @ExceptionHandler({NoSuchOrderException.class})
-  public ResponseEntity<String> NoSuchOrderException(NoSuchOrderException ex) {
+  @ExceptionHandler({NoSuchTransactionException.class})
+  public ResponseEntity<String> NoSuchTransaction(NoSuchTransactionException ex) {
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
   }
 
-  @ExceptionHandler({InsufficientInventoryException.class})
-  public ResponseEntity<String> InsufficientInventoryException(InsufficientInventoryException ex) {
-    return ResponseEntity.badRequest().body(ex.getMessage());
+  @ExceptionHandler({NoSuchOrderException.class})
+  public ResponseEntity<String> NoSuchOrder(NoSuchOrderException ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler({Exception.class})

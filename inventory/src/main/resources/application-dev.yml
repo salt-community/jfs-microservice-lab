@@ -2,6 +2,7 @@ api:
   base-path: /api
   controllers:
     inventory: /inventory
+    order-cache: /order-cache
 
 server:
   port: 5000
@@ -16,8 +17,12 @@ spring:
     username: ${database.username}
     password: ${database.password}
     driver-class-name: org.postgresql.Driver
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
+
+this:
+  base-uri: http://localhost:5000

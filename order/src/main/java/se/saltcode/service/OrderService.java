@@ -2,28 +2,21 @@ package se.saltcode.service;
 
 import java.util.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import se.saltcode.components.MessageRelay;
 import se.saltcode.exception.NoSuchOrderException;
-import se.saltcode.model.enums.Event;
 import se.saltcode.model.order.Order;
-import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.IOrderRepository;
-import se.saltcode.repository.ITransactionRepository;
 
 @Service
 public class OrderService {
 
   private final IOrderRepository orderRepository;
-  private final ITransactionRepository transactionRepository;
   private final MessageRelay messageRelay;
 
   public OrderService(
       IOrderRepository orderRepository,
-      MessageRelay messageRelay,
-      ITransactionRepository transactionRepository) {
+      MessageRelay messageRelay) {
     this.orderRepository = orderRepository;
-    this.transactionRepository = transactionRepository;
     this.messageRelay = messageRelay;
   }
 
@@ -36,35 +29,23 @@ public class OrderService {
   }
 
   public void deleteOrder(UUID id) {
-    if (orderRepository.existsById(id)) {
+    if (!orderRepository.existsById(id)) {
       throw new NoSuchOrderException();
     }
     orderRepository.deleteById(id);
   }
 
-  @Transactional
   public Order createOrder(Order order) {
-
     Order newOrder = orderRepository.save(order);
-
-    transactionRepository.save(
-        new Transaction(Event.PURCHASE, newOrder.getId(), newOrder.getInventoryId(), newOrder.getQuantity()));
-
     messageRelay.sendUnfinishedMessages();
     return newOrder;
   }
 
-  @Transactional
   public Order updateOrder(Order order) {
 
-    Order oldOrder =
-        orderRepository.findById(order.getId()).orElseThrow(NoSuchOrderException::new);
-
-    int change = order.getQuantity() - oldOrder.getQuantity();
-
-    orderRepository.save(order);
-    transactionRepository.save(
-            new Transaction(Event.CHANGE, order.getId(), order.getInventoryId(), change));
+    Order oldOrder = orderRepository.findById(order.getId()).orElseThrow(NoSuchOrderException::new);
+    oldOrder.update(order);
+    orderRepository.save(oldOrder);
     messageRelay.sendUnfinishedMessages();
     return order;
   }

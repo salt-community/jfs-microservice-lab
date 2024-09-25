@@ -17,8 +17,17 @@ spring:
     username: ${database.username}
     password: ${database.password}
     driver-class-name: org.postgresql.Driver
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
+
+this:
+  base-uri: http://localhost:8080
+
+inventory:
+  base-uri: http://localhost:5000
+  endpoints:
+    update-inventory-quantity: /api/inventory/update/quantity

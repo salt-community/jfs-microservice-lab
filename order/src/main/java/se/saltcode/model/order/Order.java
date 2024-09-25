@@ -1,23 +1,20 @@
 package se.saltcode.model.order;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import java.util.List;
 import java.util.UUID;
 import org.hibernate.annotations.UuidGenerator;
+import se.saltcode.model.enums.Event;
+import se.saltcode.model.transaction.Transaction;
 
 @Entity
-@Table(name = "orders")
-public class Order{
+@Table(name = "user_order")
+public class Order {
 
   @Id @UuidGenerator private UUID id;
-
-  @NotEmpty(message = "customerId cant be empty")
-  @Column(name = "customer_id")
-  private UUID customerId;
 
   @NotEmpty(message = "inventoryId cant be empty")
   @Column(name = "inventory_id")
@@ -27,28 +24,37 @@ public class Order{
   @Column(name = "quantity")
   private int quantity;
 
-  @Positive(message = "totalCost must be positive")
+  @PositiveOrZero(message = "totalCost must be positive or zero")
   @Column(name = "total_cost")
   private double totalCost;
 
+  @OneToMany(mappedBy = "order",cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Transaction> transactions;
+
   public Order() {}
 
-  public Order(AddOrderDTO addOrderDTO) {
-    this.customerId = addOrderDTO.customerId();
+  public Order(AddOrderDto addOrderDTO) {
     this.inventoryId = addOrderDTO.inventoryId();
     this.quantity = addOrderDTO.quantity();
     this.totalCost = addOrderDTO.totalCost();
+    this.transactions = List.of(new Transaction(Event.PURCHASE,quantity,this));
   }
 
-  public Order(UpdateOrderDTO updateOrderDTO) {
-    this.customerId = updateOrderDTO.customerId();
-    this.inventoryId = updateOrderDTO.inventoryId();
-    this.quantity = updateOrderDTO.quantity();
-    this.totalCost = updateOrderDTO.totalCost();
+  public Order(OrderDto orderDTO) {
+    this.id = orderDTO.id();
+    this.inventoryId = orderDTO.inventoryId();
+    this.quantity = orderDTO.quantity();
+    this.totalCost = orderDTO.totalCost();
   }
 
-  public OrderDTO toResponseObject() {
-    return new OrderDTO(id, customerId, inventoryId, quantity, totalCost);
+  public void update(Order order) {
+    this.transactions.add(new Transaction(Event.CHANGE,order.getQuantity() - quantity,this)) ;
+    this.quantity = order.getQuantity();
+    this.totalCost = order.getTotalCost();
+  }
+
+  public OrderDto toDto() {
+    return new OrderDto(id, inventoryId, quantity, totalCost);
   }
 
   public UUID getId() {
@@ -57,14 +63,6 @@ public class Order{
 
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  public UUID getCustomerId() {
-    return customerId;
-  }
-
-  public void setCustomerId(UUID customerId) {
-    this.customerId = customerId;
   }
 
   public UUID getInventoryId() {
@@ -90,7 +88,4 @@ public class Order{
   public void setTotalCost(double totalCost) {
     this.totalCost = totalCost;
   }
-
-
-
 }

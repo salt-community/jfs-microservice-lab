@@ -1,9 +1,10 @@
-package se.saltcode.inventory.model;
+package se.saltcode.inventory.model.inventory;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -13,22 +14,30 @@ public class Inventory {
 
   @UuidGenerator @Id private UUID id;
 
-  @Column(name = "product")
+  @NotNull(message = "product cant be null")
   private String product;
 
+  @NotNull(message = "quantity cant be null")
   @Column(name = "quantity")
   private int quantity;
 
   @Column(name = "reserved_quantity")
   private int reservedQuantity;
 
-  public Inventory(InventoryDto inventoryDTO) {}
+  public Inventory(InventoryDto inventoryDTO) {
+    this.id = inventoryDTO.id();
+    this.product = inventoryDTO.product();
+    this.quantity = inventoryDTO.quantity();
+    this.reservedQuantity = inventoryDTO.reservedQuantity();
+  }
 
   public Inventory(AddInventoryDto addInventoryDTO) {
     this.product = addInventoryDTO.product();
     this.quantity = addInventoryDTO.quantity();
     this.reservedQuantity = 0;
   }
+
+  public Inventory() {}
 
   public InventoryDto toResponseObject() {
     return new InventoryDto(id, product, quantity, reservedQuantity);

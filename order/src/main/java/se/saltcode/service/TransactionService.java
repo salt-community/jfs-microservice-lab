@@ -3,43 +3,24 @@ package se.saltcode.service;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
-import se.saltcode.model.enums.Event;
+import se.saltcode.exception.NoSuchTransactionException;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.repository.ITransactionRepository;
 
 @Service
 public class TransactionService {
 
-  private final ITransactionRepository transactionService;
+  private final ITransactionRepository transactionRepository;
 
   public TransactionService(ITransactionRepository transactionService) {
-    this.transactionService = transactionService;
+    this.transactionRepository = transactionService;
   }
 
   public List<Transaction> getAllTransactions() {
-    return transactionService.findAll();
+    return transactionRepository.findAll();
   }
 
   public Transaction getTransactionById(UUID eventID) {
-    return transactionService
-        .findById(eventID)
-        .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
-  }
-
-  public Transaction createTransaction(Transaction transaction) {
-    return transactionService.save(transaction);
-  }
-
-  public Transaction updateTransaction(UUID eventID,   Event eventType, UUID orderId, UUID inventoryId, int change) {
-    Transaction transaction = getTransactionById(eventID);
-    transaction.setEventType(eventType);
-    transaction.setOrderId(orderId);
-    transaction.setInventoryId(inventoryId);
-    transaction.setChange(change);
-    return transactionService.save(transaction);
-  }
-
-  public void deleteTransaction(UUID eventID) {
-    transactionService.deleteById(eventID);
+    return transactionRepository.findById(eventID).orElseThrow(NoSuchTransactionException::new);
   }
 }

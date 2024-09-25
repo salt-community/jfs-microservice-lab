@@ -1,41 +1,39 @@
 package se.saltcode.inventory.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
-import se.saltcode.inventory.model.Inventory;
-import se.saltcode.inventory.repository.InventoryDBRepository;
+import se.saltcode.inventory.exception.NoSuchInventoryException;
+import se.saltcode.inventory.model.cache.OrderCache;
+import se.saltcode.inventory.model.enums.UpdateResult;
+import se.saltcode.inventory.model.inventory.Inventory;
+import se.saltcode.inventory.repository.IInventoryRepository;
+import se.saltcode.inventory.repository.IOrderCacheRepository;
 
 @Service
 public class InventoryService {
 
-  private final InventoryDBRepository inventoryDBRepository;
+  private final IInventoryRepository inventoryDBRepository;
+  private final IOrderCacheRepository orderCacheRepository;
 
-  public InventoryService(InventoryDBRepository inventoryDBRepository) {
+  public InventoryService(
+      IInventoryRepository inventoryDBRepository, IOrderCacheRepository orderCacheRepository) {
     this.inventoryDBRepository = inventoryDBRepository;
+    this.orderCacheRepository = orderCacheRepository;
   }
 
-  // Get all inventory items
   public List<Inventory> getAllInventoryItems() {
     return inventoryDBRepository.findAll();
   }
 
-  // Get a single inventory item by ID (UUID)
   public Inventory getInventoryItemById(UUID id) {
-    return inventoryDBRepository.findById(id).orElse(null);
+    return inventoryDBRepository.findById(id).orElseThrow(NoSuchInventoryException::new);
   }
 
-  // Create a new inventory item
   public Inventory createInventoryItem(Inventory inventory) {
-    if (inventory == null) {
-      throw new IllegalArgumentException("Inventory item cannot be null");
-    }
-    inventory.setId(UUID.randomUUID()); // Generate a random UUID for the new item
     return inventoryDBRepository.save(inventory);
   }
 
-  // Update an existing inventory item
   public Inventory updateInventoryItem(UUID id, Inventory inventory) {
     return inventoryDBRepository
         .findById(id)
@@ -49,22 +47,29 @@ public class InventoryService {
         .orElse(null);
   }
 
-  // Delete an inventory item
   public boolean deleteInventoryItem(UUID id) {
-    if (inventoryDBRepository.existsById(id)) {
-      inventoryDBRepository.deleteById(id);
-      return true;
+    if (!inventoryDBRepository.existsById(id)) {
+      throw new NoSuchInventoryException();
     }
+    inventoryDBRepository.deleteById(id);
     return false;
   }
 
-  public Inventory updateQuantityOfInventory(UUID id, int quantity) {
+  public UpdateResult updateQuantityOfInventory(UUID inventoryId, int quantity, UUID transactionId) {
+    if (orderCacheRepository.existsById(transactionId)) {
+      return UpdateResult.DUPLICATE_MESSAGE;
+    }
+    orderCacheRepository.save(new OrderCache(transactionId));
+    if (!inventoryDBRepository.existsById(inventoryId)) {
+      return UpdateResult.NO_SUCH_INVENTORY;
+    }
     Inventory inventory =
-        inventoryDBRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        inventoryDBRepository.findById(inventoryId).orElseThrow(NoSuchInventoryException::new);
     inventory.setQuantity(inventory.getQuantity() - quantity);
     if (inventory.getQuantity() < 0) {
-      throw new IllegalArgumentException("Inventory item quantity cannot be negative");
+      return UpdateResult.INSUFFICIENT_QUANTITY;
     }
-    return inventoryDBRepository.save(inventory);
+    inventoryDBRepository.save(inventory);
+    return UpdateResult.SUCCESS;
   }
 }

@@ -19,8 +19,19 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>("Invalid input: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(NoSuchOrderCacheException.class)
+  public ResponseEntity<String> handleIllegalArgumentException(NoSuchOrderCacheException ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(NoSuchInventoryException.class)
+  public ResponseEntity<String> handleIllegalArgumentException(NoSuchInventoryException ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+  }
+
   @ExceptionHandler(NoSuchElementException.class)
   public ResponseEntity<String> handleIllegalArgumentException(NoSuchElementException ex) {
+    System.out.println("Invalid input: " + ex.getMessage());
     return new ResponseEntity<>("Invalid input: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
   }
 }
