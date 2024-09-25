@@ -7,6 +7,7 @@ import java.util.UUID;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -16,6 +17,7 @@ import se.saltcode.repository.IOrderRepository;
 import se.saltcode.repository.ITransactionRepository;
 import se.saltcode.service.OrderService;
 
+@EnableRuleMigrationSupport
 class MessageRelayTest {
 
   private static MockWebServer mockBackEnd;

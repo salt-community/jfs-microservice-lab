@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,6 +22,7 @@ import se.saltcode.model.enums.Event;
 import se.saltcode.model.transaction.Transaction;
 import se.saltcode.service.TransactionService;
 
+@EnableRuleMigrationSupport
 @WebMvcTest(TransactionController.class)
 class TransactionControllerTest {
 

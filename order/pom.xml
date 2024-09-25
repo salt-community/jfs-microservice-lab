@@ -28,14 +28,13 @@
 		<url/>
 	</scm>
 	<properties>
-		<okhttp3.version>4.9.1</okhttp3.version>
+		<okhttp3.version>5.11.0</okhttp3.version>
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>mockwebserver</artifactId>
-			<version>4.9.1</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>junit</artifactId>
@@ -75,7 +74,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-migrationsupport</artifactId>
+			<version>5.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -98,3 +101,4 @@
 	</build>
 
 </project>
+
