@@ -45,9 +45,8 @@ public class InventoryController {
     return ResponseEntity.created(URI.create(apiUri + "/" + inventoryDto.id())).body(inventoryDto);
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<InventoryDto> updateInventoryItem(
-      @PathVariable("id") UUID id, @RequestBody InventoryDto inventoryDTO) {
+  @PutMapping()
+  public ResponseEntity<InventoryDto> updateInventoryItem(@RequestBody InventoryDto inventoryDTO) {
     return ResponseEntity.ok(inventoryService.updateInventoryItem(new Inventory(inventoryDTO)).toDto());
   }
 

@@ -148,7 +148,7 @@ class InventoryControllerTest {
     // Act & Assert
     mockMvc
         .perform(
-            put("/api/inventory/{id}", UUID.randomUUID())
+            put("/api/inventory", UUID.randomUUID())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     "{\"product\":\"Updated Product\",\"quantity\":15,\"reservedQuantity\":2}"))
