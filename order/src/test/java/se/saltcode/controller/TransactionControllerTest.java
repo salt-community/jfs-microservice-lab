@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,7 @@ class TransactionControllerTest {
   void setUp() {
     eventID = UUID.randomUUID();
     UUID inventoryId = UUID.randomUUID();
-    transaction = new Transaction(Event.PURCHASE, eventID, inventoryId, 10);
+    transaction = new Transaction( Event.PURCHASE, 5, null);
     transaction.setId(eventID);
   }
 
