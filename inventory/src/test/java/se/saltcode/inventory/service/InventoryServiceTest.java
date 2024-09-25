@@ -126,7 +126,7 @@ class InventoryServiceTest {
     when(mockRepo.save(existingItem)).thenReturn(updatedItemData);
 
     // Act
-    Inventory updatedItem = inventoryService.updateInventoryItem(id, updatedItemData);
+    Inventory updatedItem = inventoryService.updateInventoryItem(updatedItemData);
 
     // Assert
     assertNotNull(updatedItem, "Updated item should not be null when the item exists");
@@ -147,7 +147,7 @@ class InventoryServiceTest {
     when(mockRepo.findById(id)).thenReturn(Optional.empty());
 
     // Act
-    Inventory updatedItem = inventoryService.updateInventoryItem(id, updatedItemData);
+    Inventory updatedItem = inventoryService.updateInventoryItem(updatedItemData);
 
     // Assert
     assertNull(updatedItem, "Update should return null if item is not found");

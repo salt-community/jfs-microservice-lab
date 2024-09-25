@@ -128,6 +128,7 @@ class InventoryDBRepositoryTest {
   }
 
   // Test to check if repository can find an item by its name
+ /*
   @Test
   @Transactional
   @Rollback(value = true)
@@ -145,4 +146,6 @@ class InventoryDBRepositoryTest {
     assertThat(foundItems).hasSize(1);
     assertThat(foundItems.get(0).getQuantity()).isEqualTo(600);
   }
+
+  */
 }

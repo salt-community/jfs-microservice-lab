@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import se.saltcode.inventory.exception.NoSuchInventoryException;
 import se.saltcode.inventory.model.inventory.Inventory;
 import se.saltcode.inventory.model.inventory.InventoryDto;
 import se.saltcode.inventory.service.InventoryService;
@@ -121,7 +122,7 @@ class InventoryControllerTest {
     updatedItem.setQuantity(15);
     updatedItem.setReservedQuantity(2);
 
-    when(inventoryService.updateInventoryItem(any(UUID.class), any(Inventory.class)))
+    when(inventoryService.updateInventoryItem(any(Inventory.class)))
         .thenReturn(updatedItem);
 
     // Act & Assert
@@ -141,8 +142,8 @@ class InventoryControllerTest {
   @Test
   void testUpdateInventoryItem_notFound() throws Exception {
     // Arrange
-    when(inventoryService.updateInventoryItem(any(UUID.class), any(Inventory.class)))
-        .thenReturn(null);
+    when(inventoryService.updateInventoryItem( any(Inventory.class)))
+        .thenThrow(new NoSuchInventoryException());
 
     // Act & Assert
     mockMvc

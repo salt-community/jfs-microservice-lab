@@ -13,45 +13,39 @@ import se.saltcode.inventory.repository.IOrderCacheRepository;
 @Service
 public class InventoryService {
 
-  private final IInventoryRepository inventoryDBRepository;
+  private final IInventoryRepository inventoryRepository;
   private final IOrderCacheRepository orderCacheRepository;
 
   public InventoryService(
-      IInventoryRepository inventoryDBRepository, IOrderCacheRepository orderCacheRepository) {
-    this.inventoryDBRepository = inventoryDBRepository;
+      IInventoryRepository inventoryRepository, IOrderCacheRepository orderCacheRepository) {
+    this.inventoryRepository = inventoryRepository;
     this.orderCacheRepository = orderCacheRepository;
   }
 
   public List<Inventory> getAllInventoryItems() {
-    return inventoryDBRepository.findAll();
+    return inventoryRepository.findAll();
   }
 
   public Inventory getInventoryItemById(UUID id) {
-    return inventoryDBRepository.findById(id).orElseThrow(NoSuchInventoryException::new);
+    return inventoryRepository.findById(id).orElseThrow(NoSuchInventoryException::new);
   }
 
   public Inventory createInventoryItem(Inventory inventory) {
-    return inventoryDBRepository.save(inventory);
+    return inventoryRepository.save(inventory);
   }
 
-  public Inventory updateInventoryItem(UUID id, Inventory inventory) {
-    return inventoryDBRepository
-        .findById(id)
-        .map(
-            existingItem -> {
-              existingItem.setProduct(inventory.getProduct());
-              existingItem.setQuantity(inventory.getQuantity());
-              existingItem.setReservedQuantity(inventory.getReservedQuantity());
-              return inventoryDBRepository.save(existingItem);
-            })
-        .orElse(null);
+  public Inventory updateInventoryItem(Inventory inventory) {
+    if(!inventoryRepository.existsById(inventory.getId())) {
+      throw new NoSuchInventoryException();
+    }
+    return inventoryRepository.save(inventory);
   }
 
   public boolean deleteInventoryItem(UUID id) {
-    if (!inventoryDBRepository.existsById(id)) {
+    if (!inventoryRepository.existsById(id)) {
       throw new NoSuchInventoryException();
     }
-    inventoryDBRepository.deleteById(id);
+    inventoryRepository.deleteById(id);
     return false;
   }
 
@@ -60,16 +54,16 @@ public class InventoryService {
       return UpdateResult.DUPLICATE_MESSAGE;
     }
     orderCacheRepository.save(new OrderCache(transactionId));
-    if (!inventoryDBRepository.existsById(inventoryId)) {
+    if (!inventoryRepository.existsById(inventoryId)) {
       return UpdateResult.NO_SUCH_INVENTORY;
     }
     Inventory inventory =
-        inventoryDBRepository.findById(inventoryId).orElseThrow(NoSuchInventoryException::new);
+            inventoryRepository.findById(inventoryId).orElseThrow(NoSuchInventoryException::new);
     inventory.setQuantity(inventory.getQuantity() - quantity);
     if (inventory.getQuantity() < 0) {
       return UpdateResult.INSUFFICIENT_QUANTITY;
     }
-    inventoryDBRepository.save(inventory);
+    inventoryRepository.save(inventory);
     return UpdateResult.SUCCESS;
   }
 }

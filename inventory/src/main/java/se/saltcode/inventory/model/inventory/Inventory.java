@@ -39,7 +39,7 @@ public class Inventory {
 
   public Inventory() {}
 
-  public InventoryDto toResponseObject() {
+  public InventoryDto toDto() {
     return new InventoryDto(id, product, quantity, reservedQuantity);
   }
 
