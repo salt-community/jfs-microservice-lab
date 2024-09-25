@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import se.saltcode.inventory.model.inventory.Inventory;
+import se.saltcode.inventory.model.inventory.InventoryDto;
 import se.saltcode.inventory.repository.IInventoryRepository;
 import se.saltcode.inventory.repository.IOrderCacheRepository;
 
@@ -18,6 +19,7 @@ class InventoryServiceTest {
   private InventoryService inventoryService;
   private IInventoryRepository mockRepo;
   private IOrderCacheRepository mockCacheRepo;
+  private InventoryDto inventoryDto;
 
   @BeforeEach
   void setUp() {
@@ -25,6 +27,7 @@ class InventoryServiceTest {
     mockRepo = Mockito.mock(IInventoryRepository.class);
     mockCacheRepo = Mockito.mock(IOrderCacheRepository.class);
     inventoryService = new InventoryService(mockRepo,mockCacheRepo);
+    inventoryDto = new InventoryDto(UUID.randomUUID(),"rope",1000,0);
   }
 
   @Test
@@ -43,7 +46,8 @@ class InventoryServiceTest {
   @Test
   void shouldCreateInventoryItemSuccessfully() {
     // Arrange
-    Inventory newItem = new Inventory(inventoryDTO);
+
+    Inventory newItem = new Inventory(inventoryDto);
     newItem.setProduct("Test Product");
     newItem.setQuantity(10);
     newItem.setReservedQuantity(2);
@@ -72,7 +76,7 @@ class InventoryServiceTest {
   @Test
   void shouldReturnInventoryItem_whenItemExists() {
     // Arrange
-    Inventory newItem = new Inventory(inventoryDTO);
+    Inventory newItem = new Inventory(inventoryDto);
     newItem.setProduct("Test Product");
     newItem.setQuantity(10);
     newItem.setReservedQuantity(2);
@@ -108,12 +112,12 @@ class InventoryServiceTest {
     // Arrange
     UUID id = UUID.randomUUID();
 
-    Inventory existingItem = new Inventory(inventoryDTO);
+    Inventory existingItem = new Inventory(inventoryDto);
     existingItem.setProduct("Existing Product");
     existingItem.setQuantity(10);
     existingItem.setReservedQuantity(1);
 
-    Inventory updatedItemData = new Inventory(inventoryDTO);
+    Inventory updatedItemData = new Inventory(inventoryDto);
     updatedItemData.setProduct("Updated Product");
     updatedItemData.setQuantity(15);
     updatedItemData.setReservedQuantity(3);
@@ -136,7 +140,7 @@ class InventoryServiceTest {
   void shouldReturnNull_whenUpdateItemDoesNotExist() {
     // Arrange
     UUID id = UUID.randomUUID();
-    Inventory updatedItemData = new Inventory(inventoryDTO);
+    Inventory updatedItemData = new Inventory(inventoryDto);
     updatedItemData.setProduct("Updated Product");
     updatedItemData.setQuantity(15);
     updatedItemData.setReservedQuantity(3);

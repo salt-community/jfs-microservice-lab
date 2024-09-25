@@ -6,17 +6,21 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import se.saltcode.inventory.model.inventory.Inventory;
+import se.saltcode.inventory.model.inventory.InventoryDto;
 import se.saltcode.inventory.repository.IInventoryRepository;
 
+@EnableRuleMigrationSupport
 @SpringBootTest
 class InventoryDBRepositoryTest {
 
   @Autowired private IInventoryRepository repository;
+  private InventoryDto inventoryDto = new InventoryDto(UUID.randomUUID(),"rope",1000,0);
 
   // Test to check if database creates an item
   @Test
@@ -25,7 +29,7 @@ class InventoryDBRepositoryTest {
   public void shouldCreateOneItem() {
 
     // Arrange
-    Inventory entity = new Inventory(inventoryDTO);
+    Inventory entity = new Inventory(inventoryDto);
     entity.setQuantity(1234);
 
     // Act
@@ -42,7 +46,7 @@ class InventoryDBRepositoryTest {
   public void shouldFindItemById() {
 
     // Arrange
-    Inventory entity = new Inventory(inventoryDTO);
+    Inventory entity = new Inventory(inventoryDto);
     entity.setProduct("Product 1");
     entity.setQuantity(100);
     entity.setReservedQuantity(10);
@@ -64,7 +68,7 @@ class InventoryDBRepositoryTest {
   public void shouldUpdateItemQuantity() {
 
     // Arrange
-    Inventory entity = new Inventory(inventoryDTO);
+    Inventory entity = new Inventory(inventoryDto);
     entity.setProduct("Product 2");
     entity.setQuantity(200);
     repository.save(entity);
@@ -87,7 +91,7 @@ class InventoryDBRepositoryTest {
   public void shouldDeleteItem() {
 
     // Arrange
-    Inventory entity = new Inventory(inventoryDTO);
+    Inventory entity = new Inventory(inventoryDto);
     entity.setProduct("Product 3");
     entity.setQuantity(300);
     Inventory savedEntity = repository.save(entity);
@@ -106,10 +110,10 @@ class InventoryDBRepositoryTest {
   public void shouldFindAllItems() {
 
     // Arrange
-    Inventory entity1 = new Inventory(inventoryDTO);
+    Inventory entity1 = new Inventory(inventoryDto);
     entity1.setProduct("Product 4");
     entity1.setQuantity(400);
-    Inventory entity2 = new Inventory(inventoryDTO);
+    Inventory entity2 = new Inventory(inventoryDto);
     entity2.setProduct("Product 5");
     entity2.setQuantity(500);
 
@@ -129,7 +133,7 @@ class InventoryDBRepositoryTest {
   @Rollback(value = true)
   public void shouldFindByProductName() {
     // Arrange
-    Inventory entity = new Inventory(inventoryDTO);
+    Inventory entity = new Inventory(inventoryDto);
     entity.setProduct("Unique Product");
     entity.setQuantity(600);
     repository.save(entity);

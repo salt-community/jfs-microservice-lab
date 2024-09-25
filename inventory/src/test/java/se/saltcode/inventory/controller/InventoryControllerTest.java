@@ -8,20 +8,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Collections;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import se.saltcode.inventory.model.inventory.Inventory;
+import se.saltcode.inventory.model.inventory.InventoryDto;
 import se.saltcode.inventory.service.InventoryService;
 
+@EnableRuleMigrationSupport
 @WebMvcTest(InventoryController.class)
 class InventoryControllerTest {
 
   @Autowired private MockMvc mockMvc;
 
   @MockBean private InventoryService inventoryService;
+
+  private InventoryDto inventoryDto = new InventoryDto(UUID.randomUUID(),"rope",1000,0);;
 
   // Test to check if an empty inventory list returns a 200 OK status and an empty list
   @Test
@@ -41,7 +46,7 @@ class InventoryControllerTest {
   @Test
   void testCreateInventoryItem() throws Exception {
     // Arrange
-    Inventory newItem = new Inventory(inventoryDTO);
+    Inventory newItem = new Inventory(inventoryDto);
     newItem.setId(UUID.randomUUID());
     newItem.setProduct("New Product");
     newItem.setQuantity(10);
@@ -65,7 +70,7 @@ class InventoryControllerTest {
   @Test
   void testGetInventoryItemById_found() throws Exception {
     // Arrange
-    Inventory item = new Inventory(inventoryDTO);
+    Inventory item = new Inventory(inventoryDto);
     item.setId(UUID.randomUUID());
     item.setProduct("Existing Product");
     item.setQuantity(10);
@@ -110,7 +115,7 @@ class InventoryControllerTest {
   @Test
   void testUpdateInventoryItem() throws Exception {
     // Arrange
-    Inventory updatedItem = new Inventory(inventoryDTO);
+    Inventory updatedItem = new Inventory(inventoryDto);
     updatedItem.setId(UUID.randomUUID());
     updatedItem.setProduct("Updated Product");
     updatedItem.setQuantity(15);
