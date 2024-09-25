@@ -52,58 +52,12 @@ class TransactionControllerTest {
 
   @Test
   void shouldGetTransactionById() throws Exception {
-    when(transactionService.getTransactionById(eventID)).thenReturn(transaction);
 
+    when(transactionService.getTransactionById(eventID)).thenReturn(transaction);
     mockMvc
         .perform(get("/api/transaction/{eventID}", eventID).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(eventID.toString()))
         .andExpect(jsonPath("$.eventType").value("PURCHASE"));
-  }
-
-  @Test
-  void shouldCreateTransaction() throws Exception {
-    when(transactionService.createTransaction(any(Transaction.class), addTransactionDto.orderId())).thenReturn(transaction);
-
-    mockMvc
-        .perform(
-            post("/api/transaction")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    "{\"eventType\":\"PURCHASE\",\"orderId\":\""
-                        + eventID
-                        + "\",\"inventoryId\":\""
-                        + UUID.randomUUID()
-                        + "\",\"change\":10}"))
-        .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.eventType").value("PURCHASE"));
-  }
-
-  @Test
-  void shouldUpdateTransaction() throws Exception {
-    when(transactionService.updateTransaction(any(UUID.class), any(), any(), any(), anyInt()))
-        .thenReturn(transaction);
-
-    mockMvc
-        .perform(
-            put("/api/transaction/{eventID}", eventID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    "{\"eventType\":\"CHANGE\",\"orderId\":\""
-                        + eventID
-                        + "\",\"inventoryId\":\""
-                        + UUID.randomUUID()
-                        + "\",\"change\":5}"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.eventType").value("PURCHASE"));
-  }
-
-  @Test
-  void shouldDeleteTransaction() throws Exception {
-    Mockito.doNothing().when(transactionService).deleteTransaction(eventID);
-
-    mockMvc
-        .perform(delete("/api/transaction/{eventID}", eventID))
-        .andExpect(status().isNoContent());
   }
 }

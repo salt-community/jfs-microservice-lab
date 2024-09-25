@@ -8,6 +8,7 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClient;
 import se.saltcode.model.order.AddOrderDto;
 import se.saltcode.model.order.Order;
@@ -22,6 +23,9 @@ class MessageRelayTest {
   @Autowired private ITransactionRepository transactionRepository;
 
   @Autowired private IOrderRepository orderRepository;
+
+  @Value("${inventory.endpoints.update-inventory-quantity}")
+  private String apiServiceEndpoint;
 
   private MessageRelay messageRelay;
   private OrderService orderService;
@@ -42,8 +46,9 @@ class MessageRelayTest {
     String baseUrl = String.format("http://localhost:%s", mockBackEnd.getPort());
     WebClient webClient = WebClient.builder().baseUrl(baseUrl).build();
 
-    messageRelay = new MessageRelay(transactionRepository, orderRepository, webClient);
-    orderService = new OrderService(orderRepository, messageRelay, transactionRepository);
+
+    messageRelay = new MessageRelay(transactionRepository, orderRepository, webClient,apiServiceEndpoint);
+    orderService = new OrderService(orderRepository, messageRelay);
   }
 
   @Test
