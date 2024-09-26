@@ -60,4 +60,8 @@ public class InventoryController {
       @RequestParam UUID inventoryId, @RequestParam int change, @RequestParam UUID transactionId) {
     return ResponseEntity.ok(inventoryService.updateQuantityOfInventory(inventoryId, change, transactionId));
   }
+  @RequestMapping("/test")
+  public ResponseEntity<InventoryDto> test() {
+    return createInventoryItem(null);
+  }
 }

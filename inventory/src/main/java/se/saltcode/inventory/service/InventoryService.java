@@ -31,6 +31,9 @@ public class InventoryService {
   }
 
   public Inventory createInventoryItem(Inventory inventory) {
+    if(inventory ==null){
+      throw new IllegalArgumentException("inventory cant be null");
+    }
     return inventoryRepository.save(inventory);
   }
 
@@ -46,7 +49,7 @@ public class InventoryService {
       throw new NoSuchInventoryException();
     }
     inventoryRepository.deleteById(id);
-    return false;
+    return !inventoryRepository.existsById(id);
   }
 
   public UpdateResult updateQuantityOfInventory(UUID inventoryId, int quantity, UUID transactionId) {

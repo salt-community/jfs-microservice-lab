@@ -115,7 +115,6 @@ class InventoryServiceTest {
   @Test
   void shouldUpdateInventoryItem_whenItemExists() {
     // Arrange
-   // UUID id = UUID.randomUUID();
 
     Inventory existingItem = new Inventory(inventoryDto);
     existingItem.setProduct("Existing Product");
@@ -127,8 +126,8 @@ class InventoryServiceTest {
     updatedItemData.setQuantity(15);
     updatedItemData.setReservedQuantity(3);
 
-    when(mockRepo.findById(inventoryDto.id())).thenReturn(Optional.of(existingItem));
-    when(mockRepo.save(existingItem)).thenReturn(updatedItemData);
+    when(mockRepo.existsById(inventoryDto.id())).thenReturn(true);
+    when(mockRepo.save(updatedItemData)).thenReturn(updatedItemData);
 
     // Act
     Inventory updatedItem = inventoryService.updateInventoryItem(updatedItemData);
@@ -137,8 +136,9 @@ class InventoryServiceTest {
     assertNotNull(updatedItem, "Updated item should not be null when the item exists");
     assertEquals("Updated Product", updatedItem.getProduct());
     assertEquals(15, updatedItem.getQuantity());
-    verify(mockRepo, times(1)).findById(existingItem.getId());
-    verify(mockRepo, times(1)).save(existingItem);
+
+    verify(mockRepo, times(1)).existsById(existingItem.getId());
+    verify(mockRepo, times(1)).save(updatedItemData);
   }
 
   @Test
@@ -167,14 +167,14 @@ class InventoryServiceTest {
   void shouldDeleteInventoryItem_whenItemExists() {
     // Arrange
     UUID id = UUID.randomUUID();
-    when(mockRepo.existsById(id)).thenReturn(true);
+    when(mockRepo.existsById(id)).thenReturn(true,false);
 
     // Act
     boolean deleted = inventoryService.deleteInventoryItem(id);
 
     // Assert
     assertTrue(deleted, "Inventory item should be successfully deleted");
-    verify(mockRepo, times(1)).existsById(id);
+    verify(mockRepo, times(2)).existsById(id);
     verify(mockRepo, times(1)).deleteById(id);
   }
 
@@ -199,15 +199,18 @@ class InventoryServiceTest {
   void shouldNotDeleteItemTwice() {
     // Arrange
     UUID id = UUID.randomUUID();
-    when(mockRepo.existsById(id)).thenReturn(true).thenReturn(false);
+    when(mockRepo.existsById(id)).thenReturn(true,false);
 
     // Act & Assert
     boolean firstDelete = inventoryService.deleteInventoryItem(id);
     assertTrue(firstDelete, "Inventory item should be deleted the first time");
 
-    boolean secondDelete = inventoryService.deleteInventoryItem(id);
-    assertFalse(secondDelete, "Inventory item should not be deleted the second time");
-    verify(mockRepo, times(2)).existsById(id);
+    NoSuchInventoryException thrown =assertThrows(
+            NoSuchInventoryException.class,
+            () ->inventoryService.deleteInventoryItem(id),
+            "Expected deleteInventoryItem() to throw noSuchInventoryException, but it didn't") ;
+
+    verify(mockRepo, times(3)).existsById(id);
     verify(mockRepo, times(1)).deleteById(id);
   }
 }
