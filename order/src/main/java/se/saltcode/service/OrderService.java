@@ -42,7 +42,6 @@ public class OrderService {
   }
 
   public Order updateOrder(Order order) {
-
     Order oldOrder = orderRepository.findById(order.getId()).orElseThrow(NoSuchOrderException::new);
     oldOrder.update(order);
     orderRepository.save(oldOrder);

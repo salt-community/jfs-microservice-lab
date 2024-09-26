@@ -1,9 +1,7 @@
 package se.saltcode.controller;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.saltcode.model.transaction.Transaction;
@@ -16,13 +14,10 @@ import se.saltcode.service.TransactionService;
 public class TransactionController {
 
   private final TransactionService service;
-  public final String apiUri;
 
   public TransactionController(
-      TransactionService service,
-      @Value("${this.base-uri}${api.base-path}${api.controllers.transactions}") String apiUri) {
+      TransactionService service) {
     this.service = service;
-    this.apiUri = apiUri;
   }
 
   @GetMapping
