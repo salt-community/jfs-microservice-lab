@@ -78,6 +78,7 @@ public class MessageRelay {
       case CHANGE -> {
         Order order = transaction.getOrder();
         order.setQuantity(order.getQuantity() - transaction.getChange());
+        order.clearTransactions();
         orderRepository.save(order);
         transactionRepository.deleteById(transaction.getId());}
     };

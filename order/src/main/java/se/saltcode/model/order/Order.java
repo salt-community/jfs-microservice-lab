@@ -52,6 +52,9 @@ public class Order {
     this.quantity = order.getQuantity();
     this.totalCost = order.getTotalCost();
   }
+  public void clearTransactions() {
+    transactions.clear();
+  }
 
   public OrderDto toDto() {
     return new OrderDto(id, inventoryId, quantity, totalCost);
