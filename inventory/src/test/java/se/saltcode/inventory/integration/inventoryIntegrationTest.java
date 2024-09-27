@@ -1,5 +1,6 @@
 package se.saltcode.inventory.integration;
 
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,9 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import se.saltcode.inventory.model.inventory.AddInventoryDto;
 import se.saltcode.inventory.model.inventory.Inventory;
 import se.saltcode.inventory.model.inventory.InventoryDto;
@@ -17,7 +15,6 @@ import se.saltcode.inventory.repository.IInventoryRepository;
 import se.saltcode.inventory.repository.IOrderCacheRepository;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -110,6 +107,19 @@ public class inventoryIntegrationTest {
 
     @Test
     public void shouldBeAbleToGetInventoryItemById(){
+
+        AddInventoryDto newInventory = new AddInventoryDto("rope",100);
+
+        // Assert
+
+        InventoryDto createdInventory = restTemplate.exchange(apiUri, HttpMethod.POST, new HttpEntity<>(newInventory), InventoryDto.class).getBody();
+        ResponseEntity<InventoryDto> exchange = restTemplate.exchange(apiUri+"/"+createdInventory.id(), HttpMethod.GET, HttpEntity.EMPTY, InventoryDto.class);
+        // Assert
+
+        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(exchange.getBody().quantity()).isEqualTo(100);
+        assertThat(exchange.getBody().product()).isEqualTo("rope");
+        assertThat(exchange.getBody().reservedQuantity()).isEqualTo(0);
 
     }
 
