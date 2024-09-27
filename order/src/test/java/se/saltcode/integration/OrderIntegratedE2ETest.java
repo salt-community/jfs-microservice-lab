@@ -20,7 +20,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class OrderIntegratedE2Etest {
+public class OrderIntegratedE2ETest {
 
     @Autowired
     protected TestRestTemplate restTemplate;
@@ -37,10 +37,19 @@ public class OrderIntegratedE2Etest {
     }
 
     @Test
-    public void portShouldUseIntegrationProperties() {
+    public void portShouldUse8080() {
         assertThat(configPort).isEqualTo(8080);
     }
 
+    @Test
+    public void shouldReturnOrderWhenGetWithId() {
+        String url = "http://localhost:" + configPort + "/api/order";
+        AddOrderDto addOrderDto = new AddOrderDto(UUID.randomUUID(), 1, 10);
+        ResponseEntity<OrderDto> exchange = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<AddOrderDto>(addOrderDto), OrderDto.class);
+        UUID id = exchange.getBody().id();
+        OrderDto order = restTemplate.getForObject(url + "/" + id, OrderDto.class);
+        assertThat(order).isNotNull();
+    }
 
     @Test
     public void shouldAddOrderToRepositoryAfterItIsCreated() throws Exception {
