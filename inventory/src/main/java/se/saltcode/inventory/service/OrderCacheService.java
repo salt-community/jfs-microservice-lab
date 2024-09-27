@@ -2,7 +2,6 @@ package se.saltcode.inventory.service;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -42,8 +41,7 @@ public class OrderCacheService {
   @Scheduled(fixedRate = 6000000)
   public void clearCacheItems() {
     orderCacheRepository.findAll().stream()
-        .filter(
-            e -> Duration.between(e.getCreatedAt(), ZonedDateTime.now()).get(ChronoUnit.HOURS) > 48)
-        .forEach(e -> orderCacheRepository.deleteById(e.getId()));
+            .filter(e -> Duration.between(e.getCreatedAt(), ZonedDateTime.now()).toHours() > 48)
+            .forEach(e -> orderCacheRepository.deleteById(e.getId()));
   }
 }

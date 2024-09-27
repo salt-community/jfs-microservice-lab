@@ -10,6 +10,7 @@ import se.saltcode.inventory.exception.NoSuchOrderCacheException;
 import se.saltcode.inventory.model.cache.OrderCache;
 import se.saltcode.inventory.repository.IOrderCacheRepository;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -114,5 +115,26 @@ class OrderCacheServiceTest {
         // Act & Assert
         assertThrows(NoSuchOrderCacheException.class, () -> orderCacheService.deleteOrderCacheById(id));
         verify(orderCacheRepository, times(0)).deleteById(id);
+    }
+    @Test
+    void shouldClearCacheItemsOlderThan48Hours() {
+        // Arrange
+        UUID id = UUID.randomUUID();
+        OrderCache oldCache = new OrderCache();
+        oldCache.setId(id);
+        oldCache.setCreatedAt(ZonedDateTime.now().minusDays(3)); // Older than 48 hours
+
+        OrderCache newCache = new OrderCache();
+        newCache.setId(UUID.randomUUID());
+        newCache.setCreatedAt(ZonedDateTime.now().minusHours(10)); // Newer than 48 hours
+
+        when(orderCacheRepository.findAll()).thenReturn(List.of(oldCache, newCache));
+
+        // Act
+        orderCacheService.clearCacheItems();
+
+        // Assert
+        verify(orderCacheRepository, times(1)).deleteById(id);
+        verify(orderCacheRepository, times(0)).deleteById(newCache.getId());
     }
 }
