@@ -135,11 +135,20 @@ public class inventoryIntegrationTest {
 
     @Test
     public void shouldDeleteItem(){
+        AddInventoryDto newInventory = new AddInventoryDto("rope",100);
 
+        // Assert
+        InventoryDto createdInventory = restTemplate.exchange(apiUri, HttpMethod.POST, new HttpEntity<>(newInventory), InventoryDto.class).getBody();
+        ResponseEntity<Void> exchange = restTemplate.exchange(apiUri+"/"+createdInventory.id(), HttpMethod.DELETE, HttpEntity.EMPTY,Void.class);
+
+        // Assert
+        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(inventoryRepository.existsById(createdInventory.id())).isEqualTo(false);
     }
 
     @Test
     public void ShouldUpdateInventoryItem(){
+
 
     }
 
