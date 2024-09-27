@@ -11,7 +11,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import se.saltcode.model.order.AddOrderDto;
-import se.saltcode.model.order.Order;
 import se.saltcode.model.order.OrderDto;
 import se.saltcode.repository.IOrderRepository;
 
@@ -22,8 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class OrderIntegratedE2Etest {
-
-    private final String UUID_STRING = "00000000-0000-0000-0000-000000000001";
 
     @Autowired
     protected TestRestTemplate restTemplate;
@@ -36,7 +33,6 @@ public class OrderIntegratedE2Etest {
 
     @AfterEach
     public void cleanUp() {
-        // we are adding jokes to the repo in the tests, we need to remove them after each test, so we have a known state
         repo.deleteAll();
     }
 
@@ -47,24 +43,19 @@ public class OrderIntegratedE2Etest {
 
 
     @Test
-    public void shouldReturnNoJokesWhenStartingClean() throws Exception {
-        // Arrange
+    public void shouldAddOrderToRepositoryAfterItIsCreated() throws Exception {
+        String url = "http://localhost:" + configPort + "/api/order";
 
-        // Act
-
-        List<OrderDto> orderList = restTemplate.getForObject("http://localhost:" + configPort + "/api/order", List.class);
-        // Assert
+        List<OrderDto> orderList = restTemplate.getForObject(url, List.class);
         int numberOfOrdersInList = orderList.size();
 
         AddOrderDto addOrderDto = new AddOrderDto(UUID.randomUUID(), 1, 10);
-        String url = "http://localhost:" + configPort + "/api/order";
-
         ResponseEntity<AddOrderDto> exchange = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<AddOrderDto>(addOrderDto), AddOrderDto.class);
-
-        // Assert
         assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        List<OrderDto> newOrderList = restTemplate.getForObject("http://localhost:" + configPort + "/api/order", List.class);
 
-        assertThat(newOrderList.size()).isEqualTo(numberOfOrdersInList + 1); // checks that the joke is saved in the DB
-    }   
+        List<OrderDto> newOrderList = restTemplate.getForObject(url, List.class);
+        int newNumberOfOrdersInList = newOrderList.size();
+
+        assertThat(newNumberOfOrdersInList).isEqualTo(numberOfOrdersInList + 1); // checks that the joke is saved in the DB
+    }
 }
