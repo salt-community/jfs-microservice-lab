@@ -27,29 +27,29 @@ public class OrderController {
   }
 
   @GetMapping
-  ResponseEntity<List<OrderDto>> getOrders() {
+  public ResponseEntity<List<OrderDto>> getOrders() {
     return ResponseEntity.ok(orderService.getOrders().stream().map(Order::toDto).toList());
   }
 
   @GetMapping("/{id}")
-  ResponseEntity<OrderDto> getOrder(@PathVariable UUID id) {
+  public ResponseEntity<OrderDto> getOrder(@PathVariable UUID id) {
     return ResponseEntity.ok(orderService.getOrder(id).toDto());
   }
 
   @PostMapping
-  ResponseEntity<OrderDto> createOrder(@RequestBody AddOrderDto addOrderDTO) {
+  public ResponseEntity<OrderDto> createOrder(@RequestBody AddOrderDto addOrderDTO) {
     OrderDto orderDto = orderService.createOrder(new Order(addOrderDTO)).toDto();
     return ResponseEntity.created(URI.create(apiUri + "/" + orderDto.id())).body(orderDto);
   }
 
   @DeleteMapping("/{id}")
-  ResponseEntity<Void> deleteOrder(@PathVariable UUID id) {
+  public ResponseEntity<Void> deleteOrder(@PathVariable UUID id) {
     orderService.deleteOrder(id);
     return ResponseEntity.noContent().build();
   }
 
-  @PutMapping()
-  ResponseEntity<OrderDto> updateOrder(@RequestBody OrderDto orderDTO) {
+  @PutMapping("/{id}")
+  public ResponseEntity<OrderDto> updateOrder(@RequestBody OrderDto orderDTO) {
     return ResponseEntity.ok(orderService.updateOrder(new Order(orderDTO)).toDto());
   }
 }
