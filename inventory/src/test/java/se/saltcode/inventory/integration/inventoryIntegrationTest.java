@@ -84,6 +84,7 @@ public class inventoryIntegrationTest {
     @Test
     public void shouldThrowErrorWhenCreatingInventoryWithNullQuantity(){
 
+
     }
 
     @Test
@@ -94,7 +95,17 @@ public class inventoryIntegrationTest {
 
     @Test
     public void shouldBeAbleToGetAllInventoryItems(){
+        AddInventoryDto newInventory = new AddInventoryDto("rope",100);
+        AddInventoryDto newInventory2 = new AddInventoryDto("rope",100);
 
+        // Assert
+
+        restTemplate.exchange(apiUri, HttpMethod.POST, new HttpEntity<>(newInventory), InventoryDto.class);
+        restTemplate.exchange(apiUri, HttpMethod.POST, new HttpEntity<>(newInventory2), InventoryDto.class);
+        ResponseEntity<List> inventoryItems = restTemplate.exchange(apiUri, HttpMethod.GET, HttpEntity.EMPTY, List.class);
+        // Assert
+        assertThat(inventoryItems.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(inventoryItems.getBody().size()).isEqualTo(2);
     }
 
     @Test
